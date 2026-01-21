@@ -1,0 +1,2578 @@
+{
+  "meta": {
+    "province_th": "กรุงเทพมหานคร",
+    "province_en": "Bangkok",
+    "district_count": 50,
+    "subdistrict_count": 180,
+    "id_scheme": "BKK-D## for districts, BKK-D##-S## for subdistricts (seq-based, stable within this dataset)"
+  },
+  "districts": [
+    {
+      "id": "BKK-D01",
+      "seq": 1,
+      "name_th": "พระนคร",
+      "name_en": "Phra Nakhon"
+    },
+    {
+      "id": "BKK-D02",
+      "seq": 2,
+      "name_th": "ดุสิต",
+      "name_en": "Dusit"
+    },
+    {
+      "id": "BKK-D03",
+      "seq": 3,
+      "name_th": "หนองจอก",
+      "name_en": "Nong Chok"
+    },
+    {
+      "id": "BKK-D04",
+      "seq": 4,
+      "name_th": "บางรัก",
+      "name_en": "Bang Rak"
+    },
+    {
+      "id": "BKK-D05",
+      "seq": 5,
+      "name_th": "บางเขน",
+      "name_en": "Bang Khen"
+    },
+    {
+      "id": "BKK-D06",
+      "seq": 6,
+      "name_th": "บางกะปิ",
+      "name_en": "Bang Kapi"
+    },
+    {
+      "id": "BKK-D07",
+      "seq": 7,
+      "name_th": "ปทุมวัน",
+      "name_en": "Pathum Wan"
+    },
+    {
+      "id": "BKK-D08",
+      "seq": 8,
+      "name_th": "ป้อมปราบศัตรูพ่าย",
+      "name_en": "Pom Prap Sattru Phai"
+    },
+    {
+      "id": "BKK-D09",
+      "seq": 9,
+      "name_th": "พระโขนง",
+      "name_en": "Phra Khanong"
+    },
+    {
+      "id": "BKK-D10",
+      "seq": 10,
+      "name_th": "มีนบุรี",
+      "name_en": "Min Buri"
+    },
+    {
+      "id": "BKK-D11",
+      "seq": 11,
+      "name_th": "ลาดกระบัง",
+      "name_en": "Lat Krabang"
+    },
+    {
+      "id": "BKK-D12",
+      "seq": 12,
+      "name_th": "ยานนาวา",
+      "name_en": "Yan Nawa"
+    },
+    {
+      "id": "BKK-D13",
+      "seq": 13,
+      "name_th": "สัมพันธวงศ์",
+      "name_en": "Samphanthawong"
+    },
+    {
+      "id": "BKK-D14",
+      "seq": 14,
+      "name_th": "พญาไท",
+      "name_en": "Phaya Thai"
+    },
+    {
+      "id": "BKK-D15",
+      "seq": 15,
+      "name_th": "ธนบุรี",
+      "name_en": "Thon Buri"
+    },
+    {
+      "id": "BKK-D16",
+      "seq": 16,
+      "name_th": "บางกอกใหญ่",
+      "name_en": "Bangkok Yai"
+    },
+    {
+      "id": "BKK-D17",
+      "seq": 17,
+      "name_th": "ห้วยขวาง",
+      "name_en": "Huai Khwang"
+    },
+    {
+      "id": "BKK-D18",
+      "seq": 18,
+      "name_th": "คลองสาน",
+      "name_en": "Khlong San"
+    },
+    {
+      "id": "BKK-D19",
+      "seq": 19,
+      "name_th": "ตลิ่งชัน",
+      "name_en": "Taling Chan"
+    },
+    {
+      "id": "BKK-D20",
+      "seq": 20,
+      "name_th": "บางกอกน้อย",
+      "name_en": "Bangkok Noi"
+    },
+    {
+      "id": "BKK-D21",
+      "seq": 21,
+      "name_th": "บางขุนเทียน",
+      "name_en": "Bang Khun Thain"
+    },
+    {
+      "id": "BKK-D22",
+      "seq": 22,
+      "name_th": "ภาษีเจริญ",
+      "name_en": "Phasi Charoen"
+    },
+    {
+      "id": "BKK-D23",
+      "seq": 23,
+      "name_th": "หนองแขม",
+      "name_en": "Nong Khaem"
+    },
+    {
+      "id": "BKK-D24",
+      "seq": 24,
+      "name_th": "ราษฎร์บูรณะ",
+      "name_en": "Rat Burana"
+    },
+    {
+      "id": "BKK-D25",
+      "seq": 25,
+      "name_th": "บางพลัด",
+      "name_en": "Bang Phlat"
+    },
+    {
+      "id": "BKK-D26",
+      "seq": 26,
+      "name_th": "ดินแดง",
+      "name_en": "Din Daeng"
+    },
+    {
+      "id": "BKK-D27",
+      "seq": 27,
+      "name_th": "บึงกุ่ม",
+      "name_en": "Bueng Kum"
+    },
+    {
+      "id": "BKK-D28",
+      "seq": 28,
+      "name_th": "สาทร",
+      "name_en": "Sathon"
+    },
+    {
+      "id": "BKK-D29",
+      "seq": 29,
+      "name_th": "บางซื่อ",
+      "name_en": "Bang Sue"
+    },
+    {
+      "id": "BKK-D30",
+      "seq": 30,
+      "name_th": "จตุจักร",
+      "name_en": "Chatu Chak"
+    },
+    {
+      "id": "BKK-D31",
+      "seq": 31,
+      "name_th": "บางคอแหลม",
+      "name_en": "Bang Kho Laem"
+    },
+    {
+      "id": "BKK-D32",
+      "seq": 32,
+      "name_th": "ประเวศ",
+      "name_en": "Prawet"
+    },
+    {
+      "id": "BKK-D33",
+      "seq": 33,
+      "name_th": "คลองเตย",
+      "name_en": "Khlong Toei"
+    },
+    {
+      "id": "BKK-D34",
+      "seq": 34,
+      "name_th": "สวนหลวง",
+      "name_en": "Suan Luang"
+    },
+    {
+      "id": "BKK-D35",
+      "seq": 35,
+      "name_th": "จอมทอง",
+      "name_en": "Chom Thong"
+    },
+    {
+      "id": "BKK-D36",
+      "seq": 36,
+      "name_th": "ดอนเมือง",
+      "name_en": "Don Mueang"
+    },
+    {
+      "id": "BKK-D37",
+      "seq": 37,
+      "name_th": "ราชเทวี",
+      "name_en": "Ratchathewi"
+    },
+    {
+      "id": "BKK-D38",
+      "seq": 38,
+      "name_th": "ลาดพร้าว",
+      "name_en": "Lat Phrao"
+    },
+    {
+      "id": "BKK-D39",
+      "seq": 39,
+      "name_th": "วัฒนา",
+      "name_en": "Vadhana"
+    },
+    {
+      "id": "BKK-D40",
+      "seq": 40,
+      "name_th": "บางแค",
+      "name_en": "Bang Khae"
+    },
+    {
+      "id": "BKK-D41",
+      "seq": 41,
+      "name_th": "หลักสี่",
+      "name_en": "Lak Si"
+    },
+    {
+      "id": "BKK-D42",
+      "seq": 42,
+      "name_th": "สายไหม",
+      "name_en": "Sai Mai"
+    },
+    {
+      "id": "BKK-D43",
+      "seq": 43,
+      "name_th": "คันนายาว",
+      "name_en": "Khan Na Yao"
+    },
+    {
+      "id": "BKK-D44",
+      "seq": 44,
+      "name_th": "สะพานสูง",
+      "name_en": "Saphan Sung"
+    },
+    {
+      "id": "BKK-D45",
+      "seq": 45,
+      "name_th": "วังทองหลาง",
+      "name_en": "Wang Thong Lang"
+    },
+    {
+      "id": "BKK-D46",
+      "seq": 46,
+      "name_th": "คลองสามวา",
+      "name_en": "Khlong Sam Wa"
+    },
+    {
+      "id": "BKK-D47",
+      "seq": 47,
+      "name_th": "ทุ่งครุ",
+      "name_en": "Thung Khru"
+    },
+    {
+      "id": "BKK-D48",
+      "seq": 48,
+      "name_th": "บางบอน",
+      "name_en": "Bang Bon"
+    },
+    {
+      "id": "BKK-D49",
+      "seq": 49,
+      "name_th": "บางนา",
+      "name_en": "Bang Na"
+    },
+    {
+      "id": "BKK-D50",
+      "seq": 50,
+      "name_th": "ทวีวัฒนา",
+      "name_en": "Thawi Watthana"
+    }
+  ],
+  "subdistricts": [
+    {
+      "id": "BKK-D01-S01",
+      "district_id": "BKK-D01",
+      "seq_in_district": 1,
+      "name_th": "พระบรมหาราชวัง",
+      "name_en": "Phra Borom Maha Rachawang"
+    },
+    {
+      "id": "BKK-D01-S02",
+      "district_id": "BKK-D01",
+      "seq_in_district": 2,
+      "name_th": "วังบูรพาภิรมย์",
+      "name_en": "Wang Buraphaphirom"
+    },
+    {
+      "id": "BKK-D01-S03",
+      "district_id": "BKK-D01",
+      "seq_in_district": 3,
+      "name_th": "วัดราชบพิธ",
+      "name_en": "Wat Ratchabophit"
+    },
+    {
+      "id": "BKK-D01-S04",
+      "district_id": "BKK-D01",
+      "seq_in_district": 4,
+      "name_th": "สำราญราษฎร์",
+      "name_en": "Samran Rat"
+    },
+    {
+      "id": "BKK-D01-S05",
+      "district_id": "BKK-D01",
+      "seq_in_district": 5,
+      "name_th": "ศาลเจ้าพ่อเสือ",
+      "name_en": "San Chao Pho Suea"
+    },
+    {
+      "id": "BKK-D01-S06",
+      "district_id": "BKK-D01",
+      "seq_in_district": 6,
+      "name_th": "เสาชิงช้า",
+      "name_en": "Sao Chingcha"
+    },
+    {
+      "id": "BKK-D01-S07",
+      "district_id": "BKK-D01",
+      "seq_in_district": 7,
+      "name_th": "บวรนิเวศ",
+      "name_en": "Bowon Niwet"
+    },
+    {
+      "id": "BKK-D01-S08",
+      "district_id": "BKK-D01",
+      "seq_in_district": 8,
+      "name_th": "ตลาดยอด",
+      "name_en": "Talat Yot"
+    },
+    {
+      "id": "BKK-D01-S09",
+      "district_id": "BKK-D01",
+      "seq_in_district": 9,
+      "name_th": "ชนะสงคราม",
+      "name_en": "Chana Songkhram"
+    },
+    {
+      "id": "BKK-D01-S10",
+      "district_id": "BKK-D01",
+      "seq_in_district": 10,
+      "name_th": "บ้านพานถม",
+      "name_en": "Ban Phan Thom"
+    },
+    {
+      "id": "BKK-D01-S11",
+      "district_id": "BKK-D01",
+      "seq_in_district": 11,
+      "name_th": "บางขุนพรหม",
+      "name_en": "Bang Khun Phrom"
+    },
+    {
+      "id": "BKK-D01-S12",
+      "district_id": "BKK-D01",
+      "seq_in_district": 12,
+      "name_th": "วัดสามพระยา",
+      "name_en": "Wat Sam Phraya"
+    },
+    {
+      "id": "BKK-D02-S01",
+      "district_id": "BKK-D02",
+      "seq_in_district": 1,
+      "name_th": "ดุสิต",
+      "name_en": "Dusit"
+    },
+    {
+      "id": "BKK-D02-S02",
+      "district_id": "BKK-D02",
+      "seq_in_district": 2,
+      "name_th": "วชิรพยาบาล",
+      "name_en": "Vajira Phayaban"
+    },
+    {
+      "id": "BKK-D02-S03",
+      "district_id": "BKK-D02",
+      "seq_in_district": 3,
+      "name_th": "สวนจิตรลดา",
+      "name_en": "Suan Chitlada"
+    },
+    {
+      "id": "BKK-D02-S04",
+      "district_id": "BKK-D02",
+      "seq_in_district": 4,
+      "name_th": "สี่แยกมหานาค",
+      "name_en": "Si Yeak Maha Nak"
+    },
+    {
+      "id": "BKK-D02-S05",
+      "district_id": "BKK-D02",
+      "seq_in_district": 5,
+      "name_th": "ถนนนครไชยศรี",
+      "name_en": "Thanon Nakhon Chai Si"
+    },
+    {
+      "id": "BKK-D03-S01",
+      "district_id": "BKK-D03",
+      "seq_in_district": 1,
+      "name_th": "กระทุ่มราย",
+      "name_en": "Krathum Rai"
+    },
+    {
+      "id": "BKK-D03-S02",
+      "district_id": "BKK-D03",
+      "seq_in_district": 2,
+      "name_th": "หนองจอก",
+      "name_en": "Nong Chok"
+    },
+    {
+      "id": "BKK-D03-S03",
+      "district_id": "BKK-D03",
+      "seq_in_district": 3,
+      "name_th": "คลองสิบ",
+      "name_en": "Khlong Sip"
+    },
+    {
+      "id": "BKK-D03-S04",
+      "district_id": "BKK-D03",
+      "seq_in_district": 4,
+      "name_th": "คลองสิบสอง",
+      "name_en": "Khlong Sip Song"
+    },
+    {
+      "id": "BKK-D03-S05",
+      "district_id": "BKK-D03",
+      "seq_in_district": 5,
+      "name_th": "โคกแฝด",
+      "name_en": "Khok Faet"
+    },
+    {
+      "id": "BKK-D03-S06",
+      "district_id": "BKK-D03",
+      "seq_in_district": 6,
+      "name_th": "คู้ฝั่งเหนือ",
+      "name_en": "Khu Fang Nuea"
+    },
+    {
+      "id": "BKK-D03-S07",
+      "district_id": "BKK-D03",
+      "seq_in_district": 7,
+      "name_th": "ลำผักชี",
+      "name_en": "Lam Phak Chi"
+    },
+    {
+      "id": "BKK-D03-S08",
+      "district_id": "BKK-D03",
+      "seq_in_district": 8,
+      "name_th": "ลำต้อยติ่ง",
+      "name_en": "Lam Toi Ting"
+    },
+    {
+      "id": "BKK-D04-S01",
+      "district_id": "BKK-D04",
+      "seq_in_district": 1,
+      "name_th": "มหาพฤฒาราม",
+      "name_en": "Maha Phruettharam"
+    },
+    {
+      "id": "BKK-D04-S02",
+      "district_id": "BKK-D04",
+      "seq_in_district": 2,
+      "name_th": "สีลม",
+      "name_en": "Si Lom"
+    },
+    {
+      "id": "BKK-D04-S03",
+      "district_id": "BKK-D04",
+      "seq_in_district": 3,
+      "name_th": "สุรวงศ์",
+      "name_en": "Suriyawong"
+    },
+    {
+      "id": "BKK-D04-S04",
+      "district_id": "BKK-D04",
+      "seq_in_district": 4,
+      "name_th": "บางรัก",
+      "name_en": "Bang Rak"
+    },
+    {
+      "id": "BKK-D04-S05",
+      "district_id": "BKK-D04",
+      "seq_in_district": 5,
+      "name_th": "สี่พระยา",
+      "name_en": "Si Phraya"
+    },
+    {
+      "id": "BKK-D05-S01",
+      "district_id": "BKK-D05",
+      "seq_in_district": 1,
+      "name_th": "อนุสาวรีย์",
+      "name_en": "Anusaowari"
+    },
+    {
+      "id": "BKK-D05-S02",
+      "district_id": "BKK-D05",
+      "seq_in_district": 2,
+      "name_th": "ท่าแร้ง",
+      "name_en": "Tha Raeng"
+    },
+    {
+      "id": "BKK-D06-S01",
+      "district_id": "BKK-D06",
+      "seq_in_district": 1,
+      "name_th": "คลองจั่น",
+      "name_en": "Khlong Chan"
+    },
+    {
+      "id": "BKK-D06-S02",
+      "district_id": "BKK-D06",
+      "seq_in_district": 2,
+      "name_th": "หัวหมาก",
+      "name_en": "Hua Mak"
+    },
+    {
+      "id": "BKK-D07-S01",
+      "district_id": "BKK-D07",
+      "seq_in_district": 1,
+      "name_th": "รองเมือง",
+      "name_en": "Rong Mueang"
+    },
+    {
+      "id": "BKK-D07-S02",
+      "district_id": "BKK-D07",
+      "seq_in_district": 2,
+      "name_th": "วังใหม่",
+      "name_en": "Wang Mai"
+    },
+    {
+      "id": "BKK-D07-S03",
+      "district_id": "BKK-D07",
+      "seq_in_district": 3,
+      "name_th": "ปทุมวัน",
+      "name_en": "Pathum Wan"
+    },
+    {
+      "id": "BKK-D07-S04",
+      "district_id": "BKK-D07",
+      "seq_in_district": 4,
+      "name_th": "ลุมพินี",
+      "name_en": "Lumphini"
+    },
+    {
+      "id": "BKK-D08-S01",
+      "district_id": "BKK-D08",
+      "seq_in_district": 1,
+      "name_th": "ป้อมปราบ",
+      "name_en": "Pom Prap"
+    },
+    {
+      "id": "BKK-D08-S02",
+      "district_id": "BKK-D08",
+      "seq_in_district": 2,
+      "name_th": "วัดเทพศิรินทร์",
+      "name_en": "Wat Thep Sirin"
+    },
+    {
+      "id": "BKK-D08-S03",
+      "district_id": "BKK-D08",
+      "seq_in_district": 3,
+      "name_th": "คลองมหานาค",
+      "name_en": "Khlong Maha Nak"
+    },
+    {
+      "id": "BKK-D08-S04",
+      "district_id": "BKK-D08",
+      "seq_in_district": 4,
+      "name_th": "บ้านบาตร",
+      "name_en": "Ban Bat"
+    },
+    {
+      "id": "BKK-D08-S05",
+      "district_id": "BKK-D08",
+      "seq_in_district": 5,
+      "name_th": "วัดโสมนัส",
+      "name_en": "Wat Sommanat"
+    },
+    {
+      "id": "BKK-D09-S01",
+      "district_id": "BKK-D09",
+      "seq_in_district": 1,
+      "name_th": "บางจาก",
+      "name_en": "Bang Chak"
+    },
+    {
+      "id": "BKK-D09-S02",
+      "district_id": "BKK-D09",
+      "seq_in_district": 2,
+      "name_th": "พระโขนงใต้",
+      "name_en": "Phra Khanong Tai"
+    },
+    {
+      "id": "BKK-D10-S01",
+      "district_id": "BKK-D10",
+      "seq_in_district": 1,
+      "name_th": "มีนบุรี",
+      "name_en": "Min Buri"
+    },
+    {
+      "id": "BKK-D10-S02",
+      "district_id": "BKK-D10",
+      "seq_in_district": 2,
+      "name_th": "แสนแสบ",
+      "name_en": "Saen Saep"
+    },
+    {
+      "id": "BKK-D11-S01",
+      "district_id": "BKK-D11",
+      "seq_in_district": 1,
+      "name_th": "ลาดกระบัง",
+      "name_en": "Lat Krabang"
+    },
+    {
+      "id": "BKK-D11-S02",
+      "district_id": "BKK-D11",
+      "seq_in_district": 2,
+      "name_th": "คลองสองต้นนุ่น",
+      "name_en": "Khlong Song Ton Nun"
+    },
+    {
+      "id": "BKK-D11-S03",
+      "district_id": "BKK-D11",
+      "seq_in_district": 3,
+      "name_th": "คลองสามประเวศ",
+      "name_en": "Khlong Sam Prawet"
+    },
+    {
+      "id": "BKK-D11-S04",
+      "district_id": "BKK-D11",
+      "seq_in_district": 4,
+      "name_th": "ลำปลาทิว",
+      "name_en": "Lam Pla Thio"
+    },
+    {
+      "id": "BKK-D11-S05",
+      "district_id": "BKK-D11",
+      "seq_in_district": 5,
+      "name_th": "ทับยาว",
+      "name_en": "Thap Yao"
+    },
+    {
+      "id": "BKK-D11-S06",
+      "district_id": "BKK-D11",
+      "seq_in_district": 6,
+      "name_th": "ขุมทอง",
+      "name_en": "Khum Thong"
+    },
+    {
+      "id": "BKK-D12-S01",
+      "district_id": "BKK-D12",
+      "seq_in_district": 1,
+      "name_th": "ช่องนนทรี",
+      "name_en": "Chong Nonsi"
+    },
+    {
+      "id": "BKK-D12-S02",
+      "district_id": "BKK-D12",
+      "seq_in_district": 2,
+      "name_th": "บางโพงพาง",
+      "name_en": "Bang Phong Phang"
+    },
+    {
+      "id": "BKK-D13-S01",
+      "district_id": "BKK-D13",
+      "seq_in_district": 1,
+      "name_th": "จักรวรรดิ",
+      "name_en": "Chakkrawat"
+    },
+    {
+      "id": "BKK-D13-S02",
+      "district_id": "BKK-D13",
+      "seq_in_district": 2,
+      "name_th": "สัมพันธวงศ์",
+      "name_en": "Samphanthawong"
+    },
+    {
+      "id": "BKK-D13-S03",
+      "district_id": "BKK-D13",
+      "seq_in_district": 3,
+      "name_th": "ตลาดน้อย",
+      "name_en": "Talat Noi"
+    },
+    {
+      "id": "BKK-D14-S01",
+      "district_id": "BKK-D14",
+      "seq_in_district": 1,
+      "name_th": "สามเสนใน",
+      "name_en": "Samsen Nai"
+    },
+    {
+      "id": "BKK-D14-S02",
+      "district_id": "BKK-D14",
+      "seq_in_district": 2,
+      "name_th": "พญาไทย",
+      "name_en": "Phaya Thai"
+    },
+    {
+      "id": "BKK-D15-S01",
+      "district_id": "BKK-D15",
+      "seq_in_district": 1,
+      "name_th": "วัดกัลยาณ์",
+      "name_en": "Wat Kanlaya"
+    },
+    {
+      "id": "BKK-D15-S02",
+      "district_id": "BKK-D15",
+      "seq_in_district": 2,
+      "name_th": "หิรัญรูจี",
+      "name_en": "Hirun Ruchi"
+    },
+    {
+      "id": "BKK-D15-S03",
+      "district_id": "BKK-D15",
+      "seq_in_district": 3,
+      "name_th": "บางยี่เรือ",
+      "name_en": "Bang Yi Ruea"
+    },
+    {
+      "id": "BKK-D15-S04",
+      "district_id": "BKK-D15",
+      "seq_in_district": 4,
+      "name_th": "ตลาดพลู",
+      "name_en": "Talat Phlu"
+    },
+    {
+      "id": "BKK-D15-S05",
+      "district_id": "BKK-D15",
+      "seq_in_district": 5,
+      "name_th": "บุคคโล",
+      "name_en": "Bukkhalo"
+    },
+    {
+      "id": "BKK-D15-S06",
+      "district_id": "BKK-D15",
+      "seq_in_district": 6,
+      "name_th": "สำเหร่",
+      "name_en": "Samrae"
+    },
+    {
+      "id": "BKK-D15-S07",
+      "district_id": "BKK-D15",
+      "seq_in_district": 7,
+      "name_th": "ดาวคะนอง",
+      "name_en": "Dao Kanong"
+    },
+    {
+      "id": "BKK-D16-S01",
+      "district_id": "BKK-D16",
+      "seq_in_district": 1,
+      "name_th": "วัดอรุณ",
+      "name_en": "Wat Arun"
+    },
+    {
+      "id": "BKK-D16-S02",
+      "district_id": "BKK-D16",
+      "seq_in_district": 2,
+      "name_th": "วัดท่าพระ",
+      "name_en": "Wat Tha Phra"
+    },
+    {
+      "id": "BKK-D17-S01",
+      "district_id": "BKK-D17",
+      "seq_in_district": 1,
+      "name_th": "ห้วยขวาง",
+      "name_en": "Huai Khwang"
+    },
+    {
+      "id": "BKK-D17-S02",
+      "district_id": "BKK-D17",
+      "seq_in_district": 2,
+      "name_th": "บางกะปิ",
+      "name_en": "Bangk Kapi"
+    },
+    {
+      "id": "BKK-D17-S03",
+      "district_id": "BKK-D17",
+      "seq_in_district": 3,
+      "name_th": "สามเสนนอก",
+      "name_en": "Samsen Nok"
+    },
+    {
+      "id": "BKK-D18-S01",
+      "district_id": "BKK-D18",
+      "seq_in_district": 1,
+      "name_th": "สมเด็จเจ้าพระยา",
+      "name_en": "Somdet Chao Phraya"
+    },
+    {
+      "id": "BKK-D18-S02",
+      "district_id": "BKK-D18",
+      "seq_in_district": 2,
+      "name_th": "คลองสาน",
+      "name_en": "Khlong San"
+    },
+    {
+      "id": "BKK-D18-S03",
+      "district_id": "BKK-D18",
+      "seq_in_district": 3,
+      "name_th": "บางลำภูล่าง",
+      "name_en": "Bang Lamphu Lang"
+    },
+    {
+      "id": "BKK-D18-S04",
+      "district_id": "BKK-D18",
+      "seq_in_district": 4,
+      "name_th": "คลองต้นไทร",
+      "name_en": "Khlong Ton Sai"
+    },
+    {
+      "id": "BKK-D19-S01",
+      "district_id": "BKK-D19",
+      "seq_in_district": 1,
+      "name_th": "คลองชักพระ",
+      "name_en": "Khlong Chak Phra"
+    },
+    {
+      "id": "BKK-D19-S02",
+      "district_id": "BKK-D19",
+      "seq_in_district": 2,
+      "name_th": "ตลิ่งชัน",
+      "name_en": "Taling Chan"
+    },
+    {
+      "id": "BKK-D19-S03",
+      "district_id": "BKK-D19",
+      "seq_in_district": 3,
+      "name_th": "ฉิมพลี",
+      "name_en": "Chim Phli"
+    },
+    {
+      "id": "BKK-D19-S04",
+      "district_id": "BKK-D19",
+      "seq_in_district": 4,
+      "name_th": "บางพรม",
+      "name_en": "Bang Phrom"
+    },
+    {
+      "id": "BKK-D19-S05",
+      "district_id": "BKK-D19",
+      "seq_in_district": 5,
+      "name_th": "บางระมาด",
+      "name_en": "Bang Ramat"
+    },
+    {
+      "id": "BKK-D19-S06",
+      "district_id": "BKK-D19",
+      "seq_in_district": 6,
+      "name_th": "บางเชือกหนัง",
+      "name_en": "Bang Chueak Nang"
+    },
+    {
+      "id": "BKK-D20-S01",
+      "district_id": "BKK-D20",
+      "seq_in_district": 1,
+      "name_th": "ศิริราช",
+      "name_en": "Siriraj"
+    },
+    {
+      "id": "BKK-D20-S02",
+      "district_id": "BKK-D20",
+      "seq_in_district": 2,
+      "name_th": "บ้านช่างหล่อ",
+      "name_en": "Ban Chang Lo"
+    },
+    {
+      "id": "BKK-D20-S03",
+      "district_id": "BKK-D20",
+      "seq_in_district": 3,
+      "name_th": "บางขุนนนท์",
+      "name_en": "Bang Khun Non"
+    },
+    {
+      "id": "BKK-D20-S04",
+      "district_id": "BKK-D20",
+      "seq_in_district": 4,
+      "name_th": "บางขุนศรี",
+      "name_en": "Bang Khun Si"
+    },
+    {
+      "id": "BKK-D20-S05",
+      "district_id": "BKK-D20",
+      "seq_in_district": 5,
+      "name_th": "อรุณอมรินทร์",
+      "name_en": "Arun Ammarin"
+    },
+    {
+      "id": "BKK-D21-S01",
+      "district_id": "BKK-D21",
+      "seq_in_district": 1,
+      "name_th": "ท่าข้าม",
+      "name_en": "Tha Kham"
+    },
+    {
+      "id": "BKK-D21-S02",
+      "district_id": "BKK-D21",
+      "seq_in_district": 2,
+      "name_th": "แสมดำ",
+      "name_en": "Samae Dam"
+    },
+    {
+      "id": "BKK-D22-S01",
+      "district_id": "BKK-D22",
+      "seq_in_district": 1,
+      "name_th": "บางหว้า",
+      "name_en": "Bang Wa"
+    },
+    {
+      "id": "BKK-D22-S02",
+      "district_id": "BKK-D22",
+      "seq_in_district": 2,
+      "name_th": "บางด้วน",
+      "name_en": "Bang Duan"
+    },
+    {
+      "id": "BKK-D22-S03",
+      "district_id": "BKK-D22",
+      "seq_in_district": 3,
+      "name_th": "บางจาก",
+      "name_en": "Bang Chak"
+    },
+    {
+      "id": "BKK-D22-S04",
+      "district_id": "BKK-D22",
+      "seq_in_district": 4,
+      "name_th": "บางแวก",
+      "name_en": "Bang Waek"
+    },
+    {
+      "id": "BKK-D22-S05",
+      "district_id": "BKK-D22",
+      "seq_in_district": 5,
+      "name_th": "คลองขวาง",
+      "name_en": "Khlong Khwang"
+    },
+    {
+      "id": "BKK-D22-S06",
+      "district_id": "BKK-D22",
+      "seq_in_district": 6,
+      "name_th": "ปากคลองภาษีเจริญ",
+      "name_en": "Pak Khlong Phasi Charoen"
+    },
+    {
+      "id": "BKK-D22-S07",
+      "district_id": "BKK-D22",
+      "seq_in_district": 7,
+      "name_th": "คูหาสวรรค์",
+      "name_en": "Khuha Sawan"
+    },
+    {
+      "id": "BKK-D23-S01",
+      "district_id": "BKK-D23",
+      "seq_in_district": 1,
+      "name_th": "หนองแขม",
+      "name_en": "Nong Khaem"
+    },
+    {
+      "id": "BKK-D23-S02",
+      "district_id": "BKK-D23",
+      "seq_in_district": 2,
+      "name_th": "หนองค้างพลู",
+      "name_en": "Nong Khang Phlu"
+    },
+    {
+      "id": "BKK-D24-S01",
+      "district_id": "BKK-D24",
+      "seq_in_district": 1,
+      "name_th": "ราษฎร์บูรณะ",
+      "name_en": "Rat Burana"
+    },
+    {
+      "id": "BKK-D24-S02",
+      "district_id": "BKK-D24",
+      "seq_in_district": 2,
+      "name_th": "บางปะกอก",
+      "name_en": "Bang Pakok"
+    },
+    {
+      "id": "BKK-D25-S01",
+      "district_id": "BKK-D25",
+      "seq_in_district": 1,
+      "name_th": "บางพลัด",
+      "name_en": "Bang Phlat"
+    },
+    {
+      "id": "BKK-D25-S02",
+      "district_id": "BKK-D25",
+      "seq_in_district": 2,
+      "name_th": "บางอ้อ",
+      "name_en": "Bang O"
+    },
+    {
+      "id": "BKK-D25-S03",
+      "district_id": "BKK-D25",
+      "seq_in_district": 3,
+      "name_th": "บางบำหรุ",
+      "name_en": "Bang Bamru"
+    },
+    {
+      "id": "BKK-D25-S04",
+      "district_id": "BKK-D25",
+      "seq_in_district": 4,
+      "name_th": "บางยี่ขัน",
+      "name_en": "Bang Yi Khan"
+    },
+    {
+      "id": "BKK-D26-S01",
+      "district_id": "BKK-D26",
+      "seq_in_district": 1,
+      "name_th": "ดินแดง",
+      "name_en": "Din Daeng"
+    },
+    {
+      "id": "BKK-D26-S02",
+      "district_id": "BKK-D26",
+      "seq_in_district": 2,
+      "name_th": "รัชดาภิเษก",
+      "name_en": null
+    },
+    {
+      "id": "BKK-D27-S01",
+      "district_id": "BKK-D27",
+      "seq_in_district": 1,
+      "name_th": "คลองกุ่ม",
+      "name_en": "Khlong Kum"
+    },
+    {
+      "id": "BKK-D27-S02",
+      "district_id": "BKK-D27",
+      "seq_in_district": 2,
+      "name_th": "นวมินทร์",
+      "name_en": null
+    },
+    {
+      "id": "BKK-D27-S03",
+      "district_id": "BKK-D27",
+      "seq_in_district": 3,
+      "name_th": "นวลจันทร์",
+      "name_en": null
+    },
+    {
+      "id": "BKK-D28-S01",
+      "district_id": "BKK-D28",
+      "seq_in_district": 1,
+      "name_th": "ทุ่งวัดดอน",
+      "name_en": "Thung Wat Don"
+    },
+    {
+      "id": "BKK-D28-S02",
+      "district_id": "BKK-D28",
+      "seq_in_district": 2,
+      "name_th": "ยานนาวา",
+      "name_en": "Yan Nawa"
+    },
+    {
+      "id": "BKK-D28-S03",
+      "district_id": "BKK-D28",
+      "seq_in_district": 3,
+      "name_th": "ทุ่งมหาเมฆ",
+      "name_en": "Thung Maha Mek"
+    },
+    {
+      "id": "BKK-D29-S01",
+      "district_id": "BKK-D29",
+      "seq_in_district": 1,
+      "name_th": "บางซื่อ",
+      "name_en": "Bang Sue"
+    },
+    {
+      "id": "BKK-D29-S02",
+      "district_id": "BKK-D29",
+      "seq_in_district": 2,
+      "name_th": "วงศ์สว่าง",
+      "name_en": null
+    },
+    {
+      "id": "BKK-D30-S01",
+      "district_id": "BKK-D30",
+      "seq_in_district": 1,
+      "name_th": "ลาดยาว",
+      "name_en": "Lat Yao"
+    },
+    {
+      "id": "BKK-D30-S02",
+      "district_id": "BKK-D30",
+      "seq_in_district": 2,
+      "name_th": "เสนานิคม",
+      "name_en": "Sena Nikhom"
+    },
+    {
+      "id": "BKK-D30-S03",
+      "district_id": "BKK-D30",
+      "seq_in_district": 3,
+      "name_th": "จันทรเกษม",
+      "name_en": "Chan Kasem"
+    },
+    {
+      "id": "BKK-D30-S04",
+      "district_id": "BKK-D30",
+      "seq_in_district": 4,
+      "name_th": "จอมพล",
+      "name_en": "Chom Phon"
+    },
+    {
+      "id": "BKK-D30-S05",
+      "district_id": "BKK-D30",
+      "seq_in_district": 5,
+      "name_th": "จตุจักร",
+      "name_en": "Chatu Chak"
+    },
+    {
+      "id": "BKK-D31-S01",
+      "district_id": "BKK-D31",
+      "seq_in_district": 1,
+      "name_th": "บางคอแหลม",
+      "name_en": "Bang Kho Laem"
+    },
+    {
+      "id": "BKK-D31-S02",
+      "district_id": "BKK-D31",
+      "seq_in_district": 2,
+      "name_th": "วัดพระยาไกร",
+      "name_en": "Wat Phraya Krai"
+    },
+    {
+      "id": "BKK-D31-S03",
+      "district_id": "BKK-D31",
+      "seq_in_district": 3,
+      "name_th": "บางโคล่",
+      "name_en": "Bang Khlo"
+    },
+    {
+      "id": "BKK-D32-S01",
+      "district_id": "BKK-D32",
+      "seq_in_district": 1,
+      "name_th": "ประเวศ",
+      "name_en": "Prawet"
+    },
+    {
+      "id": "BKK-D32-S02",
+      "district_id": "BKK-D32",
+      "seq_in_district": 2,
+      "name_th": "หนองบอน",
+      "name_en": "Nong Bon"
+    },
+    {
+      "id": "BKK-D32-S03",
+      "district_id": "BKK-D32",
+      "seq_in_district": 3,
+      "name_th": "ดอกไม้",
+      "name_en": "Dok Mai"
+    },
+    {
+      "id": "BKK-D33-S01",
+      "district_id": "BKK-D33",
+      "seq_in_district": 1,
+      "name_th": "คลองเตย",
+      "name_en": "Khlong Toe"
+    },
+    {
+      "id": "BKK-D33-S02",
+      "district_id": "BKK-D33",
+      "seq_in_district": 2,
+      "name_th": "คลองตัน",
+      "name_en": "Khlong Tan"
+    },
+    {
+      "id": "BKK-D33-S03",
+      "district_id": "BKK-D33",
+      "seq_in_district": 3,
+      "name_th": "พระโขนง",
+      "name_en": "Phra Khanong"
+    },
+    {
+      "id": "BKK-D34-S01",
+      "district_id": "BKK-D34",
+      "seq_in_district": 1,
+      "name_th": "สวนหลวง",
+      "name_en": "Suan Luang"
+    },
+    {
+      "id": "BKK-D34-S02",
+      "district_id": "BKK-D34",
+      "seq_in_district": 2,
+      "name_th": "อ่อนนุช",
+      "name_en": "On Nut"
+    },
+    {
+      "id": "BKK-D34-S03",
+      "district_id": "BKK-D34",
+      "seq_in_district": 3,
+      "name_th": "พัฒนาการ",
+      "name_en": "Phatthanakan"
+    },
+    {
+      "id": "BKK-D35-S01",
+      "district_id": "BKK-D35",
+      "seq_in_district": 1,
+      "name_th": "บางขุนเทียน",
+      "name_en": "Bang Khun Thian"
+    },
+    {
+      "id": "BKK-D35-S02",
+      "district_id": "BKK-D35",
+      "seq_in_district": 2,
+      "name_th": "บางค้อ",
+      "name_en": "Bang Kho"
+    },
+    {
+      "id": "BKK-D35-S03",
+      "district_id": "BKK-D35",
+      "seq_in_district": 3,
+      "name_th": "บางมด",
+      "name_en": "Bang Mot"
+    },
+    {
+      "id": "BKK-D35-S04",
+      "district_id": "BKK-D35",
+      "seq_in_district": 4,
+      "name_th": "จอมทอง",
+      "name_en": "Chom Thong"
+    },
+    {
+      "id": "BKK-D36-S01",
+      "district_id": "BKK-D36",
+      "seq_in_district": 1,
+      "name_th": "สีกัน",
+      "name_en": "Si Kan"
+    },
+    {
+      "id": "BKK-D36-S02",
+      "district_id": "BKK-D36",
+      "seq_in_district": 2,
+      "name_th": "ดอนเมือง",
+      "name_en": "Don Mueang"
+    },
+    {
+      "id": "BKK-D36-S03",
+      "district_id": "BKK-D36",
+      "seq_in_district": 3,
+      "name_th": "สนามบิน",
+      "name_en": "Sanam Bin"
+    },
+    {
+      "id": "BKK-D37-S01",
+      "district_id": "BKK-D37",
+      "seq_in_district": 1,
+      "name_th": "ทุ่งพญาไท",
+      "name_en": "Thung Phaya Thai"
+    },
+    {
+      "id": "BKK-D37-S02",
+      "district_id": "BKK-D37",
+      "seq_in_district": 2,
+      "name_th": "ถนนพญาไท",
+      "name_en": "Thanon Phaya Thai"
+    },
+    {
+      "id": "BKK-D37-S03",
+      "district_id": "BKK-D37",
+      "seq_in_district": 3,
+      "name_th": "ถนนเพชรบุรี",
+      "name_en": "Thanon Phetchaburi"
+    },
+    {
+      "id": "BKK-D37-S04",
+      "district_id": "BKK-D37",
+      "seq_in_district": 4,
+      "name_th": "มักกะสัน",
+      "name_en": "Makkasan"
+    },
+    {
+      "id": "BKK-D38-S01",
+      "district_id": "BKK-D38",
+      "seq_in_district": 1,
+      "name_th": "ลาดพร้าว",
+      "name_en": "Lat Phrao"
+    },
+    {
+      "id": "BKK-D38-S02",
+      "district_id": "BKK-D38",
+      "seq_in_district": 2,
+      "name_th": "จรเข้บัว",
+      "name_en": "Chorakhae Bua"
+    },
+    {
+      "id": "BKK-D39-S01",
+      "district_id": "BKK-D39",
+      "seq_in_district": 1,
+      "name_th": "คลองเตยเหนือ",
+      "name_en": "Khlong Toei Nuea"
+    },
+    {
+      "id": "BKK-D39-S02",
+      "district_id": "BKK-D39",
+      "seq_in_district": 2,
+      "name_th": "คลองตันเหนือ",
+      "name_en": "Khlong Tan Nuea"
+    },
+    {
+      "id": "BKK-D39-S03",
+      "district_id": "BKK-D39",
+      "seq_in_district": 3,
+      "name_th": "พระโขนงเหนือ",
+      "name_en": "Phra Khanong Nuea"
+    },
+    {
+      "id": "BKK-D40-S01",
+      "district_id": "BKK-D40",
+      "seq_in_district": 1,
+      "name_th": "บางแค",
+      "name_en": "Bang Khae"
+    },
+    {
+      "id": "BKK-D40-S02",
+      "district_id": "BKK-D40",
+      "seq_in_district": 2,
+      "name_th": "บางแคเหนือ",
+      "name_en": "Bang Khae Nuea"
+    },
+    {
+      "id": "BKK-D40-S03",
+      "district_id": "BKK-D40",
+      "seq_in_district": 3,
+      "name_th": "บางไผ่",
+      "name_en": "Bang Phai"
+    },
+    {
+      "id": "BKK-D40-S04",
+      "district_id": "BKK-D40",
+      "seq_in_district": 4,
+      "name_th": "หลักสอง",
+      "name_en": "Lak song"
+    },
+    {
+      "id": "BKK-D41-S01",
+      "district_id": "BKK-D41",
+      "seq_in_district": 1,
+      "name_th": "ทุ่งสองห้อง",
+      "name_en": "Thung Song Hong"
+    },
+    {
+      "id": "BKK-D41-S02",
+      "district_id": "BKK-D41",
+      "seq_in_district": 2,
+      "name_th": "ตลาดบางเขน",
+      "name_en": "Talat Bang Khen"
+    },
+    {
+      "id": "BKK-D42-S01",
+      "district_id": "BKK-D42",
+      "seq_in_district": 1,
+      "name_th": "สายไหม",
+      "name_en": "Sai Mai"
+    },
+    {
+      "id": "BKK-D42-S02",
+      "district_id": "BKK-D42",
+      "seq_in_district": 2,
+      "name_th": "ออเงิน",
+      "name_en": "O Ngoen"
+    },
+    {
+      "id": "BKK-D42-S03",
+      "district_id": "BKK-D42",
+      "seq_in_district": 3,
+      "name_th": "คลองถนน",
+      "name_en": "Khlong Thanon"
+    },
+    {
+      "id": "BKK-D43-S01",
+      "district_id": "BKK-D43",
+      "seq_in_district": 1,
+      "name_th": "คันนายาว",
+      "name_en": "Khan Na Yao"
+    },
+    {
+      "id": "BKK-D43-S02",
+      "district_id": "BKK-D43",
+      "seq_in_district": 2,
+      "name_th": "รามอินทรา",
+      "name_en": null
+    },
+    {
+      "id": "BKK-D44-S01",
+      "district_id": "BKK-D44",
+      "seq_in_district": 1,
+      "name_th": "สะพานสูง",
+      "name_en": null
+    },
+    {
+      "id": "BKK-D44-S02",
+      "district_id": "BKK-D44",
+      "seq_in_district": 2,
+      "name_th": "ราษฎร์พัฒนา",
+      "name_en": "Rat Phatthana"
+    },
+    {
+      "id": "BKK-D44-S03",
+      "district_id": "BKK-D44",
+      "seq_in_district": 3,
+      "name_th": "ทับช้าง",
+      "name_en": "Thap Chang"
+    },
+    {
+      "id": "BKK-D45-S01",
+      "district_id": "BKK-D45",
+      "seq_in_district": 1,
+      "name_th": "วังทองหลาง",
+      "name_en": "Wang Thong Lang"
+    },
+    {
+      "id": "BKK-D45-S02",
+      "district_id": "BKK-D45",
+      "seq_in_district": 2,
+      "name_th": "สะพานสอง",
+      "name_en": "Saphan Song"
+    },
+    {
+      "id": "BKK-D45-S03",
+      "district_id": "BKK-D45",
+      "seq_in_district": 3,
+      "name_th": "คลองเจ้าคุณสิงห์",
+      "name_en": "Khlong Chaokhun Sing"
+    },
+    {
+      "id": "BKK-D45-S04",
+      "district_id": "BKK-D45",
+      "seq_in_district": 4,
+      "name_th": "พลับพลา",
+      "name_en": "Phlapphla"
+    },
+    {
+      "id": "BKK-D46-S01",
+      "district_id": "BKK-D46",
+      "seq_in_district": 1,
+      "name_th": "สามวาตะวันตก",
+      "name_en": "Sam Wa Tawan Tok"
+    },
+    {
+      "id": "BKK-D46-S02",
+      "district_id": "BKK-D46",
+      "seq_in_district": 2,
+      "name_th": "สามวาตะวันออก",
+      "name_en": "Sam Wa Tawan Ok"
+    },
+    {
+      "id": "BKK-D46-S03",
+      "district_id": "BKK-D46",
+      "seq_in_district": 3,
+      "name_th": "บางชัน",
+      "name_en": "Bang Chan"
+    },
+    {
+      "id": "BKK-D46-S04",
+      "district_id": "BKK-D46",
+      "seq_in_district": 4,
+      "name_th": "ทรายกองดิน",
+      "name_en": "Sai Kong Din"
+    },
+    {
+      "id": "BKK-D46-S05",
+      "district_id": "BKK-D46",
+      "seq_in_district": 5,
+      "name_th": "ทรายกองดินใต้",
+      "name_en": "Sai Kong Din Tai"
+    },
+    {
+      "id": "BKK-D47-S01",
+      "district_id": "BKK-D47",
+      "seq_in_district": 1,
+      "name_th": "บางมด",
+      "name_en": "Bang Mot"
+    },
+    {
+      "id": "BKK-D47-S02",
+      "district_id": "BKK-D47",
+      "seq_in_district": 2,
+      "name_th": "ทุ่งครุ",
+      "name_en": "Thung Khru"
+    },
+    {
+      "id": "BKK-D48-S01",
+      "district_id": "BKK-D48",
+      "seq_in_district": 1,
+      "name_th": "บางบอนเหนือ",
+      "name_en": "Bang Bon Nuea"
+    },
+    {
+      "id": "BKK-D48-S02",
+      "district_id": "BKK-D48",
+      "seq_in_district": 2,
+      "name_th": "บางบอนใต้",
+      "name_en": "Bang Bon Tai"
+    },
+    {
+      "id": "BKK-D48-S03",
+      "district_id": "BKK-D48",
+      "seq_in_district": 3,
+      "name_th": "คลองบางพราน",
+      "name_en": "Khlong Bang Phran"
+    },
+    {
+      "id": "BKK-D48-S04",
+      "district_id": "BKK-D48",
+      "seq_in_district": 4,
+      "name_th": "คลองบางบอน",
+      "name_en": "Khlong Bang Bon"
+    },
+    {
+      "id": "BKK-D49-S01",
+      "district_id": "BKK-D49",
+      "seq_in_district": 1,
+      "name_th": "บางนาเหนือ",
+      "name_en": "Bang Na Nuea"
+    },
+    {
+      "id": "BKK-D49-S02",
+      "district_id": "BKK-D49",
+      "seq_in_district": 2,
+      "name_th": "บางนาใต้",
+      "name_en": "Bang Na Tai"
+    },
+    {
+      "id": "BKK-D50-S01",
+      "district_id": "BKK-D50",
+      "seq_in_district": 1,
+      "name_th": "ทวีวัฒนา",
+      "name_en": "Thawi Watthana"
+    },
+    {
+      "id": "BKK-D50-S02",
+      "district_id": "BKK-D50",
+      "seq_in_district": 2,
+      "name_th": "ศาลาธรรมสพน์",
+      "name_en": "Sala Thammasop"
+    }
+  ],
+
+  "map": {
+    "district_to_subdistricts": {
+      "BKK-D01": [
+        {
+          "id": "BKK-D01-S01",
+          "name_th": "พระบรมหาราชวัง",
+          "name_en": "Phra Borom Maha Rachawang"
+        },
+        {
+          "id": "BKK-D01-S02",
+          "name_th": "วังบูรพาภิรมย์",
+          "name_en": "Wang Buraphaphirom"
+        },
+        {
+          "id": "BKK-D01-S03",
+          "name_th": "วัดราชบพิธ",
+          "name_en": "Wat Ratchabophit"
+        },
+        {
+          "id": "BKK-D01-S04",
+          "name_th": "สำราญราษฎร์",
+          "name_en": "Samran Rat"
+        },
+        {
+          "id": "BKK-D01-S05",
+          "name_th": "ศาลเจ้าพ่อเสือ",
+          "name_en": "San Chao Pho Suea"
+        },
+        {
+          "id": "BKK-D01-S06",
+          "name_th": "เสาชิงช้า",
+          "name_en": "Sao Chingcha"
+        },
+        {
+          "id": "BKK-D01-S07",
+          "name_th": "บวรนิเวศ",
+          "name_en": "Bowon Niwet"
+        },
+        {
+          "id": "BKK-D01-S08",
+          "name_th": "ตลาดยอด",
+          "name_en": "Talat Yot"
+        },
+        {
+          "id": "BKK-D01-S09",
+          "name_th": "ชนะสงคราม",
+          "name_en": "Chana Songkhram"
+        },
+        {
+          "id": "BKK-D01-S10",
+          "name_th": "บ้านพานถม",
+          "name_en": "Ban Phan Thom"
+        },
+        {
+          "id": "BKK-D01-S11",
+          "name_th": "บางขุนพรหม",
+          "name_en": "Bang Khun Phrom"
+        },
+        {
+          "id": "BKK-D01-S12",
+          "name_th": "วัดสามพระยา",
+          "name_en": "Wat Sam Phraya"
+        }
+      ],
+      "BKK-D02": [
+        {
+          "id": "BKK-D02-S01",
+          "name_th": "ดุสิต",
+          "name_en": "Dusit"
+        },
+        {
+          "id": "BKK-D02-S02",
+          "name_th": "วชิรพยาบาล",
+          "name_en": "Vajira Phayaban"
+        },
+        {
+          "id": "BKK-D02-S03",
+          "name_th": "สวนจิตรลดา",
+          "name_en": "Suan Chitlada"
+        },
+        {
+          "id": "BKK-D02-S04",
+          "name_th": "สี่แยกมหานาค",
+          "name_en": "Si Yeak Maha Nak"
+        },
+        {
+          "id": "BKK-D02-S05",
+          "name_th": "ถนนนครไชยศรี",
+          "name_en": "Thanon Nakhon Chai Si"
+        }
+      ],
+      "BKK-D03": [
+        {
+          "id": "BKK-D03-S01",
+          "name_th": "กระทุ่มราย",
+          "name_en": "Krathum Rai"
+        },
+        {
+          "id": "BKK-D03-S02",
+          "name_th": "หนองจอก",
+          "name_en": "Nong Chok"
+        },
+        {
+          "id": "BKK-D03-S03",
+          "name_th": "คลองสิบ",
+          "name_en": "Khlong Sip"
+        },
+        {
+          "id": "BKK-D03-S04",
+          "name_th": "คลองสิบสอง",
+          "name_en": "Khlong Sip Song"
+        },
+        {
+          "id": "BKK-D03-S05",
+          "name_th": "โคกแฝด",
+          "name_en": "Khok Faet"
+        },
+        {
+          "id": "BKK-D03-S06",
+          "name_th": "คู้ฝั่งเหนือ",
+          "name_en": "Khu Fang Nuea"
+        },
+        {
+          "id": "BKK-D03-S07",
+          "name_th": "ลำผักชี",
+          "name_en": "Lam Phak Chi"
+        },
+        {
+          "id": "BKK-D03-S08",
+          "name_th": "ลำต้อยติ่ง",
+          "name_en": "Lam Toi Ting"
+        }
+      ],
+      "BKK-D04": [
+        {
+          "id": "BKK-D04-S01",
+          "name_th": "มหาพฤฒาราม",
+          "name_en": "Maha Phruettharam"
+        },
+        {
+          "id": "BKK-D04-S02",
+          "name_th": "สีลม",
+          "name_en": "Si Lom"
+        },
+        {
+          "id": "BKK-D04-S03",
+          "name_th": "สุรวงศ์",
+          "name_en": "Suriyawong"
+        },
+        {
+          "id": "BKK-D04-S04",
+          "name_th": "บางรัก",
+          "name_en": "Bang Rak"
+        },
+        {
+          "id": "BKK-D04-S05",
+          "name_th": "สี่พระยา",
+          "name_en": "Si Phraya"
+        }
+      ],
+      "BKK-D05": [
+        {
+          "id": "BKK-D05-S01",
+          "name_th": "อนุสาวรีย์",
+          "name_en": "Anusaowari"
+        },
+        {
+          "id": "BKK-D05-S02",
+          "name_th": "ท่าแร้ง",
+          "name_en": "Tha Raeng"
+        }
+      ],
+      "BKK-D06": [
+        {
+          "id": "BKK-D06-S01",
+          "name_th": "คลองจั่น",
+          "name_en": "Khlong Chan"
+        },
+        {
+          "id": "BKK-D06-S02",
+          "name_th": "หัวหมาก",
+          "name_en": "Hua Mak"
+        }
+      ],
+      "BKK-D07": [
+        {
+          "id": "BKK-D07-S01",
+          "name_th": "รองเมือง",
+          "name_en": "Rong Mueang"
+        },
+        {
+          "id": "BKK-D07-S02",
+          "name_th": "วังใหม่",
+          "name_en": "Wang Mai"
+        },
+        {
+          "id": "BKK-D07-S03",
+          "name_th": "ปทุมวัน",
+          "name_en": "Pathum Wan"
+        },
+        {
+          "id": "BKK-D07-S04",
+          "name_th": "ลุมพินี",
+          "name_en": "Lumphini"
+        }
+      ],
+      "BKK-D08": [
+        {
+          "id": "BKK-D08-S01",
+          "name_th": "ป้อมปราบ",
+          "name_en": "Pom Prap"
+        },
+        {
+          "id": "BKK-D08-S02",
+          "name_th": "วัดเทพศิรินทร์",
+          "name_en": "Wat Thep Sirin"
+        },
+        {
+          "id": "BKK-D08-S03",
+          "name_th": "คลองมหานาค",
+          "name_en": "Khlong Maha Nak"
+        },
+        {
+          "id": "BKK-D08-S04",
+          "name_th": "บ้านบาตร",
+          "name_en": "Ban Bat"
+        },
+        {
+          "id": "BKK-D08-S05",
+          "name_th": "วัดโสมนัส",
+          "name_en": "Wat Sommanat"
+        }
+      ],
+      "BKK-D09": [
+        {
+          "id": "BKK-D09-S01",
+          "name_th": "บางจาก",
+          "name_en": "Bang Chak"
+        },
+        {
+          "id": "BKK-D09-S02",
+          "name_th": "พระโขนงใต้",
+          "name_en": "Phra Khanong Tai"
+        }
+      ],
+      "BKK-D10": [
+        {
+          "id": "BKK-D10-S01",
+          "name_th": "มีนบุรี",
+          "name_en": "Min Buri"
+        },
+        {
+          "id": "BKK-D10-S02",
+          "name_th": "แสนแสบ",
+          "name_en": "Saen Saep"
+        }
+      ],
+      "BKK-D11": [
+        {
+          "id": "BKK-D11-S01",
+          "name_th": "ลาดกระบัง",
+          "name_en": "Lat Krabang"
+        },
+        {
+          "id": "BKK-D11-S02",
+          "name_th": "คลองสองต้นนุ่น",
+          "name_en": "Khlong Song Ton Nun"
+        },
+        {
+          "id": "BKK-D11-S03",
+          "name_th": "คลองสามประเวศ",
+          "name_en": "Khlong Sam Prawet"
+        },
+        {
+          "id": "BKK-D11-S04",
+          "name_th": "ลำปลาทิว",
+          "name_en": "Lam Pla Thio"
+        },
+        {
+          "id": "BKK-D11-S05",
+          "name_th": "ทับยาว",
+          "name_en": "Thap Yao"
+        },
+        {
+          "id": "BKK-D11-S06",
+          "name_th": "ขุมทอง",
+          "name_en": "Khum Thong"
+        }
+      ],
+      "BKK-D12": [
+        {
+          "id": "BKK-D12-S01",
+          "name_th": "ช่องนนทรี",
+          "name_en": "Chong Nonsi"
+        },
+        {
+          "id": "BKK-D12-S02",
+          "name_th": "บางโพงพาง",
+          "name_en": "Bang Phong Phang"
+        }
+      ],
+      "BKK-D13": [
+        {
+          "id": "BKK-D13-S01",
+          "name_th": "จักรวรรดิ",
+          "name_en": "Chakkrawat"
+        },
+        {
+          "id": "BKK-D13-S02",
+          "name_th": "สัมพันธวงศ์",
+          "name_en": "Samphanthawong"
+        },
+        {
+          "id": "BKK-D13-S03",
+          "name_th": "ตลาดน้อย",
+          "name_en": "Talat Noi"
+        }
+      ],
+      "BKK-D14": [
+        {
+          "id": "BKK-D14-S01",
+          "name_th": "สามเสนใน",
+          "name_en": "Samsen Nai"
+        },
+        {
+          "id": "BKK-D14-S02",
+          "name_th": "พญาไทย",
+          "name_en": "Phaya Thai"
+        }
+      ],
+      "BKK-D15": [
+        {
+          "id": "BKK-D15-S01",
+          "name_th": "วัดกัลยาณ์",
+          "name_en": "Wat Kanlaya"
+        },
+        {
+          "id": "BKK-D15-S02",
+          "name_th": "หิรัญรูจี",
+          "name_en": "Hirun Ruchi"
+        },
+        {
+          "id": "BKK-D15-S03",
+          "name_th": "บางยี่เรือ",
+          "name_en": "Bang Yi Ruea"
+        },
+        {
+          "id": "BKK-D15-S04",
+          "name_th": "ตลาดพลู",
+          "name_en": "Talat Phlu"
+        },
+        {
+          "id": "BKK-D15-S05",
+          "name_th": "บุคคโล",
+          "name_en": "Bukkhalo"
+        },
+        {
+          "id": "BKK-D15-S06",
+          "name_th": "สำเหร่",
+          "name_en": "Samrae"
+        },
+        {
+          "id": "BKK-D15-S07",
+          "name_th": "ดาวคะนอง",
+          "name_en": "Dao Kanong"
+        }
+      ],
+      "BKK-D16": [
+        {
+          "id": "BKK-D16-S01",
+          "name_th": "วัดอรุณ",
+          "name_en": "Wat Arun"
+        },
+        {
+          "id": "BKK-D16-S02",
+          "name_th": "วัดท่าพระ",
+          "name_en": "Wat Tha Phra"
+        }
+      ],
+      "BKK-D17": [
+        {
+          "id": "BKK-D17-S01",
+          "name_th": "ห้วยขวาง",
+          "name_en": "Huai Khwang"
+        },
+        {
+          "id": "BKK-D17-S02",
+          "name_th": "บางกะปิ",
+          "name_en": "Bangk Kapi"
+        },
+        {
+          "id": "BKK-D17-S03",
+          "name_th": "สามเสนนอก",
+          "name_en": "Samsen Nok"
+        }
+      ],
+      "BKK-D18": [
+        {
+          "id": "BKK-D18-S01",
+          "name_th": "สมเด็จเจ้าพระยา",
+          "name_en": "Somdet Chao Phraya"
+        },
+        {
+          "id": "BKK-D18-S02",
+          "name_th": "คลองสาน",
+          "name_en": "Khlong San"
+        },
+        {
+          "id": "BKK-D18-S03",
+          "name_th": "บางลำภูล่าง",
+          "name_en": "Bang Lamphu Lang"
+        },
+        {
+          "id": "BKK-D18-S04",
+          "name_th": "คลองต้นไทร",
+          "name_en": "Khlong Ton Sai"
+        }
+      ],
+      "BKK-D19": [
+        {
+          "id": "BKK-D19-S01",
+          "name_th": "คลองชักพระ",
+          "name_en": "Khlong Chak Phra"
+        },
+        {
+          "id": "BKK-D19-S02",
+          "name_th": "ตลิ่งชัน",
+          "name_en": "Taling Chan"
+        },
+        {
+          "id": "BKK-D19-S03",
+          "name_th": "ฉิมพลี",
+          "name_en": "Chim Phli"
+        },
+        {
+          "id": "BKK-D19-S04",
+          "name_th": "บางพรม",
+          "name_en": "Bang Phrom"
+        },
+        {
+          "id": "BKK-D19-S05",
+          "name_th": "บางระมาด",
+          "name_en": "Bang Ramat"
+        },
+        {
+          "id": "BKK-D19-S06",
+          "name_th": "บางเชือกหนัง",
+          "name_en": "Bang Chueak Nang"
+        }
+      ],
+      "BKK-D20": [
+        {
+          "id": "BKK-D20-S01",
+          "name_th": "ศิริราช",
+          "name_en": "Siriraj"
+        },
+        {
+          "id": "BKK-D20-S02",
+          "name_th": "บ้านช่างหล่อ",
+          "name_en": "Ban Chang Lo"
+        },
+        {
+          "id": "BKK-D20-S03",
+          "name_th": "บางขุนนนท์",
+          "name_en": "Bang Khun Non"
+        },
+        {
+          "id": "BKK-D20-S04",
+          "name_th": "บางขุนศรี",
+          "name_en": "Bang Khun Si"
+        },
+        {
+          "id": "BKK-D20-S05",
+          "name_th": "อรุณอมรินทร์",
+          "name_en": "Arun Ammarin"
+        }
+      ],
+      "BKK-D21": [
+        {
+          "id": "BKK-D21-S01",
+          "name_th": "ท่าข้าม",
+          "name_en": "Tha Kham"
+        },
+        {
+          "id": "BKK-D21-S02",
+          "name_th": "แสมดำ",
+          "name_en": "Samae Dam"
+        }
+      ],
+      "BKK-D22": [
+        {
+          "id": "BKK-D22-S01",
+          "name_th": "บางหว้า",
+          "name_en": "Bang Wa"
+        },
+        {
+          "id": "BKK-D22-S02",
+          "name_th": "บางด้วน",
+          "name_en": "Bang Duan"
+        },
+        {
+          "id": "BKK-D22-S03",
+          "name_th": "บางจาก",
+          "name_en": "Bang Chak"
+        },
+        {
+          "id": "BKK-D22-S04",
+          "name_th": "บางแวก",
+          "name_en": "Bang Waek"
+        },
+        {
+          "id": "BKK-D22-S05",
+          "name_th": "คลองขวาง",
+          "name_en": "Khlong Khwang"
+        },
+        {
+          "id": "BKK-D22-S06",
+          "name_th": "ปากคลองภาษีเจริญ",
+          "name_en": "Pak Khlong Phasi Charoen"
+        },
+        {
+          "id": "BKK-D22-S07",
+          "name_th": "คูหาสวรรค์",
+          "name_en": "Khuha Sawan"
+        }
+      ],
+      "BKK-D23": [
+        {
+          "id": "BKK-D23-S01",
+          "name_th": "หนองแขม",
+          "name_en": "Nong Khaem"
+        },
+        {
+          "id": "BKK-D23-S02",
+          "name_th": "หนองค้างพลู",
+          "name_en": "Nong Khang Phlu"
+        }
+      ],
+      "BKK-D24": [
+        {
+          "id": "BKK-D24-S01",
+          "name_th": "ราษฎร์บูรณะ",
+          "name_en": "Rat Burana"
+        },
+        {
+          "id": "BKK-D24-S02",
+          "name_th": "บางปะกอก",
+          "name_en": "Bang Pakok"
+        }
+      ],
+      "BKK-D25": [
+        {
+          "id": "BKK-D25-S01",
+          "name_th": "บางพลัด",
+          "name_en": "Bang Phlat"
+        },
+        {
+          "id": "BKK-D25-S02",
+          "name_th": "บางอ้อ",
+          "name_en": "Bang O"
+        },
+        {
+          "id": "BKK-D25-S03",
+          "name_th": "บางบำหรุ",
+          "name_en": "Bang Bamru"
+        },
+        {
+          "id": "BKK-D25-S04",
+          "name_th": "บางยี่ขัน",
+          "name_en": "Bang Yi Khan"
+        }
+      ],
+      "BKK-D26": [
+        {
+          "id": "BKK-D26-S01",
+          "name_th": "ดินแดง",
+          "name_en": "Din Daeng"
+        },
+        {
+          "id": "BKK-D26-S02",
+          "name_th": "รัชดาภิเษก",
+          "name_en": null
+        }
+      ],
+      "BKK-D27": [
+        {
+          "id": "BKK-D27-S01",
+          "name_th": "คลองกุ่ม",
+          "name_en": "Khlong Kum"
+        },
+        {
+          "id": "BKK-D27-S02",
+          "name_th": "นวมินทร์",
+          "name_en": null
+        },
+        {
+          "id": "BKK-D27-S03",
+          "name_th": "นวลจันทร์",
+          "name_en": null
+        }
+      ],
+      "BKK-D28": [
+        {
+          "id": "BKK-D28-S01",
+          "name_th": "ทุ่งวัดดอน",
+          "name_en": "Thung Wat Don"
+        },
+        {
+          "id": "BKK-D28-S02",
+          "name_th": "ยานนาวา",
+          "name_en": "Yan Nawa"
+        },
+        {
+          "id": "BKK-D28-S03",
+          "name_th": "ทุ่งมหาเมฆ",
+          "name_en": "Thung Maha Mek"
+        }
+      ],
+      "BKK-D29": [
+        {
+          "id": "BKK-D29-S01",
+          "name_th": "บางซื่อ",
+          "name_en": "Bang Sue"
+        },
+        {
+          "id": "BKK-D29-S02",
+          "name_th": "วงศ์สว่าง",
+          "name_en": null
+        }
+      ],
+      "BKK-D30": [
+        {
+          "id": "BKK-D30-S01",
+          "name_th": "ลาดยาว",
+          "name_en": "Lat Yao"
+        },
+        {
+          "id": "BKK-D30-S02",
+          "name_th": "เสนานิคม",
+          "name_en": "Sena Nikhom"
+        },
+        {
+          "id": "BKK-D30-S03",
+          "name_th": "จันทรเกษม",
+          "name_en": "Chan Kasem"
+        },
+        {
+          "id": "BKK-D30-S04",
+          "name_th": "จอมพล",
+          "name_en": "Chom Phon"
+        },
+        {
+          "id": "BKK-D30-S05",
+          "name_th": "จตุจักร",
+          "name_en": "Chatu Chak"
+        }
+      ],
+      "BKK-D31": [
+        {
+          "id": "BKK-D31-S01",
+          "name_th": "บางคอแหลม",
+          "name_en": "Bang Kho Laem"
+        },
+        {
+          "id": "BKK-D31-S02",
+          "name_th": "วัดพระยาไกร",
+          "name_en": "Wat Phraya Krai"
+        },
+        {
+          "id": "BKK-D31-S03",
+          "name_th": "บางโคล่",
+          "name_en": "Bang Khlo"
+        }
+      ],
+      "BKK-D32": [
+        {
+          "id": "BKK-D32-S01",
+          "name_th": "ประเวศ",
+          "name_en": "Prawet"
+        },
+        {
+          "id": "BKK-D32-S02",
+          "name_th": "หนองบอน",
+          "name_en": "Nong Bon"
+        },
+        {
+          "id": "BKK-D32-S03",
+          "name_th": "ดอกไม้",
+          "name_en": "Dok Mai"
+        }
+      ],
+      "BKK-D33": [
+        {
+          "id": "BKK-D33-S01",
+          "name_th": "คลองเตย",
+          "name_en": "Khlong Toe"
+        },
+        {
+          "id": "BKK-D33-S02",
+          "name_th": "คลองตัน",
+          "name_en": "Khlong Tan"
+        },
+        {
+          "id": "BKK-D33-S03",
+          "name_th": "พระโขนง",
+          "name_en": "Phra Khanong"
+        }
+      ],
+      "BKK-D34": [
+        {
+          "id": "BKK-D34-S01",
+          "name_th": "สวนหลวง",
+          "name_en": "Suan Luang"
+        },
+        {
+          "id": "BKK-D34-S02",
+          "name_th": "อ่อนนุช",
+          "name_en": "On Nut"
+        },
+        {
+          "id": "BKK-D34-S03",
+          "name_th": "พัฒนาการ",
+          "name_en": "Phatthanakan"
+        }
+      ],
+      "BKK-D35": [
+        {
+          "id": "BKK-D35-S01",
+          "name_th": "บางขุนเทียน",
+          "name_en": "Bang Khun Thian"
+        },
+        {
+          "id": "BKK-D35-S02",
+          "name_th": "บางค้อ",
+          "name_en": "Bang Kho"
+        },
+        {
+          "id": "BKK-D35-S03",
+          "name_th": "บางมด",
+          "name_en": "Bang Mot"
+        },
+        {
+          "id": "BKK-D35-S04",
+          "name_th": "จอมทอง",
+          "name_en": "Chom Thong"
+        }
+      ],
+      "BKK-D36": [
+        {
+          "id": "BKK-D36-S01",
+          "name_th": "สีกัน",
+          "name_en": "Si Kan"
+        },
+        {
+          "id": "BKK-D36-S02",
+          "name_th": "ดอนเมือง",
+          "name_en": "Don Mueang"
+        },
+        {
+          "id": "BKK-D36-S03",
+          "name_th": "สนามบิน",
+          "name_en": "Sanam Bin"
+        }
+      ],
+      "BKK-D37": [
+        {
+          "id": "BKK-D37-S01",
+          "name_th": "ทุ่งพญาไท",
+          "name_en": "Thung Phaya Thai"
+        },
+        {
+          "id": "BKK-D37-S02",
+          "name_th": "ถนนพญาไท",
+          "name_en": "Thanon Phaya Thai"
+        },
+        {
+          "id": "BKK-D37-S03",
+          "name_th": "ถนนเพชรบุรี",
+          "name_en": "Thanon Phetchaburi"
+        },
+        {
+          "id": "BKK-D37-S04",
+          "name_th": "มักกะสัน",
+          "name_en": "Makkasan"
+        }
+      ],
+      "BKK-D38": [
+        {
+          "id": "BKK-D38-S01",
+          "name_th": "ลาดพร้าว",
+          "name_en": "Lat Phrao"
+        },
+        {
+          "id": "BKK-D38-S02",
+          "name_th": "จรเข้บัว",
+          "name_en": "Chorakhae Bua"
+        }
+      ],
+      "BKK-D39": [
+        {
+          "id": "BKK-D39-S01",
+          "name_th": "คลองเตยเหนือ",
+          "name_en": "Khlong Toei Nuea"
+        },
+        {
+          "id": "BKK-D39-S02",
+          "name_th": "คลองตันเหนือ",
+          "name_en": "Khlong Tan Nuea"
+        },
+        {
+          "id": "BKK-D39-S03",
+          "name_th": "พระโขนงเหนือ",
+          "name_en": "Phra Khanong Nuea"
+        }
+      ],
+      "BKK-D40": [
+        {
+          "id": "BKK-D40-S01",
+          "name_th": "บางแค",
+          "name_en": "Bang Khae"
+        },
+        {
+          "id": "BKK-D40-S02",
+          "name_th": "บางแคเหนือ",
+          "name_en": "Bang Khae Nuea"
+        },
+        {
+          "id": "BKK-D40-S03",
+          "name_th": "บางไผ่",
+          "name_en": "Bang Phai"
+        },
+        {
+          "id": "BKK-D40-S04",
+          "name_th": "หลักสอง",
+          "name_en": "Lak song"
+        }
+      ],
+      "BKK-D41": [
+        {
+          "id": "BKK-D41-S01",
+          "name_th": "ทุ่งสองห้อง",
+          "name_en": "Thung Song Hong"
+        },
+        {
+          "id": "BKK-D41-S02",
+          "name_th": "ตลาดบางเขน",
+          "name_en": "Talat Bang Khen"
+        }
+      ],
+      "BKK-D42": [
+        {
+          "id": "BKK-D42-S01",
+          "name_th": "สายไหม",
+          "name_en": "Sai Mai"
+        },
+        {
+          "id": "BKK-D42-S02",
+          "name_th": "ออเงิน",
+          "name_en": "O Ngoen"
+        },
+        {
+          "id": "BKK-D42-S03",
+          "name_th": "คลองถนน",
+          "name_en": "Khlong Thanon"
+        }
+      ],
+      "BKK-D43": [
+        {
+          "id": "BKK-D43-S01",
+          "name_th": "คันนายาว",
+          "name_en": "Khan Na Yao"
+        },
+        {
+          "id": "BKK-D43-S02",
+          "name_th": "รามอินทรา",
+          "name_en": null
+        }
+      ],
+      "BKK-D44": [
+        {
+          "id": "BKK-D44-S01",
+          "name_th": "สะพานสูง",
+          "name_en": null
+        },
+        {
+          "id": "BKK-D44-S02",
+          "name_th": "ราษฎร์พัฒนา",
+          "name_en": "Rat Phatthana"
+        },
+        {
+          "id": "BKK-D44-S03",
+          "name_th": "ทับช้าง",
+          "name_en": "Thap Chang"
+        }
+      ],
+      "BKK-D45": [
+        {
+          "id": "BKK-D45-S01",
+          "name_th": "วังทองหลาง",
+          "name_en": "Wang Thong Lang"
+        },
+        {
+          "id": "BKK-D45-S02",
+          "name_th": "สะพานสอง",
+          "name_en": "Saphan Song"
+        },
+        {
+          "id": "BKK-D45-S03",
+          "name_th": "คลองเจ้าคุณสิงห์",
+          "name_en": "Khlong Chaokhun Sing"
+        },
+        {
+          "id": "BKK-D45-S04",
+          "name_th": "พลับพลา",
+          "name_en": "Phlapphla"
+        }
+      ],
+      "BKK-D46": [
+        {
+          "id": "BKK-D46-S01",
+          "name_th": "สามวาตะวันตก",
+          "name_en": "Sam Wa Tawan Tok"
+        },
+        {
+          "id": "BKK-D46-S02",
+          "name_th": "สามวาตะวันออก",
+          "name_en": "Sam Wa Tawan Ok"
+        },
+        {
+          "id": "BKK-D46-S03",
+          "name_th": "บางชัน",
+          "name_en": "Bang Chan"
+        },
+        {
+          "id": "BKK-D46-S04",
+          "name_th": "ทรายกองดิน",
+          "name_en": "Sai Kong Din"
+        },
+        {
+          "id": "BKK-D46-S05",
+          "name_th": "ทรายกองดินใต้",
+          "name_en": "Sai Kong Din Tai"
+        }
+      ],
+      "BKK-D47": [
+        {
+          "id": "BKK-D47-S01",
+          "name_th": "บางมด",
+          "name_en": "Bang Mot"
+        },
+        {
+          "id": "BKK-D47-S02",
+          "name_th": "ทุ่งครุ",
+          "name_en": "Thung Khru"
+        }
+      ],
+      "BKK-D48": [
+        {
+          "id": "BKK-D48-S01",
+          "name_th": "บางบอนเหนือ",
+          "name_en": "Bang Bon Nuea"
+        },
+        {
+          "id": "BKK-D48-S02",
+          "name_th": "บางบอนใต้",
+          "name_en": "Bang Bon Tai"
+        },
+        {
+          "id": "BKK-D48-S03",
+          "name_th": "คลองบางพราน",
+          "name_en": "Khlong Bang Phran"
+        },
+        {
+          "id": "BKK-D48-S04",
+          "name_th": "คลองบางบอน",
+          "name_en": "Khlong Bang Bon"
+        }
+      ],
+      "BKK-D49": [
+        {
+          "id": "BKK-D49-S01",
+          "name_th": "บางนาเหนือ",
+          "name_en": "Bang Na Nuea"
+        },
+        {
+          "id": "BKK-D49-S02",
+          "name_th": "บางนาใต้",
+          "name_en": "Bang Na Tai"
+        }
+      ],
+      "BKK-D50": [
+        {
+          "id": "BKK-D50-S01",
+          "name_th": "ทวีวัฒนา",
+          "name_en": "Thawi Watthana"
+        },
+        {
+          "id": "BKK-D50-S02",
+          "name_th": "ศาลาธรรมสพน์",
+          "name_en": "Sala Thammasop"
+        }
+      ]
+    }
+  }
+}
