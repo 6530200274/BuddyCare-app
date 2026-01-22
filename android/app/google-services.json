@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1035158830052",
+    "project_id": "elder-care-medical",
+    "storage_bucket": "elder-care-medical.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035158830052:android:0967df63f386699a0d65f1",
+        "android_client_info": {
+          "package_name": "com.example.my_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1035158830052-nqr6e3nd0l50plk0r68hdcllglcs7olb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2nlEDZyd98akCh7ZZT_dvlrtTyTEzmqY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1035158830052-nqr6e3nd0l50plk0r68hdcllglcs7olb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1035158830052-qklni46fs1peu0k2n32had3n320ntvmb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.myApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

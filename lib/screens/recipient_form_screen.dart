@@ -1,0 +1,667 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:my_app/screens/signup_customer_screen.dart';
+import 'package:my_app/theme/app_colors.dart';
+
+import '../models/recipient_profile.dart';
+import '../services/recipient_service.dart';
+import '../widgets/app_text_field.dart';
+import '../widgets/primary_button.dart';
+
+class RecipientFormScreen extends StatefulWidget {
+  const RecipientFormScreen({super.key});
+
+  @override
+  State<RecipientFormScreen> createState() => _RecipientFormScreenState();
+}
+
+class _RecipientFormScreenState extends State<RecipientFormScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _service = RecipientService();
+
+  // Controllers - ผู้รับบริการ
+  final _firstName = TextEditingController();
+  final _lastName = TextEditingController();
+  final _phone = TextEditingController();
+  final _dobText = TextEditingController();
+  final _weight = TextEditingController();
+  final _height = TextEditingController();
+
+  // Controllers - ฉุกเฉิน
+  final _emgFirstName = TextEditingController();
+  final _emgLastName = TextEditingController();
+  final _emgPhone = TextEditingController();
+
+  DateTime? _dob;
+
+  // Dropdown values
+  String? _nationality;
+  String? _religion;
+  String? _language;
+  String? _gender;
+  String? _relationship;
+
+  bool _loading = false;
+  final _nationalities = const [
+    'ไทย',
+    'จีน',
+    'เกาหลี',
+    'ญี่ปุ่น',
+    'อังกฤษ',
+    'อเมริกัน',
+    'อื่นๆ',
+  ];
+  final _religions = const [
+    'พุทธ',
+    'คริสต์',
+    'อิสลาม',
+    'ฮินดู',
+    'ไม่นับถือศาสนาใดๆ',
+    'อื่นๆ',
+  ];
+  final _languages = const ['ไทย', 'อังกฤษ'];
+  final _genders = const ['เพศชาย', 'เพศหญิง', 'ไม่ระบุ'];
+  final _relationships = const [
+    'ตัวฉันเอง',
+    'บุตร',
+    'บิดาหรือมารดา',
+    'สามีหรือภรรยา',
+    'พี่หรือน้อง',
+    'ปู่ย่าหรือตายาย',
+    'ลุงป้าหรือน้าอา',
+    'ญาติ',
+    'บุคคลในอุปการะตามกฎหมาย',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadExisting();
+  }
+
+  Future<void> _loadExisting() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final profile = await _service.getProfile(user.uid);
+    if (profile == null) return;
+
+    if (!mounted) return;
+    setState(() {
+      _firstName.text = profile.firstName;
+      _lastName.text = profile.lastName;
+      _phone.text = profile.phone;
+
+      _dob = profile.dob;
+      _dobText.text = profile.dob == null
+          ? ''
+          : DateFormat('dd/MM/yyyy').format(profile.dob!);
+
+      _nationality = profile.nationality.isEmpty ? null : profile.nationality;
+      _religion = profile.religion.isEmpty ? null : profile.religion;
+      _language = profile.language.isEmpty ? null : profile.language;
+      _gender = profile.gender.isEmpty ? null : profile.gender;
+      _relationship = profile.relationship.isEmpty
+          ? null
+          : profile.relationship;
+
+      _weight.text = profile.weightKg?.toString() ?? '';
+      _height.text = profile.heightCm?.toString() ?? '';
+
+      _emgFirstName.text = profile.emergencyContact.firstName;
+      _emgLastName.text = profile.emergencyContact.lastName;
+      _emgPhone.text = profile.emergencyContact.phone;
+    });
+  }
+
+  @override
+  void dispose() {
+    _firstName.dispose();
+    _lastName.dispose();
+    _phone.dispose();
+    _dobText.dispose();
+    _weight.dispose();
+    _height.dispose();
+    _emgFirstName.dispose();
+    _emgLastName.dispose();
+    _emgPhone.dispose();
+    super.dispose();
+  }
+
+  String? _requiredText(String? v) {
+    if (v == null || v.trim().isEmpty) return 'กรุณากรอกข้อมูล';
+    return null;
+  }
+
+  String? _requiredDropdown(String? v) {
+    if (v == null || v.trim().isEmpty) return 'กรุณาเลือกข้อมูล';
+    return null;
+  }
+
+  String? _phoneValidator(String? v) {
+    if (v == null || v.trim().isEmpty) return 'กรุณากรอกเบอร์โทรศัพท์';
+    final digits = v.replaceAll(RegExp(r'\D'), '');
+    if (digits.length < 9 || digits.length > 10) {
+      return 'รูปแบบเบอร์โทรไม่ถูกต้อง';
+    }
+    return null;
+  }
+
+  double? _parseNullableDouble(String text) {
+    final t = text.trim();
+    if (t.isEmpty) return null;
+    return double.tryParse(t.replaceAll(',', '.'));
+  }
+
+  Future<void> _pickDob() async {
+    FocusScope.of(context).unfocus();
+    final now = DateTime.now();
+    final initial = _dob ?? DateTime(now.year - 30, now.month, now.day);
+
+    final orangeColor = AppColors.primary;
+
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: DateTime(1900),
+      lastDate: now,
+      builder: (context, child) {
+        final base = Theme.of(context);
+
+        return Theme(
+          data: base.copyWith(
+            colorScheme: base.colorScheme.copyWith(
+              primary: orangeColor,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: Colors.black,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(foregroundColor: orangeColor),
+            ),
+            dialogTheme: DialogThemeData(backgroundColor: Colors.white),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked == null) return;
+
+    setState(() {
+      _dob = picked;
+      _dobText.text = DateFormat('dd/MM/yyyy').format(picked);
+    });
+  }
+
+  Future<void> _save() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('กรุณาเข้าสู่ระบบก่อนบันทึกข้อมูล')),
+      );
+      return;
+    }
+
+    final ok = _formKey.currentState?.validate() ?? false;
+    if (!ok) return;
+
+    setState(() => _loading = true);
+    try {
+      final profile = RecipientProfile(
+        firstName: _firstName.text.trim(),
+        lastName: _lastName.text.trim(),
+        phone: _phone.text.trim(),
+        dob: _dob,
+        nationality: (_nationality ?? '').trim(),
+        religion: (_religion ?? '').trim(),
+        language: (_language ?? '').trim(),
+        weightKg: _parseNullableDouble(_weight.text),
+        heightCm: _parseNullableDouble(_height.text),
+        gender: (_gender ?? '').trim(),
+        relationship: (_relationship ?? '').trim(),
+        emergencyContact: EmergencyContact(
+          firstName: _emgFirstName.text.trim(),
+          lastName: _emgLastName.text.trim(),
+          phone: _emgPhone.text.trim(),
+        ),
+      );
+
+      await _service.upsertProfile(uid: user.uid, profile: profile);
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('บันทึกข้อมูลเรียบร้อย')));
+      // ถ้าทำหน้าต่อไปแล้วให้เชื่อมหน้าต่อไปได้เลยจ้า
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const SignupCustomerScreen()),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('บันทึกไม่สำเร็จ: $e')));
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  InputDecoration _dropdownDecoration(String hint) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: const TextStyle(color: AppColors.hint),
+      isDense: true,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: AppColors.border),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: AppColors.border),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: AppColors.primary, width: 1.2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Colors.red),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Colors.red, width: 1.2),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.all(10),
+          child: CircleAvatar(
+            backgroundColor: const Color(0xFFFFA726),
+            child: Center(
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.white,
+                  size: 18,
+                ),
+              ),
+            ),
+          ),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'ผู้รับบริการ',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+        ),
+      ),
+
+      body: SafeArea(
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+            children: [
+              _CardSection(
+                title: 'ข้อมูลผู้รับบริการ',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppTextField(
+                      label: 'ชื่อ',
+                      requiredMark: true,
+                      hintText: 'กรอกชื่อ',
+                      controller: _firstName,
+                      validator: _requiredText,
+                    ),
+                    const SizedBox(height: 12),
+
+                    AppTextField(
+                      label: 'นามสกุล',
+                      requiredMark: true,
+                      hintText: 'กรอกนามสกุล',
+                      controller: _lastName,
+                      validator: _requiredText,
+                    ),
+                    const SizedBox(height: 12),
+
+                    AppTextField(
+                      label: 'เบอร์โทรศัพท์',
+                      requiredMark: true,
+                      hintText: 'กรอกเบอร์โทรศัพท์',
+                      controller: _phone,
+                      keyboardType: TextInputType.phone,
+                      validator: _phoneValidator,
+                    ),
+                    const SizedBox(height: 12),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppTextField(
+                            label: 'วันเดือนปีเกิด',
+                            requiredMark: true,
+                            hintText: 'ว/ด/ป',
+                            controller: _dobText,
+                            readOnly: true,
+                            onTap: _pickDob,
+                            validator: (v) =>
+                                _dob == null ? 'กรุณาเลือกวันเกิด' : null,
+                            suffixIcon: const Icon(
+                              Icons.calendar_month_outlined,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const _Label('สัญชาติ', required: true),
+                              DropdownButtonFormField<String>(
+                                key: ValueKey(_nationality),
+                                initialValue: _nationality,
+                                isExpanded: true,
+                                style: const TextStyle(color: AppColors.text),
+                                iconEnabledColor: AppColors.textSecondary,
+                                dropdownColor: Colors.white,
+                                items: _nationalities
+                                    .map(
+                                      (e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(e),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (v) =>
+                                    setState(() => _nationality = v),
+                                decoration: _dropdownDecoration('กรุณาเลือก'),
+                                validator: _requiredDropdown,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const _Label('ศาสนา'),
+                              DropdownButtonFormField<String>(
+                                key: ValueKey(_religion),
+                                initialValue: _religion,
+                                isExpanded: true,
+                                style: const TextStyle(color: AppColors.text),
+                                iconEnabledColor: AppColors.textSecondary,
+                                dropdownColor: Colors.white,
+                                items: _religions
+                                    .map(
+                                      (e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(e),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (v) => setState(() => _religion = v),
+                                decoration: _dropdownDecoration('กรุณาเลือก'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const _Label('ภาษาหลักที่ใช้สื่อสาร'),
+                              DropdownButtonFormField<String>(
+                                key: ValueKey(_language),
+                                initialValue: _language,
+                                isExpanded: true,
+                                style: const TextStyle(color: AppColors.text),
+                                iconEnabledColor: AppColors.textSecondary,
+                                dropdownColor: Colors.white,
+                                items: _languages
+                                    .map(
+                                      (e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(e),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (v) => setState(() => _language = v),
+                                decoration: _dropdownDecoration('กรุณาเลือก'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppTextField(
+                            label: 'น้ำหนัก',
+                            requiredMark: true,
+                            hintText: 'กรอกน้ำหนัก',
+                            controller: _weight,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            validator: _requiredText,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: AppTextField(
+                            label: 'ส่วนสูง',
+                            requiredMark: true,
+                            hintText: 'กรอกส่วนสูง',
+                            controller: _height,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            validator: _requiredText,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const _Label('เพศ', required: true),
+                              DropdownButtonFormField<String>(
+                                key: ValueKey(_gender),
+                                initialValue: _gender,
+                                isExpanded: true,
+                                style: const TextStyle(color: AppColors.text),
+                                iconEnabledColor: AppColors.textSecondary,
+                                dropdownColor: Colors.white,
+                                items: _genders
+                                    .map(
+                                      (e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(e),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (v) => setState(() => _gender = v),
+                                decoration: _dropdownDecoration('กรุณาเลือก'),
+                                validator: _requiredDropdown,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const _Label('ความสัมพันธ์', required: true),
+                              DropdownButtonFormField<String>(
+                                key: ValueKey(_relationship),
+                                initialValue: _relationship,
+                                isExpanded: true,
+                                style: const TextStyle(color: AppColors.text),
+                                iconEnabledColor: AppColors.textSecondary,
+                                dropdownColor: Colors.white,
+                                items: _relationships.map((e) {
+                                  return DropdownMenuItem(
+                                    value: e,
+                                    child: Text(
+                                      e,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (v) =>
+                                    setState(() => _relationship = v),
+                                decoration: _dropdownDecoration('กรุณาเลือก'),
+                                validator: _requiredDropdown,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              _CardSection(
+                title: 'ผู้ติดต่อกรณีฉุกเฉิน',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppTextField(
+                      label: 'ชื่อ',
+                      requiredMark: true,
+                      hintText: 'กรอกชื่อ',
+                      controller: _emgFirstName,
+                      validator: _requiredText,
+                    ),
+                    const SizedBox(height: 12),
+
+                    AppTextField(
+                      label: 'นามสกุล',
+                      requiredMark: true,
+                      hintText: 'กรอกนามสกุล',
+                      controller: _emgLastName,
+                      validator: _requiredText,
+                    ),
+                    const SizedBox(height: 12),
+
+                    AppTextField(
+                      label: 'เบอร์โทรศัพท์',
+                      requiredMark: true,
+                      hintText: 'กรอกเบอร์โทรศัพท์',
+                      controller: _emgPhone,
+                      keyboardType: TextInputType.phone,
+                      validator: _phoneValidator,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              PrimaryButton(
+                text: 'บันทึก',
+                loading: _loading,
+                onPressed: _save,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CardSection extends StatelessWidget {
+  const _CardSection({required this.title, required this.child});
+
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      shadowColor: Colors.black12,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 12),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Label extends StatelessWidget {
+  const _Label(this.text, {this.required = false});
+  final String text;
+  final bool required;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: RichText(
+        text: TextSpan(
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(fontWeight: FontWeight.w600),
+          children: [
+            TextSpan(text: text),
+            if (required)
+              const TextSpan(
+                text: ' *',
+                style: TextStyle(
+                  color: AppColors.primary, 
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

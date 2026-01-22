@@ -1,4 +1,4 @@
-# buddycare_application
+# my_app
 
 A new Flutter project.
 
