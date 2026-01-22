@@ -9,6 +9,7 @@ import 'firebase_options.dart';
 import 'theme/app_colors.dart';
 import 'providers/selected_package_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:my_app/screens/schedule_page_officer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -93,7 +94,8 @@ class MyApp extends StatelessWidget {
       // home: const RecipientFormScreen(),
       // home: const MeetingPointScreen(),
       // home: const SelectDateTimeScreen(),
-      home: const SignupCustomerScreen(),
+      //home: const SignupCustomerScreen(),
+      home: const ScheduleHomeScreen(),
     );
   }
 }
