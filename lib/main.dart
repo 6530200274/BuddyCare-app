@@ -96,6 +96,7 @@ class MyApp extends StatelessWidget {
       ),
       // home: const SelectPackageScreen(),
       home: const RecipientFormScreen(),
+      // home: const ServiceSummaryScreen(),
       // home: const MeetingPointScreen(),
       // home: const SelectDateTimeScreen(),
       // home: const SignupCustomerScreen(),

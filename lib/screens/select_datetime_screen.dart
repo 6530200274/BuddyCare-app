@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/screens/meeting_point_screen.dart';
+import 'package:my_app/screens/service_summary_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../providers/booking_provider.dart';
-
-
 
 class SelectDateTimeScreen extends StatefulWidget {
   const SelectDateTimeScreen({super.key});
@@ -60,9 +59,7 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => const MeetingPointScreen(),
-                  ),
+                  MaterialPageRoute(builder: (_) => const MeetingPointScreen()),
                 );
               },
               child: const Center(
@@ -115,7 +112,7 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                         return;
                       }
 
-                      // ถ้าเป็นวันก่อนพรุ่งนี้ (เช่นย้อนหลัง) ก็กันไว้
+                      // ถ้าเป็นวันก่อนพรุ่งนี้ 
                       if (s.isBefore(minBookDate)) {
                         await _showMustBookOneDayAheadDialog(context);
                         return;
@@ -138,11 +135,11 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                     calendarStyle: CalendarStyle(
                       todayDecoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.orange, width: 1.5),
+                        border: Border.all(color: Color(0xFFFF6701), width: 1.5),
                         color: Colors.transparent,
                       ),
                       selectedDecoration: const BoxDecoration(
-                        color: Colors.orange,
+                        color: Color(0xFFFF6701),
                         shape: BoxShape.circle,
                       ),
                       disabledTextStyle: const TextStyle(color: Colors.black26),
@@ -153,7 +150,7 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
-                    Icon(Icons.info_outline, size: 16, color: Colors.orange),
+                    Icon(Icons.info_outline, size: 16, color: Color(0xFFFF6701)),
                     SizedBox(width: 6),
                     Expanded(
                       child: Text(
@@ -229,16 +226,16 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                 const SizedBox(height: 24),
 
                 SizedBox(
-                  width: 160,
-                  height: 48,
+                  width: double.infinity,
+                  height: 56,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: Color(0xFFFF6701),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(26),
                       ),
                     ),
-                    onPressed: () async {
+                    onPressed: () {
                       if (_selectedDay == null || _selectedTime == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -248,21 +245,18 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                         return;
                       }
 
-                      // OPTION A: เก็บแค่ใน Flutter (ไปหน้าถัดไปได้เลย)
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (_) => const ConfirmBookingScreen()),
-                      // );
+                      //เก็บลง Provider
+                      final bookingProvider = context.read<BookingProvider>();
+                      bookingProvider.setServiceDate(_selectedDay!);
+                      bookingProvider.setServiceTime(_selectedTime!);
 
-                      // OPTION B: ถ้าต้องการ “บันทึกลง Firestore” ด้วย ให้เปิดใช้โค้ดด้านล่าง
-                      /*
-                    final userId = FirebaseAuth.instance.currentUser!.uid;
-                    await _firestoreService.saveSelection(
-                      userId: userId,
-                      serviceDate: _selectedDay!,
-                      serviceTime: _selectedTime!,
-                    );
-                    */
+                      //ไปหน้า ServiceSummaryScreen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ServiceSummaryScreen(),
+                        ),
+                      );
                     },
                     child: const Text(
                       "บันทึก",

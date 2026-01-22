@@ -655,7 +655,7 @@ class _Label extends StatelessWidget {
               const TextSpan(
                 text: ' *',
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: Color(0xFFFF6701),
                   fontWeight: FontWeight.w700,
                 ),
               ),
