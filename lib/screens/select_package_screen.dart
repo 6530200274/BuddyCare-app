@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_app/screens/meeting_point_screen.dart';
+import 'package:my_app/screens/questionnaire_screen.dart';
 import 'package:my_app/widgets/primary_button.dart';
 import 'package:provider/provider.dart';
 import '../models/package_model.dart';
@@ -44,7 +45,14 @@ class SelectPackageScreen extends StatelessWidget {
             backgroundColor: const Color(0xFFFFA726),
             child: Center(
               child: GestureDetector(
-                onTap: () => Navigator.pop(context),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ADLScreeningPage(),
+                    ),
+                  );
+                },
                 child: const Icon(
                   Icons.arrow_back_ios_new,
                   color: Colors.white,

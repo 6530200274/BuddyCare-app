@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/screens/signup_customer_screen.dart';
+import 'package:my_app/providers/recipient_provider.dart';
+import 'package:my_app/screens/questionnaire_screen.dart';
 import 'package:my_app/theme/app_colors.dart';
-
+import 'package:provider/provider.dart';
 import '../models/recipient_profile.dart';
 import '../services/recipient_service.dart';
 import '../widgets/app_text_field.dart';
@@ -232,18 +233,19 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
       await _service.upsertProfile(uid: user.uid, profile: profile);
 
       if (!mounted) return;
+
+      // เก็บลง Provider
+      context.read<RecipientProvider>().setProfile(profile);
+
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('บันทึกข้อมูลเรียบร้อย')));
-      // ถ้าทำหน้าต่อไปแล้วให้เชื่อมหน้าต่อไปได้เลยจ้า
-      if (Navigator.canPop(context)) {
-        Navigator.pop(context);
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const SignupCustomerScreen()),
-        );
-      }
+
+      // ไปหน้า ADLScreeningPage
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const ADLScreeningPage()),
+      );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(
@@ -644,17 +646,16 @@ class _Label extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 6),
       child: RichText(
         text: TextSpan(
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(fontWeight: FontWeight.w600),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
           children: [
             TextSpan(text: text),
             if (required)
               const TextSpan(
                 text: ' *',
                 style: TextStyle(
-                  color: AppColors.primary, 
+                  color: AppColors.primary,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -664,4 +665,3 @@ class _Label extends StatelessWidget {
     );
   }
 }
-

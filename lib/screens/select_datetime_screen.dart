@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/screens/meeting_point_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../providers/booking_provider.dart';
@@ -56,7 +57,14 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
             backgroundColor: const Color(0xFFFFA726),
             child: InkWell(
               customBorder: const CircleBorder(),
-              onTap: () => Navigator.pop(context),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const MeetingPointScreen(),
+                  ),
+                );
+              },
               child: const Center(
                 child: Icon(
                   Icons.arrow_back_ios_new,
@@ -101,7 +109,7 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                     onDaySelected: (selectedDay, focusedDay) async {
                       final s = _onlyDate(selectedDay);
 
-                      // ถ้ากด "วันนี้" ให้เด้งเตือน (ตาม requirement)
+                      // ถ้ากด "วันนี้" ให้เด้งเตือน
                       if (s.isAtSameMomentAs(today)) {
                         await _showMustBookOneDayAheadDialog(context);
                         return;

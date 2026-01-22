@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:my_app/providers/booking_provider.dart';
-import 'package:my_app/screens/select_package_screen.dart';
-import 'package:my_app/screens/signup_customer_screen.dart';
+import 'package:my_app/providers/meeting_point_provider.dart';
+import 'package:my_app/providers/questionnaire_provider.dart';
+import 'package:my_app/providers/recipient_provider.dart';
+import 'package:my_app/screens/recipient_form_screen.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'theme/app_colors.dart';
@@ -19,6 +21,9 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => SelectedPackageProvider()),
         ChangeNotifierProvider(create: (_) => BookingProvider()),
+        ChangeNotifierProvider(create: (_) => ADLProvider()),
+        ChangeNotifierProvider(create: (_) => RecipientProvider()),
+        ChangeNotifierProvider(create: (_) => MeetingPointProvider()),
       ],
       child: const MyApp(),
     ),
@@ -90,10 +95,11 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // home: const SelectPackageScreen(),
-      // home: const RecipientFormScreen(),
+      home: const RecipientFormScreen(),
       // home: const MeetingPointScreen(),
       // home: const SelectDateTimeScreen(),
-      home: const SignupCustomerScreen(),
+      // home: const SignupCustomerScreen(),
+      // home: const ADLScreeningPage(),
     );
   }
 }
