@@ -92,6 +92,30 @@ class _MeetingPointScreenState extends State<MeetingPointScreen> {
       // default
       _province = 'กรุงเทพมหานคร';
       _destProvince = 'กรุงเทพมหานคร';
+      _prefillFromProvider();
+    });
+  }
+
+  void _prefillFromProvider() {
+    final saved = context.read<MeetingPointProvider>().data;
+    if (saved == null) return;
+
+    setState(() {
+      // จุดนัดพบ
+      _address.text = saved.address;
+      _postcode.text = saved.postcode;
+
+      _province = saved.province;
+      _districtId = saved.districtId;
+      _districtText.text = saved.districtName;
+
+      _subdistrictId = saved.subdistrictId;
+      _subdistrictText.text = saved.subdistrictName;
+
+      // จุดหมาย
+      _destProvince = saved.destProvince;
+      _hospitalId = saved.hospitalId;
+      _hospitalText.text = saved.hospitalName;
     });
   }
 

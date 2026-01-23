@@ -140,7 +140,7 @@ class ServiceSummaryScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  // TODO: ไปหน้าค้นหาผู้ดูแล / ยืนยันจอง
+                  // TODO: ไปหน้าค้นหาผู้ดูแล
                 },
                 child: const Text(
                   "ค้นหา",

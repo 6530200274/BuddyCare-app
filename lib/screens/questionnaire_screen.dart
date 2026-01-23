@@ -49,6 +49,24 @@ class _ADLScreeningPageState extends State<ADLScreeningPage> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final saved = context.read<ADLProvider>().result;
+      if (saved == null) return;
+
+      for (int i = 0; i < _items.length; i++) {
+        final v = (i < saved.scores.length) ? saved.scores[i] : 0;
+        _controllers[i].text = v.toString();
+        _errors[i] = null;
+      }
+
+      setState(() {});
+    });
+  }
+
   int _parseScore(String s) {
     final trimmed = s.trim();
     if (trimmed.isEmpty) return 0;
@@ -241,6 +259,16 @@ class _ADLScreeningPageState extends State<ADLScreeningPage> {
             SizedBox(
               height: 48,
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFF6701),
+                  disabledBackgroundColor: const Color(
+                    0xFFFF6701,
+                  ).withOpacity(0.4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                ),
+
                 onPressed: (_allFilled && !_hasAnyError)
                     ? () {
                         final scores = List<int>.generate(
@@ -264,13 +292,9 @@ class _ADLScreeningPageState extends State<ADLScreeningPage> {
                         );
                       }
                     : null,
-
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
+                child: const Text("บันทึก",
+                  style: TextStyle(color: Colors.white),
                 ),
-                child: const Text("บันทึก"),
               ),
             ),
           ],

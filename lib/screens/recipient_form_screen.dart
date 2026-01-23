@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/providers/recipient_provider.dart';
@@ -6,7 +5,6 @@ import 'package:my_app/screens/questionnaire_screen.dart';
 import 'package:my_app/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../models/recipient_profile.dart';
-import '../services/recipient_service.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/primary_button.dart';
 
@@ -19,7 +17,6 @@ class RecipientFormScreen extends StatefulWidget {
 
 class _RecipientFormScreenState extends State<RecipientFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _service = RecipientService();
 
   // Controllers - ผู้รับบริการ
   final _firstName = TextEditingController();
@@ -44,6 +41,7 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
   String? _relationship;
 
   bool _loading = false;
+
   final _nationalities = const [
     'ไทย',
     'จีน',
@@ -78,41 +76,34 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
   @override
   void initState() {
     super.initState();
-    _loadExisting();
-  }
 
-  Future<void> _loadExisting() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return;
+    // Prefill จาก Provider 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final p = context.read<RecipientProvider>().profile;
+      if (p == null) return;
 
-    final profile = await _service.getProfile(user.uid);
-    if (profile == null) return;
+      setState(() {
+        _firstName.text = p.firstName;
+        _lastName.text = p.lastName;
+        _phone.text = p.phone;
 
-    if (!mounted) return;
-    setState(() {
-      _firstName.text = profile.firstName;
-      _lastName.text = profile.lastName;
-      _phone.text = profile.phone;
+        _dob = p.dob;
+        _dobText.text =
+            p.dob == null ? '' : DateFormat('dd/MM/yyyy').format(p.dob!);
 
-      _dob = profile.dob;
-      _dobText.text = profile.dob == null
-          ? ''
-          : DateFormat('dd/MM/yyyy').format(profile.dob!);
+        _nationality = p.nationality.isEmpty ? null : p.nationality;
+        _religion = p.religion.isEmpty ? null : p.religion;
+        _language = p.language.isEmpty ? null : p.language;
+        _gender = p.gender.isEmpty ? null : p.gender;
+        _relationship = p.relationship.isEmpty ? null : p.relationship;
 
-      _nationality = profile.nationality.isEmpty ? null : profile.nationality;
-      _religion = profile.religion.isEmpty ? null : profile.religion;
-      _language = profile.language.isEmpty ? null : profile.language;
-      _gender = profile.gender.isEmpty ? null : profile.gender;
-      _relationship = profile.relationship.isEmpty
-          ? null
-          : profile.relationship;
+        _weight.text = p.weightKg?.toString() ?? '';
+        _height.text = p.heightCm?.toString() ?? '';
 
-      _weight.text = profile.weightKg?.toString() ?? '';
-      _height.text = profile.heightCm?.toString() ?? '';
-
-      _emgFirstName.text = profile.emergencyContact.firstName;
-      _emgLastName.text = profile.emergencyContact.lastName;
-      _emgPhone.text = profile.emergencyContact.phone;
+        _emgFirstName.text = p.emergencyContact.firstName;
+        _emgLastName.text = p.emergencyContact.lastName;
+        _emgPhone.text = p.emergencyContact.phone;
+      });
     });
   }
 
@@ -143,9 +134,7 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
   String? _phoneValidator(String? v) {
     if (v == null || v.trim().isEmpty) return 'กรุณากรอกเบอร์โทรศัพท์';
     final digits = v.replaceAll(RegExp(r'\D'), '');
-    if (digits.length < 9 || digits.length > 10) {
-      return 'รูปแบบเบอร์โทรไม่ถูกต้อง';
-    }
+    if (digits.length < 9 || digits.length > 10) return 'รูปแบบเบอร์โทรไม่ถูกต้อง';
     return null;
   }
 
@@ -159,7 +148,6 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
     FocusScope.of(context).unfocus();
     final now = DateTime.now();
     final initial = _dob ?? DateTime(now.year - 30, now.month, now.day);
-
     final orangeColor = AppColors.primary;
 
     final picked = await showDatePicker(
@@ -169,7 +157,6 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
       lastDate: now,
       builder: (context, child) {
         final base = Theme.of(context);
-
         return Theme(
           data: base.copyWith(
             colorScheme: base.colorScheme.copyWith(
@@ -181,7 +168,7 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(foregroundColor: orangeColor),
             ),
-            dialogTheme: DialogThemeData(backgroundColor: Colors.white),
+            dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
           ),
           child: child!,
         );
@@ -197,19 +184,11 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
   }
 
   Future<void> _save() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('กรุณาเข้าสู่ระบบก่อนบันทึกข้อมูล')),
-      );
-      return;
-    }
-
     final ok = _formKey.currentState?.validate() ?? false;
     if (!ok) return;
 
     setState(() => _loading = true);
+
     try {
       final profile = RecipientProfile(
         firstName: _firstName.text.trim(),
@@ -230,27 +209,24 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
         ),
       );
 
-      await _service.upsertProfile(uid: user.uid, profile: profile);
+      // บันทึกลง Provider 
+      context.read<RecipientProvider>().setProfile(profile);
 
       if (!mounted) return;
 
-      // เก็บลง Provider
-      context.read<RecipientProvider>().setProfile(profile);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('บันทึกข้อมูลเรียบร้อย')),
+      );
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('บันทึกข้อมูลเรียบร้อย')));
-
-      // ไปหน้า ADLScreeningPage
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const ADLScreeningPage()),
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('บันทึกไม่สำเร็จ: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('บันทึกไม่สำเร็จ: $e')),
+      );
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -313,7 +289,6 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
         ),
       ),
-
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -333,7 +308,6 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                       validator: _requiredText,
                     ),
                     const SizedBox(height: 12),
-
                     AppTextField(
                       label: 'นามสกุล',
                       requiredMark: true,
@@ -342,7 +316,6 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                       validator: _requiredText,
                     ),
                     const SizedBox(height: 12),
-
                     AppTextField(
                       label: 'เบอร์โทรศัพท์',
                       requiredMark: true,
@@ -365,9 +338,7 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                             onTap: _pickDob,
                             validator: (v) =>
                                 _dob == null ? 'กรุณาเลือกวันเกิด' : null,
-                            suffixIcon: const Icon(
-                              Icons.calendar_month_outlined,
-                            ),
+                            suffixIcon: const Icon(Icons.calendar_month_outlined),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -384,12 +355,10 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                                 iconEnabledColor: AppColors.textSecondary,
                                 dropdownColor: Colors.white,
                                 items: _nationalities
-                                    .map(
-                                      (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ),
-                                    )
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
                                     .toList(),
                                 onChanged: (v) =>
                                     setState(() => _nationality = v),
@@ -401,8 +370,8 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
 
+                    const SizedBox(height: 12),
                     Row(
                       children: [
                         Expanded(
@@ -418,12 +387,10 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                                 iconEnabledColor: AppColors.textSecondary,
                                 dropdownColor: Colors.white,
                                 items: _religions
-                                    .map(
-                                      (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ),
-                                    )
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
                                     .toList(),
                                 onChanged: (v) => setState(() => _religion = v),
                                 decoration: _dropdownDecoration('กรุณาเลือก'),
@@ -445,12 +412,10 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                                 iconEnabledColor: AppColors.textSecondary,
                                 dropdownColor: Colors.white,
                                 items: _languages
-                                    .map(
-                                      (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ),
-                                    )
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
                                     .toList(),
                                 onChanged: (v) => setState(() => _language = v),
                                 decoration: _dropdownDecoration('กรุณาเลือก'),
@@ -460,8 +425,8 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
 
+                    const SizedBox(height: 12),
                     Row(
                       children: [
                         Expanded(
@@ -470,9 +435,8 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                             requiredMark: true,
                             hintText: 'กรอกน้ำหนัก',
                             controller: _weight,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
-                            ),
+                            keyboardType:
+                                const TextInputType.numberWithOptions(decimal: true),
                             validator: _requiredText,
                           ),
                         ),
@@ -483,16 +447,15 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                             requiredMark: true,
                             hintText: 'กรอกส่วนสูง',
                             controller: _height,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
-                            ),
+                            keyboardType:
+                                const TextInputType.numberWithOptions(decimal: true),
                             validator: _requiredText,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
 
+                    const SizedBox(height: 12),
                     Row(
                       children: [
                         Expanded(
@@ -508,12 +471,10 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                                 iconEnabledColor: AppColors.textSecondary,
                                 dropdownColor: Colors.white,
                                 items: _genders
-                                    .map(
-                                      (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ),
-                                    )
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
                                     .toList(),
                                 onChanged: (v) => setState(() => _gender = v),
                                 decoration: _dropdownDecoration('กรุณาเลือก'),
@@ -558,6 +519,7 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                   ],
                 ),
               ),
+
               const SizedBox(height: 16),
               _CardSection(
                 title: 'ผู้ติดต่อกรณีฉุกเฉิน',
@@ -572,7 +534,6 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                       validator: _requiredText,
                     ),
                     const SizedBox(height: 12),
-
                     AppTextField(
                       label: 'นามสกุล',
                       requiredMark: true,
@@ -581,7 +542,6 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                       validator: _requiredText,
                     ),
                     const SizedBox(height: 12),
-
                     AppTextField(
                       label: 'เบอร์โทรศัพท์',
                       requiredMark: true,
@@ -593,8 +553,8 @@ class _RecipientFormScreenState extends State<RecipientFormScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
 
+              const SizedBox(height: 20),
               PrimaryButton(
                 text: 'บันทึก',
                 loading: _loading,
@@ -646,9 +606,10 @@ class _Label extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 6),
       child: RichText(
         text: TextSpan(
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(fontWeight: FontWeight.w600),
           children: [
             TextSpan(text: text),
             if (required)
