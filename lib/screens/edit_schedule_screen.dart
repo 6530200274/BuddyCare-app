@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
-class AddScheduleScreen extends StatefulWidget {
-  const AddScheduleScreen({super.key});
+class EditScheduleScreen extends StatefulWidget {
+  const EditScheduleScreen({super.key});
 
   @override
-  State<AddScheduleScreen> createState() => _AddScheduleScreenState();
+  State<EditScheduleScreen> createState() => _EditScheduleScreenState();
 }
 
-class _AddScheduleScreenState extends State<AddScheduleScreen> {
-  DateTime selectedDate = DateTime.now();
+class _EditScheduleScreenState extends State<EditScheduleScreen> {
+ DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
   final firstDate = DateTime(2026, 1);
@@ -55,7 +55,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
         ),
 
         title: const Text(
-          "เพิ่มตารางงาน",
+          "แก้ไขตารางงาน",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w800,
