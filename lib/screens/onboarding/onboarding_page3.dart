@@ -1,8 +1,9 @@
-import 'package:buddycare/screens/who_am_i_page.dart';
-import 'package:buddycare/widgets/onboarding/onboarding_next_button.dart';
+
 import 'package:flutter/material.dart';
-import 'package:buddycare/theme/app_colors.dart';
-import 'package:buddycare/widgets/onboarding/onboarding_indicator.dart';
+import 'package:my_app/theme/app_colors.dart';
+import 'package:my_app/widgets/onboarding/onboarding_indicator.dart';
+import 'package:my_app/widgets/onboarding/onboarding_next_button.dart';
+
 
 class OnboardingPage3 extends StatelessWidget {
   const OnboardingPage3({super.key});
@@ -151,10 +152,10 @@ class OnboardingPage3 extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 10),
               child: OnboardingNextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) =>  WhoAmIPage ()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (_) =>  WhoAmIPage ()),
+                  // );
                 },
               ),
             ),
@@ -163,4 +164,7 @@ class OnboardingPage3 extends StatelessWidget {
       ),
     );
   }
+}
+
+class WhoAmIPage {
 }

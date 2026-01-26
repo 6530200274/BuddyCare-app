@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:buddycare/theme/app_colors.dart';
-import 'package:buddycare/widgets/onboarding/onboarding_indicator.dart';
-import 'package:buddycare/widgets/onboarding/onboarding_next_button.dart';
+import 'package:my_app/theme/app_colors.dart';
+import 'package:my_app/widgets/onboarding/onboarding_indicator.dart';
+import 'package:my_app/widgets/onboarding/onboarding_next_button.dart';
+
 import 'onboarding_page2.dart';
 
 class OnboardingPage1 extends StatelessWidget {
