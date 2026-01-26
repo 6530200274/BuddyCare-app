@@ -1,10 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:my_app/screens/who_am_i_page.dart';
 import 'package:my_app/theme/app_colors.dart';
 import 'package:my_app/widgets/onboarding/onboarding_indicator.dart';
 import 'package:my_app/widgets/onboarding/onboarding_next_button.dart';
-import 'package:my_app/screens/login/who_am_i_page.dart';
-
 
 class OnboardingPage3 extends StatelessWidget {
   const OnboardingPage3({super.key});
@@ -153,10 +152,10 @@ class OnboardingPage3 extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 10),
               child: OnboardingNextButton(
                 onPressed: () {
-                   Navigator.push(
-                     context,
-                     MaterialPageRoute(builder: (_) =>  WhoAmIPage ()),
-                   );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const WhoAmIPage() ),
+                  );
                 },
               ),
             ),
@@ -165,7 +164,4 @@ class OnboardingPage3 extends StatelessWidget {
       ),
     );
   }
-}
-
-class WhoAmIPage {
 }

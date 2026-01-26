@@ -89,3 +89,6 @@ class WhoAmIPage  extends StatelessWidget {
   }
 }
 
+class Loginuser {
+}
+
