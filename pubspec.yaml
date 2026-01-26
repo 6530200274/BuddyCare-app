@@ -72,6 +72,27 @@ flutter:
     - assets/bkk_master_district_subdistrict.json
     - assets/hospitals.json
 
+    # Image assets
+    - assets/images/logo_white.png
+    - assets/images/logo_orange.png
+    - assets/images/background.png
+    - assets/images/icons_car.png
+    - assets/images/message-1.png
+    - assets/images/message-2.png
+    - assets/images/message-3.png
+    - assets/images/message-4.png
+    - assets/images/message-5.png
+    - assets/images/icon-star.png
+    - assets/images/icon-fireworks.png
+    - assets/images/icon-iphone.png
+    - assets/images/icon-like.png
+    - assets/images/icon-star-2.png
+    - assets/images/icon-wifi.png
+    - assets/images/icon-star-3.png
+    - assets/images/icon-center-3.png
+    - assets/images/icon_heart.png
+    - assets/images/icon_person.png
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

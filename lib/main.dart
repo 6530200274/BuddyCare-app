@@ -4,6 +4,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:my_app/providers/booking_provider.dart';
 import 'package:my_app/screens/select_package_screen.dart';
 import 'package:my_app/screens/signup_customer_screen.dart';
+import 'package:my_app/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'theme/app_colors.dart';
@@ -93,7 +94,8 @@ class MyApp extends StatelessWidget {
       // home: const RecipientFormScreen(),
       // home: const MeetingPointScreen(),
       // home: const SelectDateTimeScreen(),
-      home: const SignupCustomerScreen(),
+      //home: const SignupCustomerScreen(),
+      home: const SplashScreenSlideSmoothForward(),
     );
   }
 }
