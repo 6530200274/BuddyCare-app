@@ -71,8 +71,6 @@ flutter:
   assets:
     - assets/bkk_master_district_subdistrict.json
     - assets/hospitals.json
-
-    # Image assets
     - assets/images/logo_white.png
     - assets/images/logo_orange.png
     - assets/images/background.png
