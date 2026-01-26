@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/screens/schedule_officer_screen.dart';
-import 'package:my_app/screens/schedule_page_officer.dart';
+import 'package:my_app/screens/officer/schedule_officer_screen.dart';
+import 'package:my_app/screens/officer/schedule_page_officer.dart';
 
 class HomeScheduleScreen extends StatefulWidget {
   const HomeScheduleScreen({super.key});

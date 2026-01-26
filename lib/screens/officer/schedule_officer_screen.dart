@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/screens/add_schedule_screen.dart';
+import 'package:my_app/screens/officer/add_schedule_screen.dart';
 
 class ScheduleOfficerScreen extends StatefulWidget {
   const ScheduleOfficerScreen({super.key});
