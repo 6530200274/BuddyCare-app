@@ -17,6 +17,8 @@ class _SignupCustomerScreenState extends State<SignupCustomerScreen> {
   final _emailCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
   final _confirmCtrl = TextEditingController();
+  final _firstNameCtrl = TextEditingController();
+  final _lastNameCtrl = TextEditingController();
 
   bool _hidePass = true;
   bool _hideConfirm = true;
@@ -24,6 +26,8 @@ class _SignupCustomerScreenState extends State<SignupCustomerScreen> {
 
   @override
   void dispose() {
+    _firstNameCtrl.dispose();
+    _lastNameCtrl.dispose();
     _emailCtrl.dispose();
     _passCtrl.dispose();
     _confirmCtrl.dispose();
@@ -57,6 +61,8 @@ class _SignupCustomerScreenState extends State<SignupCustomerScreen> {
     setState(() => _loading = true);
 
     try {
+      final firstName = _firstNameCtrl.text.trim(); // ✅ เพิ่ม
+      final lastName = _lastNameCtrl.text.trim(); // ✅ เพิ่ม
       final email = _emailCtrl.text.trim();
       final password = _passCtrl.text;
 
@@ -73,6 +79,9 @@ class _SignupCustomerScreenState extends State<SignupCustomerScreen> {
       }
 
       await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'firstName': firstName,
+        'lastName': lastName,
+        'name': '$firstName $lastName'.trim(), // เผื่อใช้แสดงผล
         'email': email,
         'role': 'customer',
         'createdAt': FieldValue.serverTimestamp(),
@@ -135,6 +144,33 @@ class _SignupCustomerScreenState extends State<SignupCustomerScreen> {
                   ),
                 ),
                 const SizedBox(height: 28),
+
+                AppTextField(
+                  label: 'ชื่อ',
+                  hintText: 'กรอกชื่อ',
+                  controller: _firstNameCtrl,
+                  validator: (v) {
+                    final value = (v ?? '').trim();
+                    if (value.isEmpty) return 'กรุณากรอกชื่อ';
+                    return null;
+                    },
+                  ),
+
+                const SizedBox(height: 16),
+
+                AppTextField(
+                  label: 'นามสกุล',
+                  hintText: 'กรุณากรอกนามสกุล',
+                  controller: _lastNameCtrl,
+                  validator: (v) {
+                    final value = (v ?? '').trim();
+                    if (value.isEmpty) return 'กรุณากรอกนามสกุล';
+                    return null;
+                    },
+                  ),
+
+                const SizedBox(height: 16),
+
                 AppTextField(
                   label: 'อีเมล',
                   hintText: 'กรอกอีเมล',

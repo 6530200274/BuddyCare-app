@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/screens/signup_customer_screen.dart';
 
 import 'package:my_app/services/auth_service.dart';
 import 'package:my_app/theme/app_colors.dart';
@@ -286,7 +287,11 @@ class _LoginScreenState extends State<Loginuser> {
                   Center(
                     child: TextButton(
                       onPressed: _isLoading ? null : () {
-                        // TODO: ไปหน้าสมัครสมาชิก
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => SignupCustomerScreen() ),
+                  );
+                        
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,

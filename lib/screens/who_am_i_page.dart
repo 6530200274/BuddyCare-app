@@ -1,5 +1,5 @@
-// import 'package:buddycare/screens/login_customer_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/screens/login_customer.dart';
 import 'package:my_app/theme/app_colors.dart';
 import 'package:my_app/widgets/login/role_button.dart';
 
@@ -57,13 +57,12 @@ class WhoAmIPage  extends StatelessWidget {
                   iconSize: 18,
                   borderRadius: 25,
                   onPressed: () {
-                    //   Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (_) =>  Loginuser ()
-                    //   ),
-                    // );
-                  },
-                ),
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => Loginuser() ),
+                  );
+                },
+              ),
 
                 const SizedBox(height: 14),
 
@@ -78,6 +77,10 @@ class WhoAmIPage  extends StatelessWidget {
                   iconSize: 18,
                   borderRadius: 25,
                   onPressed: () {
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => Loginuser() ),
+                  );
                   },
                 ),
               ],
@@ -89,6 +92,4 @@ class WhoAmIPage  extends StatelessWidget {
   }
 }
 
-class Loginuser {
-}
 
