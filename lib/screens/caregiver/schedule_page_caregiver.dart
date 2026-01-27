@@ -10,53 +10,96 @@ class ScheduleHomeScreen extends StatefulWidget {
 }
 
 class _ScheduleHomeScreenState extends State<ScheduleHomeScreen> {
-  DateTime _today =
-      DateTime.now(); //เก็บวันที่ปัจจุบัน เวลาเปลี่ยน->เปลี่ยนค่าตัวนี้-> UI เปลี่ยน
-  Timer? _midnightTimer; //ตัวจับเวลา ใช้รอจนถึงเที่ยงคืน
+  DateTime _today = DateTime.now();
+  Timer? _midnightTimer;
+
+  // ===== Weekly =====
+  late List<DateTime> _weekDays; // 7 วัน (จ-อา)
+  int _selectedIndex = 0;
+
+  static const orange = Color(0xFFFF7A00);
+  static const bg = Color(0xFFFFF7EF);
 
   @override
   void initState() {
-    //initState() ถูกเรียกครั้งเดียว
     super.initState();
+    _rebuildWeek(); // สร้างสัปดาห์ครั้งแรก
     _scheduleMidnightUpdate();
   }
 
   void _scheduleMidnightUpdate() {
-    final now = DateTime.now(); //เวลาปัจจุบันจริง
-    final nextMidnight = DateTime(
-      now.year,
-      now.month,
-      now.day + 1,
-    ); //สร้างเวลา เที่ยงคืนของวันถัดไป
-    final duration = nextMidnight.difference(
-      now,
-    ); //คำนวณว่าจากตอนนี้ → เที่ยงคืน เหลือกี่ชั่วโมง/นาที
+    final now = DateTime.now();
+    final nextMidnight = DateTime(now.year, now.month, now.day + 1);
+    final duration = nextMidnight.difference(now);
 
     _midnightTimer = Timer(duration, () {
-      //ตั้งTimer เมื่อเวลาครบ duration → โค้ดข้างในจะถูกรันทันที
       setState(() {
-        _today = DateTime.now(); //ข้อมูลเปลี่ยนแล้ว วาดหน้าจอใหม่ด้วย
+        _today = DateTime.now();
+        _rebuildWeek(); // ข้ามวันแล้วสัปดาห์อาจเปลี่ยน ต้อง rebuild
+        _selectedIndex = _indexOfDateInWeek(_today) ?? 0;
       });
-      _scheduleMidnightUpdate(); //ตั้งรอบถัดไป
+      _scheduleMidnightUpdate();
     });
   }
 
   @override
   void dispose() {
-    //เมื่อออกจากหน้านี้ ยกเลิก Timer ทิ้ง
     _midnightTimer?.cancel();
     super.dispose();
   }
 
+  // ===== Helpers =====
+  DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
+
+  int? _indexOfDateInWeek(DateTime d) {
+    final target = _dateOnly(d);
+    for (int i = 0; i < _weekDays.length; i++) {
+      if (_dateOnly(_weekDays[i]) == target) return i;
+    }
+    return null;
+  }
+
+  DateTime _startOfWeekMonday(DateTime d) {
+    // weekday: Mon=1 ... Sun=7
+    final date = _dateOnly(d);
+    return date.subtract(Duration(days: date.weekday - DateTime.monday));
+  }
+
+  void _rebuildWeek() {
+    final start = _startOfWeekMonday(_today);
+    _weekDays = List.generate(7, (i) => start.add(Duration(days: i)));
+
+    // ให้ default เลือก "วันนี้" ถ้ามีในสัปดาห์นี้
+    _selectedIndex = _indexOfDateInWeek(_today) ?? 0;
+  }
+
+  String _thaiDayShort(DateTime d) {
+    // จ อ พ พฤ ศ ส อา (ตามที่เห็นในรูป)
+    switch (d.weekday) {
+      case DateTime.monday:
+        return 'จ';
+      case DateTime.tuesday:
+        return 'อ';
+      case DateTime.wednesday:
+        return 'พ';
+      case DateTime.thursday:
+        return 'พฤ';
+      case DateTime.friday:
+        return 'ศ';
+      case DateTime.saturday:
+        return 'ส';
+      case DateTime.sunday:
+        return 'อา';
+      default:
+        return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    const orange = Color(0xFFFF7A00);
-    const bg = Color(0xFFFFF7EF);
+    final selectedDate = _weekDays[_selectedIndex];
 
-    final dateText = DateFormat(
-      'EEEE, d MMMM yyyy',
-      'th',
-    ).format(_today); //แปลง _today เป็นข้อความ
+    final dateText = DateFormat('EEEE, d MMMM yyyy', 'th').format(selectedDate);
 
     return Scaffold(
       backgroundColor: bg,
@@ -64,39 +107,124 @@ class _ScheduleHomeScreenState extends State<ScheduleHomeScreen> {
         child: Padding(
           padding: const EdgeInsets.all(18),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // -------- เส้นแบ่ง --------
-                    Container(
-                      height: 2,
-                      width: double.infinity,
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      color: Color(0xFFFF7A00),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    const Text(
-                      "ตารางงาน",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    Text(
-                      dateText,
-                      style: const TextStyle(fontSize: 14, color: Colors.grey),
-                    ),
-                  ],
-                ),
+              // -------- เส้นแบ่ง --------
+              Container(
+                height: 2,
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                color: orange,
               ),
+              const SizedBox(height: 12),
+
+              // -------- ตารางงานและวันที่ --------
+              const Text(
+                "ตารางงาน",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+              ),
+              Text(
+                dateText,
+                style: const TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+
+              const SizedBox(height: 16),
+
+              // ===== แถบรายสัปดาห์ (7 วัน) =====
+              _WeeklyRow(
+                days: _weekDays,
+                selectedIndex: _selectedIndex,
+                dayShort: _thaiDayShort,
+                isToday: (d) => _dateOnly(d) == _dateOnly(_today),
+                onTap: (index) {
+                  setState(() => _selectedIndex = index);
+                },
+              ),
+
+              // ส่วนอื่น ๆ ของหน้าคุณใส่ต่อได้เลย
+              const SizedBox(height: 16),
+              // Expanded(child: ...),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _WeeklyRow extends StatelessWidget {
+  const _WeeklyRow({
+    required this.days,
+    required this.selectedIndex,
+    required this.dayShort,
+    required this.isToday,
+    required this.onTap,
+  });
+
+  final List<DateTime> days;
+  final int selectedIndex;
+  final String Function(DateTime) dayShort;
+  final bool Function(DateTime) isToday;
+  final void Function(int index) onTap;
+
+  static const orange = Color(0xFFFF7A00);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: List.generate(days.length, (i) {
+        final d = days[i];
+        final selected = i == selectedIndex;
+        final today = isToday(d);
+
+        // สไตล์ใกล้รูป: วงกลม + ตัวอักษรบน + เลขล่าง
+        return Expanded(
+          child: InkWell(
+            borderRadius: BorderRadius.circular(999),
+            onTap: () => onTap(i),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // ตัวอักษรวัน (จ/อ/พ...)
+                Text(
+                  dayShort(d),
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: selected ? orange : const Color(0xFF3A3A3A),
+                  ),
+                ),
+                const SizedBox(height: 8),
+
+                // วงกลมเลขวันที่
+                Container(
+                  width: 44,
+                  height: 44,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: selected ? orange : Colors.white,
+                    border: Border.all(
+                      color: selected
+                          ? orange
+                          : (today ? orange : const Color(0xFFE3E3E3)),
+                      width: today && !selected ? 2 : 1,
+                    ),
+                  ),
+                  child: Text(
+                    '${d.day}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: selected ? Colors.white : const Color(0xFF222222),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 }

@@ -121,7 +121,7 @@ class _ScheduleOfficerScreenState extends State<ScheduleOfficerScreen> {
 
               // -------- ตารางงานและวันที่ --------
               const Text(
-                "ตารางทำงาน",
+                "ตารางวันว่าง",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
               ),
               Text(
