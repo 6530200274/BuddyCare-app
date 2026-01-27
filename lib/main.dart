@@ -2,17 +2,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:my_app/providers/booking_provider.dart';
-import 'package:my_app/screens/officer/schedule_officer_screen.dart';
-import 'package:my_app/screens/officer/home_schedule_screen.dart';
+import 'package:my_app/screens/caregiver/schedule_caregiver_screen.dart';
+import 'package:my_app/screens/caregiver/home_schedule_screen.dart';
 import 'package:my_app/screens/select_package_screen.dart';
 import 'package:my_app/screens/signup_customer_screen.dart';
-import 'package:my_app/screens/officer/delete_schedule_screen.dart';
+import 'package:my_app/screens/caregiver/delete_schedule_screen.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'theme/app_colors.dart';
 import 'providers/selected_package_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:my_app/screens/officer/schedule_page_officer.dart';
+import 'package:my_app/screens/caregiver/schedule_page_caregiver.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
