@@ -240,8 +240,10 @@ class _CaregiverLoginScreenState extends State<CaregiverLoginScreen> {
                     child: TextButton(
                       onPressed: _isLoading
                           ? null
-                          : () {
-                              // TODO: ไปหน้า reset password หรือใช้ sendPasswordResetEmail
+                          : () {Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => CaregiverLoginScreen() ),
+                              );
                             },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,

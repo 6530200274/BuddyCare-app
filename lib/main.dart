@@ -97,9 +97,9 @@ class MyApp extends StatelessWidget {
       // home: const MeetingPointScreen(),
       // home: const SelectDateTimeScreen(),
       //home: const SignupCustomerScreen(),
-      //home: const SplashScreenSlideSmoothForward(),
+      home: const SplashScreenSlideSmoothForward(),
       //home: const SignupCaregiverScreen()
-      home: const PdpaCaregiverScreen(),
+      //home: const PdpaCaregiverScreen(),
     );
   }
 }

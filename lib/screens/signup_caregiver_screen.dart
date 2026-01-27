@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/screens/pdpa_caregiver_screen.dart';
 import '../theme/app_colors.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/primary_button.dart';
@@ -200,7 +201,15 @@ class _SignupCaregiverScreenState extends State<SignupCaregiverScreen > {
                     child: PrimaryButton(
                       text: 'บันทึก',
                       loading: _loading,
-                      onPressed: _loading ? null : _onSubmit,
+                      onPressed: _loading ? null 
+                      : () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const PdpaCaregiverScreen(),
+                                ),
+                              );
+                            },
                     ),
                   ),
                 ),
