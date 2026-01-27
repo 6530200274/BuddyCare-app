@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/screens/signup_caregiver_screen.dart';
 
 import 'package:my_app/theme/app_colors.dart';
 import 'package:my_app/services/auth_service.dart';
@@ -94,18 +95,23 @@ class _CaregiverLoginScreenState extends State<CaregiverLoginScreen> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('เข้าสู่ระบบสำเร็จ'), backgroundColor: Colors.green),
+        const SnackBar(
+          content: Text('เข้าสู่ระบบสำเร็จ'),
+          backgroundColor: Colors.green,
+        ),
       );
 
       // TODO: ถ้าคุณมี AuthGate ก็ไม่ต้อง push หน้า
       // Navigator.pushReplacement(...);
-
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
       _showErrorDialog('เข้าสู่ระบบไม่สำเร็จ', _mapAuthErrorTH(e));
     } catch (_) {
       if (!mounted) return;
-      _showErrorDialog('เกิดข้อผิดพลาด', 'ไม่สามารถเข้าสู่ระบบได้ กรุณาลองใหม่');
+      _showErrorDialog(
+        'เกิดข้อผิดพลาด',
+        'ไม่สามารถเข้าสู่ระบบได้ กรุณาลองใหม่',
+      );
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -119,12 +125,18 @@ class _CaregiverLoginScreenState extends State<CaregiverLoginScreen> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('เข้าสู่ระบบด้วย Google สำเร็จ'), backgroundColor: Colors.green),
+        const SnackBar(
+          content: Text('เข้าสู่ระบบด้วย Google สำเร็จ'),
+          backgroundColor: Colors.green,
+        ),
       );
     } on FirebaseAuthException catch (e) {
       _showErrorDialog('เข้าสู่ระบบไม่สำเร็จ', _mapAuthErrorTH(e));
     } catch (_) {
-      _showErrorDialog('เข้าสู่ระบบไม่สำเร็จ', 'ไม่สามารถเข้าสู่ระบบด้วย Google ได้');
+      _showErrorDialog(
+        'เข้าสู่ระบบไม่สำเร็จ',
+        'ไม่สามารถเข้าสู่ระบบด้วย Google ได้',
+      );
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -137,12 +149,18 @@ class _CaregiverLoginScreenState extends State<CaregiverLoginScreen> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('เข้าสู่ระบบด้วย Facebook สำเร็จ'), backgroundColor: Colors.green),
+        const SnackBar(
+          content: Text('เข้าสู่ระบบด้วย Facebook สำเร็จ'),
+          backgroundColor: Colors.green,
+        ),
       );
     } on FirebaseAuthException catch (e) {
       _showErrorDialog('เข้าสู่ระบบไม่สำเร็จ', _mapAuthErrorTH(e));
     } catch (_) {
-      _showErrorDialog('เข้าสู่ระบบไม่สำเร็จ', 'ไม่สามารถเข้าสู่ระบบด้วย Facebook ได้');
+      _showErrorDialog(
+        'เข้าสู่ระบบไม่สำเร็จ',
+        'ไม่สามารถเข้าสู่ระบบด้วย Facebook ได้',
+      );
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -150,7 +168,10 @@ class _CaregiverLoginScreenState extends State<CaregiverLoginScreen> {
 
   Future<void> _loginApple() async {
     // ⚠️ Apple บน Web ต้องตั้งค่าเยอะ (clientId/redirect, Apple Developer)
-    _showErrorDialog('ยังไม่พร้อมใช้งาน', 'Apple Sign-in บน Web ต้องตั้งค่าเพิ่มเติม');
+    _showErrorDialog(
+      'ยังไม่พร้อมใช้งาน',
+      'Apple Sign-in บน Web ต้องตั้งค่าเพิ่มเติม',
+    );
   }
 
   @override
@@ -217,9 +238,11 @@ class _CaregiverLoginScreenState extends State<CaregiverLoginScreen> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: _isLoading ? null : () {
-                        // TODO: ไปหน้า reset password หรือใช้ sendPasswordResetEmail
-                      },
+                      onPressed: _isLoading
+                          ? null
+                          : () {
+                              // TODO: ไปหน้า reset password หรือใช้ sendPasswordResetEmail
+                            },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: Size.zero,
@@ -311,10 +334,16 @@ class _CaregiverLoginScreenState extends State<CaregiverLoginScreen> {
                   // สมัครสมาชิกผู้ดูแล (สีส้ม + เส้นใต้สีเดียวกับข้อความ)
                   Center(
                     child: TextButton(
-                      onPressed: _isLoading ? null : () {
-                        // TODO: ไปหน้าสมัครสมาชิกผู้ดูแล
-                        // Navigator.push(context, MaterialPageRoute(builder: (_) => const SignupCaregiverScreen()));
-                      },
+                      onPressed: _isLoading
+                          ? null
+                          : () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const SignupCaregiverScreen(),
+                                ),
+                              );
+                            },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: Size.zero,
