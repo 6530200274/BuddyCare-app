@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/widgets/app_text_field.dart';
 import 'package:my_app/widgets/primary_button.dart';
+import 'package:my_app/theme/app_colors.dart';
+
 
 class MemberRegisterFormCaregiverScreen extends StatefulWidget {
   const MemberRegisterFormCaregiverScreen({super.key});
@@ -146,7 +149,7 @@ class _MemberRegisterFormCaregiverScreenState
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(foregroundColor: AppColors.primary),
             ),
-            dialogTheme: const DialogTheme(backgroundColor: Colors.white),
+            dialogTheme: const DialogTheme(backgroundColor: AppColors.white),
           ),
           child: child!,
         );
@@ -559,7 +562,7 @@ class _MemberRegisterFormCaregiverScreenState
                                 key: ValueKey(_province),
                                 initialValue: _province,
                                 isExpanded: true,
-                                items: _provinces
+                                items: _province
                                     .map(
                                       (e) => DropdownMenuItem(
                                         value: e,
