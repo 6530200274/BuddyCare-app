@@ -15,7 +15,7 @@ class MemberRegisterFormCaregiverScreen extends StatefulWidget {
 
 class _MemberRegisterFormCaregiverScreenState
     extends State<MemberRegisterFormCaregiverScreen> {
-  final _formKey = GlobalKey(FormState)();
+  final _formKey = GlobalKey<FormState>();
 
   // -------ข้อมูลทั่วไป-------
   final _firstName = TextEditingController(); //ชื่อ
