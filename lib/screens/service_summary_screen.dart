@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/providers/questionnaire_provider.dart';
+import 'package:my_app/screens/match_caretaker_screen.dart';
 import 'package:my_app/screens/select_datetime_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/booking_provider.dart';
@@ -140,7 +142,52 @@ class ServiceSummaryScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  // TODO: ไปหน้าค้นหาผู้ดูแล
+                  final pkg = context.read<SelectedPackageProvider>().selected;
+                  final recipient = context.read<RecipientProvider>().profile;
+                  final meeting = context.read<MeetingPointProvider>().data;
+                  final booking = context.read<BookingProvider>().data;
+                  // ignore: unused_local_variable
+                  final adl = context.read<ADLProvider>().result;
+
+                  // เช็คข้อมูลจำเป็นก่อน
+                  if (pkg == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("กรุณาเลือกแพ็กเกจก่อน")),
+                    );
+                    return;
+                  }
+
+                  if (recipient == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("กรุณากรอกข้อมูลผู้รับบริการก่อน"),
+                      ),
+                    );
+                    return;
+                  }
+
+                  if (meeting == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("กรุณาเลือกจุดนัดพบก่อน")),
+                    );
+                    return;
+                  }
+
+                  if (booking.serviceDate == null ||
+                      booking.serviceTime == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("กรุณาเลือกวันและเวลาให้ครบ"),
+                      ),
+                    );
+                    return;
+                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const MatchCaregiverScreen(),
+                    ),
+                  );
                 },
                 child: const Text(
                   "ค้นหา",
@@ -156,11 +203,7 @@ class ServiceSummaryScreen extends StatelessWidget {
 
   Widget _divider() => const Padding(
     padding: EdgeInsets.symmetric(vertical: 10),
-    child: Divider(
-      height: 1,
-      thickness: 1,
-      color: Color(0xFFFF6701),
-    ),
+    child: Divider(height: 1, thickness: 1, color: Color(0xFFFF6701)),
   );
 
   Widget _row({required String label, required String value}) {
