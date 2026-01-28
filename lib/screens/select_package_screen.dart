@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_app/screens/meeting_point_screen.dart';
+import 'package:my_app/screens/questionnaire_screen.dart';
 import 'package:my_app/widgets/primary_button.dart';
 import 'package:provider/provider.dart';
 import '../models/package_model.dart';
@@ -24,7 +25,7 @@ class SelectPackageScreen extends StatelessWidget {
       id: 'p2',
       title: 'Package 2',
       description:
-          'บริการพาไปหาหมอ ผู้ดูแลไปเจอกับลูกค้าที่รพ. +\n'
+          'บริการพาไปหาหมอ ผู้ดูแลไปเจอกับลูกค้าที่รพ.\n+'
           'ให้บริการระหว่างอยู่ที่รพ. และแยกย้ายกลับบ้าน',
       price: 1000,
     ),
@@ -44,7 +45,14 @@ class SelectPackageScreen extends StatelessWidget {
             backgroundColor: const Color(0xFFFFA726),
             child: Center(
               child: GestureDetector(
-                onTap: () => Navigator.pop(context),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ADLScreeningPage(),
+                    ),
+                  );
+                },
                 child: const Icon(
                   Icons.arrow_back_ios_new,
                   color: Colors.white,
@@ -136,7 +144,7 @@ class _HintBox extends StatelessWidget {
         SizedBox(height: 4),
         Text(
           '4. ผู้รับบริการต้องจองบริการก่อนการจองครั้งดูแลล่วงหน้าอย่างน้อย 1 วัน',
-          style: TextStyle(color: Color(0xFFFF8A00)),
+          style: TextStyle(color: Color(0xFFFF6701)),
         ),
       ],
     );

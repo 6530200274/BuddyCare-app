@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/models/booking_selection.dart';
+import 'package:my_app/screens/meeting_point_screen.dart';
+import 'package:my_app/screens/service_summary_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../providers/booking_provider.dart';
-
-
 
 class SelectDateTimeScreen extends StatefulWidget {
   const SelectDateTimeScreen({super.key});
@@ -14,7 +15,8 @@ class SelectDateTimeScreen extends StatefulWidget {
 }
 
 class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
-  // final _firestoreService = BookingFirestoreService();
+  BookingSelection get booking => context.watch<BookingProvider>().data;
+  DateTime? get displayDay => _selectedDay ?? booking.serviceDate;
 
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
@@ -38,6 +40,23 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
   DateTime _onlyDate(DateTime d) => DateTime(d.year, d.month, d.day);
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final saved = context.read<BookingProvider>().data;
+
+      if (!mounted) return;
+
+      setState(() {
+        _selectedDay = saved.serviceDate;
+        _selectedTime = saved.serviceTime;
+        _focusedDay = saved.serviceDate ?? DateTime.now();
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
     final today = _onlyDate(now);
@@ -56,7 +75,12 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
             backgroundColor: const Color(0xFFFFA726),
             child: InkWell(
               customBorder: const CircleBorder(),
-              onTap: () => Navigator.pop(context),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MeetingPointScreen()),
+                );
+              },
               child: const Center(
                 child: Icon(
                   Icons.arrow_back_ios_new,
@@ -101,13 +125,13 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                     onDaySelected: (selectedDay, focusedDay) async {
                       final s = _onlyDate(selectedDay);
 
-                      // ถ้ากด "วันนี้" ให้เด้งเตือน (ตาม requirement)
+                      // ถ้ากด "วันนี้" ให้เด้งเตือน
                       if (s.isAtSameMomentAs(today)) {
                         await _showMustBookOneDayAheadDialog(context);
                         return;
                       }
 
-                      // ถ้าเป็นวันก่อนพรุ่งนี้ (เช่นย้อนหลัง) ก็กันไว้
+                      // ถ้าเป็นวันก่อนพรุ่งนี้
                       if (s.isBefore(minBookDate)) {
                         await _showMustBookOneDayAheadDialog(context);
                         return;
@@ -130,11 +154,14 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                     calendarStyle: CalendarStyle(
                       todayDecoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.orange, width: 1.5),
+                        border: Border.all(
+                          color: Color(0xFFFF6701),
+                          width: 1.5,
+                        ),
                         color: Colors.transparent,
                       ),
                       selectedDecoration: const BoxDecoration(
-                        color: Colors.orange,
+                        color: Color(0xFFFF6701),
                         shape: BoxShape.circle,
                       ),
                       disabledTextStyle: const TextStyle(color: Colors.black26),
@@ -145,7 +172,11 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
-                    Icon(Icons.info_outline, size: 16, color: Colors.orange),
+                    Icon(
+                      Icons.info_outline,
+                      size: 16,
+                      color: Color(0xFFFF6701),
+                    ),
                     SizedBox(width: 6),
                     Expanded(
                       child: Text(
@@ -180,12 +211,12 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                       const Text("วันที่รับบริการ"),
                       const SizedBox(height: 8),
                       _readonlyBox(
-                        text: _selectedDay == null
+                        text: displayDay == null
                             ? ""
                             : DateFormat(
                                 'd MMMM yyyy',
                                 'th_TH',
-                              ).format(_selectedDay!),
+                              ).format(displayDay!),
                       ),
                       const SizedBox(height: 12),
                       const Text("เวลาที่รับบริการ"),
@@ -221,16 +252,16 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                 const SizedBox(height: 24),
 
                 SizedBox(
-                  width: 160,
-                  height: 48,
+                  width: double.infinity,
+                  height: 56,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: Color(0xFFFF6701),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(26),
                       ),
                     ),
-                    onPressed: () async {
+                    onPressed: () {
                       if (_selectedDay == null || _selectedTime == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -240,21 +271,18 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                         return;
                       }
 
-                      // OPTION A: เก็บแค่ใน Flutter (ไปหน้าถัดไปได้เลย)
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (_) => const ConfirmBookingScreen()),
-                      // );
+                      //เก็บลง Provider
+                      final bookingProvider = context.read<BookingProvider>();
+                      bookingProvider.setServiceDate(_selectedDay!);
+                      bookingProvider.setServiceTime(_selectedTime!);
 
-                      // OPTION B: ถ้าต้องการ “บันทึกลง Firestore” ด้วย ให้เปิดใช้โค้ดด้านล่าง
-                      /*
-                    final userId = FirebaseAuth.instance.currentUser!.uid;
-                    await _firestoreService.saveSelection(
-                      userId: userId,
-                      serviceDate: _selectedDay!,
-                      serviceTime: _selectedTime!,
-                    );
-                    */
+                      //ไปหน้า ServiceSummaryScreen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ServiceSummaryScreen(),
+                        ),
+                      );
                     },
                     child: const Text(
                       "บันทึก",

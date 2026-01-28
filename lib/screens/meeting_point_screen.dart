@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:my_app/screens/select_datetime_screen.dart';
+import 'package:my_app/screens/select_package_screen.dart';
 import '../theme/app_colors.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/primary_button.dart';
 import '../models/location_models.dart';
+import 'package:provider/provider.dart';
+import '../providers/meeting_point_provider.dart';
 
 class MeetingPointScreen extends StatefulWidget {
   const MeetingPointScreen({super.key});
@@ -89,6 +92,30 @@ class _MeetingPointScreenState extends State<MeetingPointScreen> {
       // default
       _province = 'กรุงเทพมหานคร';
       _destProvince = 'กรุงเทพมหานคร';
+      _prefillFromProvider();
+    });
+  }
+
+  void _prefillFromProvider() {
+    final saved = context.read<MeetingPointProvider>().data;
+    if (saved == null) return;
+
+    setState(() {
+      // จุดนัดพบ
+      _address.text = saved.address;
+      _postcode.text = saved.postcode;
+
+      _province = saved.province;
+      _districtId = saved.districtId;
+      _districtText.text = saved.districtName;
+
+      _subdistrictId = saved.subdistrictId;
+      _subdistrictText.text = saved.subdistrictName;
+
+      // จุดหมาย
+      _destProvince = saved.destProvince;
+      _hospitalId = saved.hospitalId;
+      _hospitalText.text = saved.hospitalName;
     });
   }
 
@@ -238,7 +265,14 @@ class _MeetingPointScreenState extends State<MeetingPointScreen> {
             backgroundColor: const Color(0xFFFFA726),
             child: Center(
               child: GestureDetector(
-                onTap: () => Navigator.pop(context),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const SelectPackageScreen(),
+                    ),
+                  );
+                },
                 child: const Icon(
                   Icons.arrow_back_ios_new,
                   color: Colors.white,
@@ -459,9 +493,37 @@ class _MeetingPointScreenState extends State<MeetingPointScreen> {
                       onPressed: () {
                         final ok = _formKey.currentState?.validate() ?? false;
                         if (!ok) return;
+                        if (_province == null ||
+                            _districtId == null ||
+                            _subdistrictId == null ||
+                            _destProvince == null ||
+                            _hospitalId == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('กรุณากรอกข้อมูลให้ครบ'),
+                            ),
+                          );
+                          return;
+                        }
 
-                        // (ถ้าต้องการ) เก็บค่าลง Provider ตรงนี้ก่อนค่อยไปหน้าใหม่
+                        final meetingPoint = MeetingPointData(
+                          address: _address.text.trim(),
+                          province: _province!.trim(),
+                          districtId: _districtId!.trim(),
+                          districtName: _districtText.text.trim(),
+                          subdistrictId: _subdistrictId!.trim(),
+                          subdistrictName: _subdistrictText.text.trim(),
+                          postcode: _postcode.text.trim(),
+                          destProvince: _destProvince!.trim(),
+                          hospitalId: _hospitalId!.trim(),
+                          hospitalName: _hospitalText.text.trim(),
+                        );
 
+                        //เก็บลง Provider
+                        context.read<MeetingPointProvider>().setData(
+                          meetingPoint,
+                        );
+                        // ไปหน้าถัดไป
                         Navigator.push(
                           context,
                           MaterialPageRoute(
