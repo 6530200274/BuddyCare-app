@@ -4,7 +4,6 @@ import 'package:my_app/widgets/app_text_field.dart';
 import 'package:my_app/widgets/primary_button.dart';
 import 'package:my_app/theme/app_colors.dart';
 
-
 class MemberRegisterFormCaregiverScreen extends StatefulWidget {
   const MemberRegisterFormCaregiverScreen({super.key});
 
@@ -18,11 +17,10 @@ class _MemberRegisterFormCaregiverScreenState
   final _formKey = GlobalKey<FormState>();
 
   // -------ข้อมูลทั่วไป-------
-  final _firstName = TextEditingController(); //ชื่อ
-  final _lastName = TextEditingController(); //นามสกุล
-  final _phone = TextEditingController(); //เบอร์มือถือ
-  final _idCard = TextEditingController(); //เลขบัตรปชช.
-
+  final _firstName = TextEditingController();
+  final _lastName = TextEditingController();
+  final _phone = TextEditingController();
+  final _idCard = TextEditingController();
   final _dobText = TextEditingController();
   DateTime? _dob;
 
@@ -31,28 +29,28 @@ class _MemberRegisterFormCaregiverScreenState
   String? _gender;
 
   // -------ที่อยู่-------
-  final _addrNo = TextEditingController(); // เลขที่
-  final _addrMoo = TextEditingController(); // หมู่ที่
-  final _addrVillage = TextEditingController(); // หมู่บ้าน
-  final _addrSoi = TextEditingController(); // ตรอก/ซอย
-  final _addrBuilding = TextEditingController(); // อาคาร
-  final _addrRoom = TextEditingController(); // ห้องเลขที่
-  final _addrFloor = TextEditingController(); // ชั้น
-  final _addrRoad = TextEditingController(); // ถนน
-  final _addrPostcode = TextEditingController(); // รหัสไปรษณีย์
+  final _addrNo = TextEditingController();
+  final _addrMoo = TextEditingController();
+  final _addrVillage = TextEditingController();
+  final _addrSoi = TextEditingController();
+  final _addrBuilding = TextEditingController();
+  final _addrRoom = TextEditingController();
+  final _addrFloor = TextEditingController();
+  final _addrRoad = TextEditingController();
+  final _addrPostcode = TextEditingController();
 
   String? _province;
-  String? _district; // อำเภอ/เขต
-  String? _subDistrict; // ตำบล/แขวง
+  String? _district;
+  String? _subDistrict;
 
   // -------ข้อมูลอาชีพ-------
-  String? _caregiverType; // ประเภทผู้สมัคร
-  final _licenseNo = TextEditingController(); // เลขใบประกอบวิชาชีพ
+  String? _caregiverType;
+  final _licenseNo = TextEditingController();
   String? _uploadedFileName;
 
   bool _loading = false;
 
-  // ======= dropdown options (ตัวอย่าง) =======
+  // ======= dropdown options =======
   final _nationalities = const [
     'ไทย',
     'จีน',
@@ -71,14 +69,11 @@ class _MemberRegisterFormCaregiverScreenState
     'อื่นๆ',
   ];
   final _genders = const ['ชาย', 'หญิง', 'ไม่ระบุ'];
-
   final _caregiverTypes = const [
     'พยาบาลวิชาชีพ (RN)',
     'ผู้ช่วยพยาบาล (PN)',
     'ผู้ดูแล (NA/Caregiver)',
   ];
-
-  // ======= options: จังหวัด/อำเภอ/ตำบล (ตัวอย่าง) =======
   final _provinces = const ['กรุงเทพมหานคร', 'นนทบุรี', 'ปทุมธานี'];
 
   final Map<String, List<String>> _districtsByProvince = const {
@@ -104,7 +99,6 @@ class _MemberRegisterFormCaregiverScreenState
     _phone.dispose();
     _idCard.dispose();
     _dobText.dispose();
-
     _addrNo.dispose();
     _addrMoo.dispose();
     _addrVillage.dispose();
@@ -114,7 +108,6 @@ class _MemberRegisterFormCaregiverScreenState
     _addrFloor.dispose();
     _addrRoad.dispose();
     _addrPostcode.dispose();
-
     _licenseNo.dispose();
     super.dispose();
   }
@@ -133,8 +126,9 @@ class _MemberRegisterFormCaregiverScreenState
   String? _phoneValidator(String? v) {
     if (v == null || v.trim().isEmpty) return 'กรุณากรอกเบอร์โทรศัพท์';
     final digits = v.replaceAll(RegExp(r'\D'), '');
-    if (digits.length < 9 || digits.length > 10)
+    if (digits.length < 9 || digits.length > 10) {
       return 'รูปแบบเบอร์โทรไม่ถูกต้อง';
+    }
     return null;
   }
 
@@ -155,20 +149,26 @@ class _MemberRegisterFormCaregiverScreenState
       initialDate: initial,
       firstDate: DateTime(1900),
       lastDate: now,
+      helpText: 'เลือกวันเกิด',
+      cancelText: 'ยกเลิก',
+      confirmText: 'ตกลง',
       builder: (context, child) {
-        final base = Theme.of(context);
         return Theme(
-          data: base.copyWith(
-            colorScheme: base.colorScheme.copyWith(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
               primary: AppColors.primary,
               onPrimary: Colors.white,
-              //surface: Colors.white,
+              surface: Colors.white,
               onSurface: Colors.black,
             ),
             textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(foregroundColor: AppColors.primary),
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.primary,
+              ),
             ),
-            dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
+            dialogTheme: const DialogThemeData(
+              backgroundColor: Colors.white,
+            ),
           ),
           child: child!,
         );
@@ -183,12 +183,8 @@ class _MemberRegisterFormCaregiverScreenState
   }
 
   Future<void> _pickFile() async {
-    // ถ้าคุณใช้ file_picker: เอาไปต่อได้เลย
-    // final result = await FilePicker.platform.pickFiles();
-    // if (result != null) setState(() => _uploadedFileName = result.files.single.name);
-
     setState(() {
-      _uploadedFileName = 'ไฟล์ถูกเลือกแล้ว.pdf'; // demo
+      _uploadedFileName = 'ไฟล์ถูกเลือกแล้ว.pdf';
     });
   }
 
@@ -196,21 +192,27 @@ class _MemberRegisterFormCaregiverScreenState
     final ok = _formKey.currentState?.validate() ?? false;
     if (!ok) return;
 
+    if (_uploadedFileName == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('กรุณาอัพโหลดใบรับรอง')),
+      );
+      return;
+    }
+
     setState(() => _loading = true);
     try {
-      // TODO: เอา payload ไปบันทึก Firestore / API ตามโปรเจกต์คุณ
-      // เช่น สร้าง model แล้วเรียก service.upsert(...)
+      await Future.delayed(const Duration(seconds: 1)); // Simulate API call
 
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('บันทึกข้อมูลเรียบร้อย')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('บันทึกข้อมูลเรียบร้อย')),
+      );
       Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('บันทึกไม่สำเร็จ: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('บันทึกไม่สำเร็จ: $e')),
+      );
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -264,9 +266,7 @@ class _MemberRegisterFormCaregiverScreenState
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  // TODO: เลือกรูปโปรไฟล์
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
@@ -323,7 +323,6 @@ class _MemberRegisterFormCaregiverScreenState
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
         ),
       ),
-
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -366,13 +365,12 @@ class _MemberRegisterFormCaregiverScreenState
                     AppTextField(
                       label: 'หมายเลขบัตรประชาชน',
                       requiredMark: true,
-                      hintText: 'กรอกหมายเลยบัตรประชาชน',
+                      hintText: 'กรอกหมายเลขบัตรประชาชน',
                       controller: _idCard,
                       keyboardType: TextInputType.number,
                       validator: _idCardValidator,
                     ),
                     const SizedBox(height: 12),
-
                     Row(
                       children: [
                         Expanded(
@@ -381,16 +379,13 @@ class _MemberRegisterFormCaregiverScreenState
                             children: [
                               const _Label('สัญชาติ', required: true),
                               DropdownButtonFormField<String>(
-                                key: ValueKey(_nationality),
-                                initialValue: _nationality,
+                                value: _nationality,
                                 isExpanded: true,
                                 items: _nationalities
-                                    .map(
-                                      (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ),
-                                    )
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
                                     .toList(),
                                 onChanged: (v) =>
                                     setState(() => _nationality = v),
@@ -407,16 +402,13 @@ class _MemberRegisterFormCaregiverScreenState
                             children: [
                               const _Label('ศาสนา', required: true),
                               DropdownButtonFormField<String>(
-                                key: ValueKey(_religion),
-                                initialValue: _religion,
+                                value: _religion,
                                 isExpanded: true,
                                 items: _religions
-                                    .map(
-                                      (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ),
-                                    )
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
                                     .toList(),
                                 onChanged: (v) => setState(() => _religion = v),
                                 decoration: _dropdownDecoration('กรุณาเลือก'),
@@ -428,7 +420,6 @@ class _MemberRegisterFormCaregiverScreenState
                       ],
                     ),
                     const SizedBox(height: 12),
-
                     Row(
                       children: [
                         Expanded(
@@ -453,16 +444,13 @@ class _MemberRegisterFormCaregiverScreenState
                             children: [
                               const _Label('เพศ', required: true),
                               DropdownButtonFormField<String>(
-                                key: ValueKey(_gender),
-                                initialValue: _gender,
+                                value: _gender,
                                 isExpanded: true,
                                 items: _genders
-                                    .map(
-                                      (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ),
-                                    )
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
                                     .toList(),
                                 onChanged: (v) => setState(() => _gender = v),
                                 decoration: _dropdownDecoration('กรุณาเลือก'),
@@ -478,7 +466,7 @@ class _MemberRegisterFormCaregiverScreenState
               ),
               const SizedBox(height: 16),
 
-              // -------ที่อยู่-------
+              // -------ที่อยู่------- (แก้ไขส่วนนี้)
               _CardSection(
                 title: 'ที่อยู่ที่สามารถติดต่อได้ / ข้อมูลที่อยู่ปัจจุบัน',
                 child: Column(
@@ -506,7 +494,6 @@ class _MemberRegisterFormCaregiverScreenState
                       ],
                     ),
                     const SizedBox(height: 12),
-
                     Row(
                       children: [
                         Expanded(
@@ -527,7 +514,6 @@ class _MemberRegisterFormCaregiverScreenState
                       ],
                     ),
                     const SizedBox(height: 12),
-
                     Row(
                       children: [
                         Expanded(
@@ -548,7 +534,6 @@ class _MemberRegisterFormCaregiverScreenState
                       ],
                     ),
                     const SizedBox(height: 12),
-
                     Row(
                       children: [
                         Expanded(
@@ -570,69 +555,57 @@ class _MemberRegisterFormCaregiverScreenState
                     ),
                     const SizedBox(height: 12),
 
-                    Row(
+                    // ===== FIX: แก้ไขส่วนจังหวัด/อำเภอ/ตำบล =====
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const _Label('จังหวัด', required: true),
-                              DropdownButtonFormField(
-                                key: ValueKey(_province),
-                                initialValue: _province,
-                                isExpanded: true,
-                                items: _provinces
-                                    .map(
-                                      (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ),
-                                    )
-                                    .toList(),
-                                onChanged: (v) {
-                                  setState(() {
-                                    _province = v;
-                                    _district = null;
-                                    _subDistrict = null;
-                                  });
-                                },
-                                decoration: _dropdownDecoration('กรุณาเลือก'),
-                                validator: _requiredDropdown,
-                              ),
-                            ],
-                          ),
+                        const _Label('จังหวัด', required: true),
+                        DropdownButtonFormField<String>(
+                          value: _province,
+                          isExpanded: true,
+                          items: _provinces
+                              .map((e) => DropdownMenuItem(
+                                    value: e,
+                                    child: Text(e),
+                                  ))
+                              .toList(),
+                          onChanged: (v) {
+                            setState(() {
+                              _province = v;
+                              _district = null;
+                              _subDistrict = null;
+                            });
+                          },
+                          decoration: _dropdownDecoration('กรุณาเลือก'),
+                          validator: _requiredDropdown,
                         ),
                       ],
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const _Label('อำเภอ/เขต', required: true),
-                          DropdownButtonFormField<String>(
-                            key: ValueKey(_district),
-                            initialValue: _district,
-                            isExpanded: true,
-                            items: districts
-                                .map(
-                                  (e) => DropdownMenuItem(
+                    const SizedBox(height: 12),
+                    
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const _Label('อำเภอ/เขต', required: true),
+                        DropdownButtonFormField<String>(
+                          value: _district,
+                          isExpanded: true,
+                          items: districts
+                              .map((e) => DropdownMenuItem(
                                     value: e,
                                     child: Text(e),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (v) {
-                              setState(() {
-                                _district = v;
-                                _subDistrict = null;
-                              });
-                            },
-                            decoration: _dropdownDecoration('กรุณาเลือก'),
-                            validator: _requiredDropdown,
-                          ),
-                        ],
-                      ),
+                                  ))
+                              .toList(),
+                          onChanged: (v) {
+                            setState(() {
+                              _district = v;
+                              _subDistrict = null;
+                            });
+                          },
+                          decoration: _dropdownDecoration('กรุณาเลือก'),
+                          validator: _requiredDropdown,
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 12),
 
@@ -644,16 +617,13 @@ class _MemberRegisterFormCaregiverScreenState
                             children: [
                               const _Label('ตำบล/แขวง', required: true),
                               DropdownButtonFormField<String>(
-                                key: ValueKey(_subDistrict),
-                                initialValue: _subDistrict,
+                                value: _subDistrict,
                                 isExpanded: true,
                                 items: subDistricts
-                                    .map(
-                                      (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ),
-                                    )
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
                                     .toList(),
                                 onChanged: (v) =>
                                     setState(() => _subDistrict = v),
@@ -688,20 +658,17 @@ class _MemberRegisterFormCaregiverScreenState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const _Label('ประเภทผู้สมัคร', required: true),
-                    DropdownButtonFormField(
-                      key: ValueKey(_caregiverType),
-                      initialValue: _caregiverType,
+                    DropdownButtonFormField<String>(
+                      value: _caregiverType,
+                      isExpanded: true,
                       items: _caregiverTypes
-                          .map(
-                            (e) => DropdownMenuItem(value: e, child: Text(e)),
-                          )
+                          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                           .toList(),
                       onChanged: (v) => setState(() => _caregiverType = v),
                       decoration: _dropdownDecoration('กรุณาเลือก'),
                       validator: _requiredDropdown,
                     ),
                     const SizedBox(height: 12),
-
                     AppTextField(
                       label: 'เลขใบประกอบวิชาชีพ',
                       requiredMark: true,
@@ -710,7 +677,6 @@ class _MemberRegisterFormCaregiverScreenState
                       validator: _requiredText,
                     ),
                     const SizedBox(height: 12),
-
                     const _Label('ใบรับรอง', required: true),
                     Container(
                       height: 56,
@@ -736,9 +702,8 @@ class _MemberRegisterFormCaregiverScreenState
                                 backgroundColor: AppColors.primary,
                                 foregroundColor: Colors.white,
                                 elevation: 0,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 18,
-                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 18),
                                 shape: const StadiumBorder(),
                               ),
                               child: const Text('อัพโหลด'),
@@ -747,14 +712,11 @@ class _MemberRegisterFormCaregiverScreenState
                         ],
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    // ถ้าอยากให้ validate “ต้องอัพโหลด” ให้เช็คใน _save() เพิ่ม
                   ],
                 ),
               ),
               const SizedBox(height: 22),
 
-              // ======= ปุ่มบันทึก =======
               PrimaryButton(
                 text: 'บันทึก',
                 loading: _loading,
@@ -787,9 +749,10 @@ class _CardSection extends StatelessWidget {
           children: [
             Text(
               title,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 12),
             child,
@@ -812,9 +775,9 @@ class _Label extends StatelessWidget {
       child: RichText(
         text: TextSpan(
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-            color: AppColors.text,
-          ),
+                fontWeight: FontWeight.w600,
+                color: AppColors.text,
+              ),
           children: [
             TextSpan(text: text),
             if (required)
