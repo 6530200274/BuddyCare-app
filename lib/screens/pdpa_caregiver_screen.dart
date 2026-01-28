@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/screens/member_register_form_caregiver_screen.dart';
 
 class PdpaCaregiverScreen extends StatefulWidget {
   const PdpaCaregiverScreen({super.key});
@@ -202,9 +203,11 @@ class _PdpaCaregiverScreenState extends State<PdpaCaregiverScreen> {
                 child: ElevatedButton(
                   onPressed: _canNext
                       ? () {
-                          // TODO: ไปหน้าถัดไป
-                          // Navigator.push(...);
-                        }
+                          Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => MemberRegisterFormCaregiverScreen() )
+                    );
+                  }
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: kOrange,
