@@ -11,7 +11,6 @@ import 'firebase_options.dart';
 import 'theme/app_colors.dart';
 import 'providers/selected_package_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:my_app/screens/caregiver/schedule_page_caregiver.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
