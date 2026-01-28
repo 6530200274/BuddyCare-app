@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:my_app/providers/booking_provider.dart';
 import 'package:my_app/screens/meeting_point_screen.dart';
+import 'package:my_app/screens/member_register_form_caregiver_screen.dart';
 import 'package:my_app/screens/pdpa_caregiver_screen.dart';
 import 'package:my_app/screens/recipient_form_screen.dart';
 import 'package:my_app/screens/select_package_screen.dart';
@@ -96,12 +97,13 @@ class MyApp extends StatelessWidget {
       ),
       // home: const SelectPackageScreen(),
       // home: const RecipientFormScreen(),
-       home: const MeetingPointScreen(),
+       //home: const MeetingPointScreen(),
       // home: const SelectDateTimeScreen(),
       //home: const SignupCustomerScreen(),
       //home: const SplashScreenSlideSmoothForward(),
       //home: const SignupCaregiverScreen()
       //home: const PdpaCaregiverScreen(),
+      home: MemberRegisterFormCaregiverScreen(),
     );
   }
 }
