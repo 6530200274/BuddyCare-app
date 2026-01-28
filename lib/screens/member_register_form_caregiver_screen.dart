@@ -15,7 +15,7 @@ class MemberRegisterFormCaregiverScreen extends StatefulWidget {
 
 class _MemberRegisterFormCaregiverScreenState
     extends State<MemberRegisterFormCaregiverScreen> {
-  final _formKey = GlobalKey(FormState)();
+  final _formKey = GlobalKey<FormState>();
 
   // -------ข้อมูลทั่วไป-------
   final _firstName = TextEditingController(); //ชื่อ
@@ -77,6 +77,25 @@ class _MemberRegisterFormCaregiverScreenState
     'ผู้ช่วยพยาบาล (PN)',
     'ผู้ดูแล (NA/Caregiver)',
   ];
+
+  // ======= options: จังหวัด/อำเภอ/ตำบล (ตัวอย่าง) =======
+  final _provinces = const ['กรุงเทพมหานคร', 'นนทบุรี', 'ปทุมธานี'];
+
+  final Map<String, List<String>> _districtsByProvince = const {
+    'กรุงเทพมหานคร': ['ปทุมวัน', 'บางรัก', 'ดินแดง'],
+    'นนทบุรี': ['เมืองนนทบุรี', 'ปากเกร็ด'],
+    'ปทุมธานี': ['เมืองปทุมธานี', 'คลองหลวง'],
+  };
+
+  final Map<String, List<String>> _subDistrictsByDistrict = const {
+    'ปทุมวัน': ['ลุมพินี', 'รองเมือง'],
+    'บางรัก': ['สีลม', 'สุริยวงศ์'],
+    'ดินแดง': ['ดินแดง'],
+    'เมืองนนทบุรี': ['สวนใหญ่', 'ตลาดขวัญ'],
+    'ปากเกร็ด': ['ปากเกร็ด', 'บ้านใหม่'],
+    'เมืองปทุมธานี': ['บางปรอก', 'บางเดื่อ'],
+    'คลองหลวง': ['คลองหนึ่ง', 'คลองสอง'],
+  };
 
   @override
   void dispose() {
@@ -143,13 +162,13 @@ class _MemberRegisterFormCaregiverScreenState
             colorScheme: base.colorScheme.copyWith(
               primary: AppColors.primary,
               onPrimary: Colors.white,
-              surface: Colors.white,
+              //surface: Colors.white,
               onSurface: Colors.black,
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(foregroundColor: AppColors.primary),
             ),
-            dialogTheme: const DialogTheme(backgroundColor: AppColors.white),
+            dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
           ),
           child: child!,
         );
@@ -562,7 +581,7 @@ class _MemberRegisterFormCaregiverScreenState
                                 key: ValueKey(_province),
                                 initialValue: _province,
                                 isExpanded: true,
-                                items: _province
+                                items: _provinces
                                     .map(
                                       (e) => DropdownMenuItem(
                                         value: e,
