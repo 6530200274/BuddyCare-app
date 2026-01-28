@@ -135,7 +135,7 @@ class OnboardingPage2 extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 45),
+            const SizedBox(height: 40),
 
             // --- Indicator (ใช้ซ้ำ) ---
             Padding(
@@ -143,7 +143,7 @@ class OnboardingPage2 extends StatelessWidget {
             child: const OnboardingIndicator(activeIndex: 1),
             ),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: 35),
 
             // --- Next Button (ใช้ซ้ำ) ---
             Padding(
