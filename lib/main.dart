@@ -5,6 +5,7 @@ import 'package:my_app/providers/booking_provider.dart';
 import 'package:my_app/providers/meeting_point_provider.dart';
 import 'package:my_app/providers/questionnaire_provider.dart';
 import 'package:my_app/providers/recipient_provider.dart';
+// import 'package:my_app/screens/caregiver/add_schedule_screen.dart';
 import 'package:my_app/screens/caregiver_login_screen.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -94,14 +95,8 @@ class MyApp extends StatelessWidget {
           cancelButtonStyle: TextButton.styleFrom(foregroundColor: orange),
         ),
       ),
-      // home: const SelectPackageScreen(),
-      // home: const RecipientFormScreen(),
+      // home: const AddScheduleScreen(),
       home: const CaregiverLoginScreen(),
-      // home: const ServiceSummaryScreen(),
-      // home: const MeetingPointScreen(),
-      // home: const SelectDateTimeScreen(),
-      // home: const SignupCustomerScreen(),
-      // home: const ADLScreeningPage(),
     );
   }
 }

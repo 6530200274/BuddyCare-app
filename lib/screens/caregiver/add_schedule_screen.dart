@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/screens/caregiver/home_schedule_screen.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AddScheduleScreen extends StatefulWidget {
   const AddScheduleScreen({super.key});
@@ -19,15 +22,20 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
 
   String selectedStatus = 'ว่างงาน';
 
+  bool _saving = false;
+
   String _formatTime24(TimeOfDay time) {
     final hour = time.hour.toString().padLeft(2, '0');
     final minute = time.minute.toString().padLeft(2, '0');
     return '$hour:$minute';
   }
 
+  String _dateKey(DateTime d) => DateFormat('yyyy-MM-dd').format(d);
+  String _timeKey(TimeOfDay t) =>
+      '${t.hour.toString().padLeft(2, '0')}${t.minute.toString().padLeft(2, '0')}';
+
   @override
   Widget build(BuildContext context) {
-    const orange = Color(0xFFFF7A00);
     const bg = Color(0xFFFFF7EF);
     const yellow = Color(0xFFFEA82F);
 
@@ -37,8 +45,6 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
         elevation: 0,
         toolbarHeight: 80,
         centerTitle: true,
-
-        // ปุ่มกลับ
         leading: Padding(
           padding: const EdgeInsets.all(12),
           child: Material(
@@ -46,14 +52,13 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
             shape: const CircleBorder(),
             child: InkWell(
               customBorder: const CircleBorder(),
-              onTap: () => Navigator.pop(context),
+              onTap: _saving ? null : () => Navigator.pop(context),
               child: const Center(
                 child: Icon(Icons.arrow_back, color: Colors.white, size: 20),
               ),
             ),
           ),
         ),
-
         title: const Text(
           "เพิ่มตารางงาน",
           style: TextStyle(
@@ -63,22 +68,20 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
           ),
         ),
       ),
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
+
             // -------- ปฏิทิน --------
             CalendarDatePicker(
               initialDate: selectedDate,
               firstDate: firstDate,
               lastDate: lastDate,
               onDateChanged: (newDate) {
-                setState(() {
-                  selectedDate = newDate;
-                });
+                setState(() => selectedDate = newDate);
               },
             ),
 
@@ -91,11 +94,9 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                 color: Color(0xFF737373),
               ),
             ),
-
-            SizedBox(height: 8),
-
+            const SizedBox(height: 8),
             GestureDetector(
-              onTap: () => _openDatePicker(context),
+              onTap: _saving ? null : () => _openDatePicker(context),
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
@@ -126,7 +127,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
 
             const SizedBox(height: 16),
 
-            // -------- ฟอร์มเลือกเวลาที่รับบริการ --------
+            // -------- ฟอร์มเลือกเวลา --------
             const Text(
               "เวลาที่ให้บริการ",
               style: TextStyle(
@@ -135,11 +136,9 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                 color: Color(0xFF737373),
               ),
             ),
-
             const SizedBox(height: 8),
-
             GestureDetector(
-              onTap: () => _openTimePicker(context),
+              onTap: _saving ? null : () => _openTimePicker(context),
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
@@ -177,7 +176,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
 
             const SizedBox(height: 16),
 
-            // -------- ฟอร์มเลือกสถานะตารางงาน --------
+            // -------- ฟอร์มเลือกสถานะ --------
             const Text(
               "สถานะตารางงาน",
               style: TextStyle(
@@ -186,9 +185,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                 color: Color(0xFF737373),
               ),
             ),
-
             const SizedBox(height: 8),
-
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -214,24 +211,24 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                     DropdownMenuItem(value: 'ว่างงาน', child: Text('ว่างงาน')),
                     DropdownMenuItem(value: 'มีงาน', child: Text('มีงาน')),
                   ],
-                  onChanged: (value) {
-                    if (value == null) return;
-                    setState(() {
-                      selectedStatus = value;
-                    });
-                  },
+                  onChanged: _saving
+                      ? null
+                      : (value) {
+                          if (value == null) return;
+                          setState(() => selectedStatus = value);
+                        },
                 ),
               ),
             ),
 
-            // -------- ปุ่มบันทึก --------
             const SizedBox(height: 24),
 
+            // -------- ปุ่มบันทึก --------
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: _onSave,
+                onPressed: _saving ? null : _onSave,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFF7A00),
                   shape: RoundedRectangleBorder(
@@ -239,14 +236,20 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                   ),
                   elevation: 0,
                 ),
-                child: const Text(
-                  'บันทึก',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
+                child: _saving
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text(
+                        'บันทึก',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
           ],
@@ -255,7 +258,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
     );
   }
 
-  _openDatePicker(BuildContext context) async {
+  Future<void> _openDatePicker(BuildContext context) async {
     final DateTime? date = await showDatePicker(
       context: context,
       initialDate: selectedDate,
@@ -264,9 +267,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
     );
 
     if (date != null) {
-      setState(() {
-        selectedDate = date;
-      });
+      setState(() => selectedDate = date);
     }
   }
 
@@ -283,14 +284,12 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
     );
 
     if (picked != null) {
-      setState(() {
-        selectedTime = picked;
-      });
+      setState(() => selectedTime = picked);
     }
   }
 
-  void _onSave() {
-    // รวมวันที่ + เวลา เป็น DateTime เดียว
+  Future<void> _onSave() async {
+    // รวมวันที่+เวลา เป็น DateTime เดียว (local)
     final DateTime serviceDateTime = DateTime(
       selectedDate.year,
       selectedDate.month,
@@ -299,18 +298,119 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
       selectedTime.minute,
     );
 
-    debugPrint('วันที่เวลา: $serviceDateTime');
-    debugPrint('สถานะ: $selectedStatus');
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('กรุณาเข้าสู่ระบบใหม่')));
+      return;
+    }
 
-    // TODO:
-    // - บันทึกลง Firebase
-    // - ส่งค่ากลับหน้าก่อนหน้า
-    // - แสดง Snackbar แจ้งสำเร็จ
+    final dk = _dateKey(selectedDate);
+    final tk = _timeKey(selectedTime);
+    final slotId = '${dk}_$tk'; // เช่น 2026-01-29_1300
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('บันทึกข้อมูลเรียบร้อย')));
+    setState(() => _saving = true);
 
-    Navigator.pop(context);
+    try {
+      final docRef = FirebaseFirestore.instance
+          .collection('caregiver')
+          .doc(uid)
+          .collection('schedule')
+          .doc(slotId);
+
+      await FirebaseFirestore.instance.runTransaction((tx) async {
+        final snap = await tx.get(docRef);
+
+        final data = {
+          'date': Timestamp.fromDate(serviceDateTime),
+          'dateKey': dk,
+          'time': _formatTime24(selectedTime),
+          'timeKey': tk,
+          'status': selectedStatus,
+          'isAvailable': selectedStatus == 'ว่างงาน',
+          'uid': uid,
+          'slotId': slotId,
+          'updatedAt': FieldValue.serverTimestamp(),
+        };
+
+        if (!snap.exists) {
+          // สร้างครั้งแรก
+          tx.set(docRef, {...data, 'createdAt': FieldValue.serverTimestamp()});
+        } else {
+          // แก้ไขของเดิม
+          tx.set(docRef, data, SetOptions(merge: true));
+        }
+      });
+      // ดึงข้อมูล caregiver เพื่อเอา province/district/subDistrict + career.caregiverType
+      final caregiverSnap = await FirebaseFirestore.instance
+          .collection('caregiver')
+          .doc(uid)
+          .get();
+      final caregiver = caregiverSnap.data() ?? {};
+      final career = (caregiver['career'] ?? {}) as Map<String, dynamic>;
+      final caregiverType = career['caregiverType'];
+
+      final address = (caregiver['address'] ?? {}) as Map<String, dynamic>;
+      final province = address['province'];
+      final district = address['district'];
+      final subdistrict = address['subDistrict'];
+
+      final profile = (caregiver['profile'] ?? {}) as Map<String, dynamic>;
+      final firstName = profile['firstName'];
+      final lastName = profile['lastName'];
+      // เขียนตารางกลาง caregiver_slots
+      final slotDocId = '${uid}_$slotId';
+
+      await FirebaseFirestore.instance
+          .collection('caregiver_slots')
+          .doc(slotDocId)
+          .set({
+            'uid': uid,
+            'slotId': slotId,
+
+            // query/เรียง
+            'date': Timestamp.fromDate(serviceDateTime),
+            'dateKey': dk,
+            'time': _formatTime24(selectedTime),
+            'timeKey': tk,
+
+            // สถานะ
+            'status': selectedStatus,
+            'isAvailable': selectedStatus == 'ว่างงาน',
+
+            // matching fields
+            'province': province,
+            'district': district,
+            'subdistrict': subdistrict,
+            'caregiverType': caregiverType,
+            'firstName': firstName,
+            'lastName': lastName,
+
+            // metadata
+            'updatedAt': FieldValue.serverTimestamp(),
+            'createdAt': FieldValue.serverTimestamp(),
+          }, SetOptions(merge: true));
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('บันทึกข้อมูลเรียบร้อย')));
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScheduleScreen()),
+        (route) => false,
+      );
+    } on FirebaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('บันทึกไม่สำเร็จ: ${e.message ?? e.code}')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('บันทึกไม่สำเร็จ: $e')));
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
   }
 }

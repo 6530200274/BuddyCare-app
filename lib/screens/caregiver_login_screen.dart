@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/screens/caregiver/home_schedule_screen.dart';
 import 'package:my_app/screens/signup_caregiver_screen.dart';
 
 import 'package:my_app/theme/app_colors.dart';
@@ -99,6 +100,12 @@ class _CaregiverLoginScreenState extends State<CaregiverLoginScreen> {
           content: Text('เข้าสู่ระบบสำเร็จ'),
           backgroundColor: Colors.green,
         ),
+      );
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScheduleScreen()),
+        (route) => false, // ❌ ลบทุกหน้าก่อนหน้า (ย้อนกลับไม่ได้)
       );
 
       // TODO: ถ้าคุณมี AuthGate ก็ไม่ต้อง push หน้า
@@ -240,9 +247,12 @@ class _CaregiverLoginScreenState extends State<CaregiverLoginScreen> {
                     child: TextButton(
                       onPressed: _isLoading
                           ? null
-                          : () {Navigator.push(
+                          : () {
+                              Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (_) => CaregiverLoginScreen() ),
+                                MaterialPageRoute(
+                                  builder: (_) => CaregiverLoginScreen(),
+                                ),
                               );
                             },
                       style: TextButton.styleFrom(
