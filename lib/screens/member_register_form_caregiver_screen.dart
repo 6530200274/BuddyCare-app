@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/screens/education_form_caregiver_screen.dart';
 import 'package:my_app/widgets/app_text_field.dart';
 import 'package:my_app/widgets/primary_button.dart';
 import 'package:my_app/theme/app_colors.dart';
@@ -921,10 +922,22 @@ class _MemberRegisterFormCaregiverScreenState
                     const SizedBox(height: 22),
 
                     PrimaryButton(
-                      text: 'บันทึก',
-                      loading: _loading,
-                      onPressed: _save,
-                    ),
+                    text: 'บันทึก',
+                    loading: _loading,
+                    onPressed: _loading
+                        ? null
+                        : () async {
+                            await _save(); // บันทึก caregiver
+                            if (!mounted) return;
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const EducationScreen(),
+                              ),
+                            );
+                          },
+                  ),
                   ],
                 ),
               ),
