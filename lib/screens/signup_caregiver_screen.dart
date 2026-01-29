@@ -7,13 +7,13 @@ import '../widgets/app_text_field.dart';
 import '../widgets/primary_button.dart';
 
 class SignupCaregiverScreen extends StatefulWidget {
-  const SignupCaregiverScreen ({super.key});
+  const SignupCaregiverScreen({super.key});
 
   @override
-  State<SignupCaregiverScreen > createState() => _SignupCaregiverScreenState();
+  State<SignupCaregiverScreen> createState() => _SignupCaregiverScreenState();
 }
 
-class _SignupCaregiverScreenState extends State<SignupCaregiverScreen > {
+class _SignupCaregiverScreenState extends State<SignupCaregiverScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
@@ -36,7 +36,7 @@ class _SignupCaregiverScreenState extends State<SignupCaregiverScreen > {
     return emailRegex.hasMatch(v.trim());
   }
 
-   String _friendlyAuthError(FirebaseAuthException e) {
+  String _friendlyAuthError(FirebaseAuthException e) {
     switch (e.code) {
       case 'email-already-in-use':
         return 'อีเมลนี้ถูกใช้งานแล้ว';
@@ -61,6 +61,7 @@ class _SignupCaregiverScreenState extends State<SignupCaregiverScreen > {
       final email = _emailCtrl.text.trim();
       final password = _passCtrl.text;
 
+      // 1) สมัครใน FirebaseAuth
       final cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -73,17 +74,26 @@ class _SignupCaregiverScreenState extends State<SignupCaregiverScreen > {
         throw Exception('สมัครสำเร็จแต่ uid เป็น null');
       }
 
-      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      // 2) เก็บข้อมูลโปรไฟล์ใน Firestore
+      await FirebaseFirestore.instance.collection('caregiver').doc(uid).set({
+        'uid': uid,
         'email': email,
         'role': 'caregiver',
         'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
       });
 
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('สมัครสมาชิกสำเร็จ')),
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('สมัครสมาชิกสำเร็จ')));
+
+      // 3) ไปหน้า PDPA หลังสมัครเสร็จ
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const PdpaCaregiverScreen()),
       );
-      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       debugPrint('AUTH ERROR: ${e.code} ${e.message}');
       if (!mounted) return;
@@ -99,9 +109,9 @@ class _SignupCaregiverScreenState extends State<SignupCaregiverScreen > {
     } catch (e) {
       debugPrint('UNKNOWN ERROR: $e');
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('เกิดข้อผิดพลาด: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('เกิดข้อผิดพลาด: $e')));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -115,7 +125,7 @@ class _SignupCaregiverScreenState extends State<SignupCaregiverScreen > {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          onPressed: () => Navigator.pop(context), 
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.primary),
         ),
       ),
@@ -138,8 +148,8 @@ class _SignupCaregiverScreenState extends State<SignupCaregiverScreen > {
                 const SizedBox(height: 28),
 
                 AppTextField(
-                  label: 'อีเมล', 
-                  hintText: 'กรอกอีเมล', 
+                  label: 'อีเมล',
+                  hintText: 'กรอกอีเมล',
                   controller: _emailCtrl,
                   keyboardType: TextInputType.emailAddress,
                   validator: (v) {
@@ -152,8 +162,8 @@ class _SignupCaregiverScreenState extends State<SignupCaregiverScreen > {
                 const SizedBox(height: 16),
 
                 AppTextField(
-                  label: 'รหัสผ่าน', 
-                  hintText: 'กรอกรหัสผ่าน', 
+                  label: 'รหัสผ่าน',
+                  hintText: 'กรอกรหัสผ่าน',
                   controller: _passCtrl,
                   obscureText: _hidePass,
                   validator: (v) {
@@ -165,7 +175,7 @@ class _SignupCaregiverScreenState extends State<SignupCaregiverScreen > {
                     return null;
                   },
                   suffixIcon: IconButton(
-                    onPressed: () => setState(()=> _hidePass = !_hidePass), 
+                    onPressed: () => setState(() => _hidePass = !_hidePass),
                     icon: Icon(
                       _hidePass ? Icons.visibility_off : Icons.visibility,
                       color: Colors.grey.shade600,
@@ -186,7 +196,8 @@ class _SignupCaregiverScreenState extends State<SignupCaregiverScreen > {
                     return null;
                   },
                   suffixIcon: IconButton(
-                    onPressed: () => setState(() => _hideConfirm = !_hideConfirm),
+                    onPressed: () =>
+                        setState(() => _hideConfirm = !_hideConfirm),
                     icon: Icon(
                       _hideConfirm ? Icons.visibility_off : Icons.visibility,
                       color: Colors.grey.shade600,
@@ -201,15 +212,7 @@ class _SignupCaregiverScreenState extends State<SignupCaregiverScreen > {
                     child: PrimaryButton(
                       text: 'บันทึก',
                       loading: _loading,
-                      onPressed: _loading ? null 
-                      : () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const PdpaCaregiverScreen(),
-                                ),
-                              );
-                            },
+                      onPressed: _loading ? null : _onSubmit,
                     ),
                   ),
                 ),

@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:intl/intl.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/widgets/app_text_field.dart';
 import 'package:my_app/widgets/primary_button.dart';
 import 'package:my_app/theme/app_colors.dart';
@@ -97,8 +98,9 @@ class _MemberRegisterFormCaregiverScreenState
   Future<void> _loadAddressJson() async {
     try {
       // ✅ ใช้ไฟล์เดียวกับ MeetingPointScreen (ตอนนี้มีแค่กรุงเทพ)
-      final str =
-          await rootBundle.loadString('assets/bkk_master_district_subdistrict.json');
+      final str = await rootBundle.loadString(
+        'assets/bkk_master_district_subdistrict.json',
+      );
       final json = jsonDecode(str) as Map<String, dynamic>;
 
       final meta = (json['meta'] as Map<String, dynamic>);
@@ -106,18 +108,22 @@ class _MemberRegisterFormCaregiverScreenState
 
       final districts = (json['districts'] as List<dynamic>)
           .cast<Map<String, dynamic>>()
-          .map((e) => DistrictMini(
-                id: (e['id'] as String).trim(),
-                nameTh: (e['name_th'] as String).trim(),
-              ))
+          .map(
+            (e) => DistrictMini(
+              id: (e['id'] as String).trim(),
+              nameTh: (e['name_th'] as String).trim(),
+            ),
+          )
           .toList();
 
       final subdistricts = (json['subdistricts'] as List<dynamic>)
           .cast<Map<String, dynamic>>()
-          .map((e) => SubdistrictMini(
-                districtId: (e['district_id'] as String).trim(),
-                nameTh: (e['name_th'] as String).trim(),
-              ))
+          .map(
+            (e) => SubdistrictMini(
+              districtId: (e['district_id'] as String).trim(),
+              nameTh: (e['name_th'] as String).trim(),
+            ),
+          )
           .toList();
 
       // id -> ชื่อเขต
@@ -233,13 +239,9 @@ class _MemberRegisterFormCaregiverScreenState
               onSurface: Colors.black,
             ),
             textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: AppColors.primary,
-              ),
+              style: TextButton.styleFrom(foregroundColor: AppColors.primary),
             ),
-            dialogTheme: const DialogThemeData(
-              backgroundColor: Colors.white,
-            ),
+            dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
           ),
           child: child!,
         );
@@ -264,25 +266,89 @@ class _MemberRegisterFormCaregiverScreenState
     if (!ok) return;
 
     if (_uploadedFileName == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('กรุณาอัพโหลดใบรับรอง')));
+      return;
+    }
+
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('กรุณาอัพโหลดใบรับรอง')),
+        const SnackBar(
+          content: Text('ไม่พบผู้ใช้ที่ล็อกอินอยู่ กรุณาเข้าสู่ระบบใหม่'),
+        ),
       );
       return;
     }
 
     setState(() => _loading = true);
+
     try {
-      await Future.delayed(const Duration(seconds: 1));
+      final caregiverRef = FirebaseFirestore.instance
+          .collection('caregiver')
+          .doc(uid);
+
+      final data = <String, dynamic>{
+        'role': 'caregiver',
+        'updatedAt': FieldValue.serverTimestamp(),
+
+        // -------ข้อมูลทั่วไป-------
+        'profile': {
+          'firstName': _firstName.text.trim(),
+          'lastName': _lastName.text.trim(),
+          'phone': _phone.text.trim(),
+          'idCard': _idCard.text.trim(),
+          'dob': _dob, // DateTime -> Firestore Timestamp อัตโนมัติ
+          'nationality': _nationality,
+          'religion': _religion,
+          'gender': _gender,
+        },
+
+        // -------ที่อยู่-------
+        'address': {
+          'no': _addrNo.text.trim(),
+          'moo': _addrMoo.text.trim(),
+          'village': _addrVillage.text.trim(),
+          'soi': _addrSoi.text.trim(),
+          'building': _addrBuilding.text.trim(),
+          'room': _addrRoom.text.trim(),
+          'floor': _addrFloor.text.trim(),
+          'road': _addrRoad.text.trim(),
+          'postcode': _addrPostcode.text.trim(),
+          'province': _province,
+          'district': _district,
+          'subDistrict': _subDistrict,
+        },
+
+        // -------ข้อมูลอาชีพ-------
+        'career': {
+          'caregiverType': _caregiverType,
+          'licenseNo': _licenseNo.text.trim(),
+          // ตอนนี้ยัง mock ชื่อไฟล์ไว้ก่อน
+          // แนะนำภายหลังอัปโหลดไป Firebase Storage แล้วเก็บ fileUrl/filePath เพิ่ม
+          'certificateFileName': _uploadedFileName,
+        },
+      };
+
+      // merge:true เพื่อไม่ทับข้อมูลเดิมที่ตอน signup เคย set ไว้ (email, createdAt, status ฯลฯ)
+      await caregiverRef.set(data, SetOptions(merge: true));
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('บันทึกข้อมูลเรียบร้อย')));
+      Navigator.pop(context);
+    } on FirebaseException catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('บันทึกข้อมูลเรียบร้อย')),
+        SnackBar(content: Text('บันทึกไม่สำเร็จ: ${e.message ?? e.code}')),
       );
-      Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('บันทึกไม่สำเร็จ: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('บันทึกไม่สำเร็จ: $e')));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -485,15 +551,18 @@ class _MemberRegisterFormCaregiverScreenState
                                       value: _nationality,
                                       isExpanded: true,
                                       items: _nationalities
-                                          .map((e) => DropdownMenuItem(
-                                                value: e,
-                                                child: Text(e),
-                                              ))
+                                          .map(
+                                            (e) => DropdownMenuItem(
+                                              value: e,
+                                              child: Text(e),
+                                            ),
+                                          )
                                           .toList(),
                                       onChanged: (v) =>
                                           setState(() => _nationality = v),
-                                      decoration:
-                                          _dropdownDecoration('กรุณาเลือก'),
+                                      decoration: _dropdownDecoration(
+                                        'กรุณาเลือก',
+                                      ),
                                       validator: _requiredDropdown,
                                     ),
                                   ],
@@ -509,15 +578,18 @@ class _MemberRegisterFormCaregiverScreenState
                                       value: _religion,
                                       isExpanded: true,
                                       items: _religions
-                                          .map((e) => DropdownMenuItem(
-                                                value: e,
-                                                child: Text(e),
-                                              ))
+                                          .map(
+                                            (e) => DropdownMenuItem(
+                                              value: e,
+                                              child: Text(e),
+                                            ),
+                                          )
                                           .toList(),
                                       onChanged: (v) =>
                                           setState(() => _religion = v),
-                                      decoration:
-                                          _dropdownDecoration('กรุณาเลือก'),
+                                      decoration: _dropdownDecoration(
+                                        'กรุณาเลือก',
+                                      ),
                                       validator: _requiredDropdown,
                                     ),
                                   ],
@@ -553,15 +625,18 @@ class _MemberRegisterFormCaregiverScreenState
                                       value: _gender,
                                       isExpanded: true,
                                       items: _genders
-                                          .map((e) => DropdownMenuItem(
-                                                value: e,
-                                                child: Text(e),
-                                              ))
+                                          .map(
+                                            (e) => DropdownMenuItem(
+                                              value: e,
+                                              child: Text(e),
+                                            ),
+                                          )
                                           .toList(),
                                       onChanged: (v) =>
                                           setState(() => _gender = v),
-                                      decoration:
-                                          _dropdownDecoration('กรุณาเลือก'),
+                                      decoration: _dropdownDecoration(
+                                        'กรุณาเลือก',
+                                      ),
                                       validator: _requiredDropdown,
                                     ),
                                   ],
@@ -576,7 +651,8 @@ class _MemberRegisterFormCaregiverScreenState
 
                     // -------ที่อยู่-------
                     _CardSection(
-                      title: 'ที่อยู่ที่สามารถติดต่อได้ / ข้อมูลที่อยู่ปัจจุบัน',
+                      title:
+                          'ที่อยู่ที่สามารถติดต่อได้ / ข้อมูลที่อยู่ปัจจุบัน',
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -672,10 +748,12 @@ class _MemberRegisterFormCaregiverScreenState
                                 value: _province,
                                 isExpanded: true,
                                 items: _provinces
-                                    .map((e) => DropdownMenuItem(
-                                          value: e,
-                                          child: Text(e),
-                                        ))
+                                    .map(
+                                      (e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(e),
+                                      ),
+                                    )
                                     .toList(),
                                 onChanged: (v) {
                                   setState(() {
@@ -700,10 +778,12 @@ class _MemberRegisterFormCaregiverScreenState
                                 value: _district,
                                 isExpanded: true,
                                 items: districts
-                                    .map((e) => DropdownMenuItem(
-                                          value: e,
-                                          child: Text(e),
-                                        ))
+                                    .map(
+                                      (e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(e),
+                                      ),
+                                    )
                                     .toList(),
                                 onChanged: (v) {
                                   setState(() {
@@ -730,15 +810,18 @@ class _MemberRegisterFormCaregiverScreenState
                                       value: _subDistrict,
                                       isExpanded: true,
                                       items: subDistricts
-                                          .map((e) => DropdownMenuItem(
-                                                value: e,
-                                                child: Text(e),
-                                              ))
+                                          .map(
+                                            (e) => DropdownMenuItem(
+                                              value: e,
+                                              child: Text(e),
+                                            ),
+                                          )
                                           .toList(),
                                       onChanged: (v) =>
                                           setState(() => _subDistrict = v),
-                                      decoration:
-                                          _dropdownDecoration('กรุณาเลือก'),
+                                      decoration: _dropdownDecoration(
+                                        'กรุณาเลือก',
+                                      ),
                                       validator: _requiredDropdown,
                                     ),
                                   ],
@@ -773,8 +856,12 @@ class _MemberRegisterFormCaregiverScreenState
                             value: _caregiverType,
                             isExpanded: true,
                             items: _caregiverTypes
-                                .map((e) =>
-                                    DropdownMenuItem(value: e, child: Text(e)))
+                                .map(
+                                  (e) => DropdownMenuItem(
+                                    value: e,
+                                    child: Text(e),
+                                  ),
+                                )
                                 .toList(),
                             onChanged: (v) =>
                                 setState(() => _caregiverType = v),
@@ -879,10 +966,9 @@ class _CardSection extends StatelessWidget {
           children: [
             Text(
               title,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(fontWeight: FontWeight.w700),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 12),
             child,
@@ -905,9 +991,9 @@ class _Label extends StatelessWidget {
       child: RichText(
         text: TextSpan(
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColors.text,
-              ),
+            fontWeight: FontWeight.w600,
+            color: AppColors.text,
+          ),
           children: [
             TextSpan(text: text),
             if (required)
