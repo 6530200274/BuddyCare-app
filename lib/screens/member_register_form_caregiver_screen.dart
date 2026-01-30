@@ -123,6 +123,7 @@ class _MemberRegisterFormCaregiverScreenState
           .cast<Map<String, dynamic>>()
           .map(
             (e) => SubdistrictMini(
+              id: (e['id'] as String).trim(), 
               districtId: (e['district_id'] as String).trim(),
               nameTh: (e['name_th'] as String).trim(),
             ),
@@ -969,9 +970,10 @@ class DistrictMini {
 }
 
 class SubdistrictMini {
+  final String id; 
   final String districtId;
   final String nameTh;
-  SubdistrictMini({required this.districtId, required this.nameTh});
+  SubdistrictMini({required this.id, required this.districtId, required this.nameTh});
 }
 
 // ======= UI helpers =======
