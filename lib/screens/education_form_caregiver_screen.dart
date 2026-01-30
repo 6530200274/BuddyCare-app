@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/screens/caregiver_login_screen.dart';
 
 class EducationScreen extends StatefulWidget {
   const EducationScreen({super.key});
@@ -53,10 +54,7 @@ class _EducationScreenState extends State<EducationScreen> {
     return null;
   }
 
-  InputDecoration _inputDecoration({
-    required String hint,
-    Widget? suffixIcon,
-  }) {
+  InputDecoration _inputDecoration({required String hint, Widget? suffixIcon}) {
     return InputDecoration(
       hintText: hint,
       hintStyle: const TextStyle(color: kHint, fontSize: 13),
@@ -114,61 +112,67 @@ class _EducationScreenState extends State<EducationScreen> {
     setState(() => _uploadedFileName = 'transcript.pdf');
   }
 
- Future<void> _save() async {
-  final ok = _formKey.currentState?.validate() ?? false;
-  if (!ok) return;
+  Future<void> _save() async {
+    final ok = _formKey.currentState?.validate() ?? false;
+    if (!ok) return;
 
-  if (_uploadedFileName == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('กรุณาอัพโหลดใบรับรองการศึกษา')),
-    );
-    return;
+    if (_uploadedFileName == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('กรุณาอัพโหลดใบรับรองการศึกษา')),
+      );
+      return;
+    }
+
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('กรุณาเข้าสู่ระบบใหม่')));
+      return;
+    }
+
+    try {
+      final caregiverRef = FirebaseFirestore.instance
+          .collection('caregiver')
+          .doc(uid);
+
+      final now = Timestamp.now();
+
+      final edu = {
+        'year': _year,
+        'school': _schoolCtrl.text.trim(),
+        'major': _majorCtrl.text.trim(),
+        'level': _level,
+        'transcriptFileName': _uploadedFileName,
+        'createdAt': now,
+        'updatedAt': now,
+      };
+
+      await caregiverRef.set({
+        'updatedAt': FieldValue.serverTimestamp(),
+        'education': edu, // ✅ เป็น Map ไม่ใช่ Array
+      }, SetOptions(merge: true));
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('บันทึกข้อมูลการศึกษาเรียบร้อย')),
+      );
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const CaregiverLoginScreen()),
+        (route) => false,
+      );
+    } on FirebaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('บันทึกไม่สำเร็จ: ${e.message ?? e.code}')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('บันทึกไม่สำเร็จ: $e')));
+    }
   }
 
-  final uid = FirebaseAuth.instance.currentUser?.uid;
-  if (uid == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('กรุณาเข้าสู่ระบบใหม่')),
-    );
-    return;
-  }
-
-  try {
-    final caregiverRef =
-        FirebaseFirestore.instance.collection('caregiver').doc(uid);
-
-    final now = Timestamp.now();
-
-    final edu = {
-      'year': _year,
-      'school': _schoolCtrl.text.trim(),
-      'major': _majorCtrl.text.trim(),
-      'level': _level,
-      'transcriptFileName': _uploadedFileName,
-      'createdAt': now,
-      'updatedAt': now,
-    };
-
-    await caregiverRef.set({
-      'updatedAt': FieldValue.serverTimestamp(),
-      'education': edu, // ✅ เป็น Map ไม่ใช่ Array
-    }, SetOptions(merge: true));
-
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('บันทึกข้อมูลการศึกษาเรียบร้อย')),
-    );
-    Navigator.pop(context);
-  } on FirebaseException catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('บันทึกไม่สำเร็จ: ${e.message ?? e.code}')),
-    );
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('บันทึกไม่สำเร็จ: $e')),
-    );
-  }
-}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -248,10 +252,10 @@ class _EducationScreenState extends State<EducationScreen> {
                           ),
                           decoration: _inputDecoration(hint: 'กรุณาเลือก'),
                           items: _years
-                              .map((e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text(e),
-                                  ))
+                              .map(
+                                (e) =>
+                                    DropdownMenuItem(value: e, child: Text(e)),
+                              )
                               .toList(),
                           onChanged: (v) => setState(() => _year = v),
                           validator: _requiredDropdown,
@@ -289,10 +293,10 @@ class _EducationScreenState extends State<EducationScreen> {
                           ),
                           decoration: _inputDecoration(hint: 'กรุณาเลือก'),
                           items: _levels
-                              .map((e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text(e),
-                                  ))
+                              .map(
+                                (e) =>
+                                    DropdownMenuItem(value: e, child: Text(e)),
+                              )
                               .toList(),
                           onChanged: (v) => setState(() => _level = v),
                           validator: _requiredDropdown,
@@ -381,4 +385,3 @@ class _EducationScreenState extends State<EducationScreen> {
     );
   }
 }
-

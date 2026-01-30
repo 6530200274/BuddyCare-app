@@ -89,6 +89,8 @@ class _MemberRegisterFormCaregiverScreenState
   final Map<String, List<String>> _districtsByProvince = {};
   final Map<String, List<String>> _subDistrictsByDistrict = {};
   final Map<String, String> _districtIdToName = {};
+  final Map<String, String> _districtNameToId = {};
+  final Map<String, String> _subdistrictNameToId = {};
 
   @override
   void initState() {
@@ -132,6 +134,11 @@ class _MemberRegisterFormCaregiverScreenState
         ..clear()
         ..addEntries(districts.map((d) => MapEntry(d.id, d.nameTh)));
 
+      // ชื่อเขต -> id
+      _districtNameToId
+        ..clear()
+        ..addEntries(districts.map((d) => MapEntry(d.nameTh, d.id)));
+
       // จังหวัด -> รายชื่อเขต
       final districtNames = districts.map((d) => d.nameTh).toList();
 
@@ -142,6 +149,7 @@ class _MemberRegisterFormCaregiverScreenState
         if (districtName == null) continue;
         subByDistrict.putIfAbsent(districtName, () => []);
         subByDistrict[districtName]!.add(s.nameTh);
+        _subdistrictNameToId[s.nameTh] = s.districtId;
       }
 
       if (!mounted) return;
@@ -264,6 +272,11 @@ class _MemberRegisterFormCaregiverScreenState
 
   Future<void> _save() async {
     final ok = _formKey.currentState?.validate() ?? false;
+    final districtId = _district == null ? null : _districtNameToId[_district!];
+    final subdistrictId = _subDistrict == null
+        ? null
+        : _subdistrictNameToId[_subDistrict!];
+
     if (!ok) return;
 
     if (_uploadedFileName == null) {
@@ -320,6 +333,8 @@ class _MemberRegisterFormCaregiverScreenState
           'province': _province,
           'district': _district,
           'subDistrict': _subDistrict,
+          'districtId': districtId,
+          'subdistrictId': subdistrictId,
         },
 
         // -------ข้อมูลอาชีพ-------
@@ -922,22 +937,22 @@ class _MemberRegisterFormCaregiverScreenState
                     const SizedBox(height: 22),
 
                     PrimaryButton(
-                    text: 'บันทึก',
-                    loading: _loading,
-                    onPressed: _loading
-                        ? null
-                        : () async {
-                            await _save(); // บันทึก caregiver
-                            if (!mounted) return;
+                      text: 'บันทึก',
+                      loading: _loading,
+                      onPressed: _loading
+                          ? null
+                          : () async {
+                              await _save(); // บันทึก caregiver
+                              if (!mounted) return;
 
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const EducationScreen(),
-                              ),
-                            );
-                          },
-                  ),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const EducationScreen(),
+                                ),
+                              );
+                            },
+                    ),
                   ],
                 ),
               ),
