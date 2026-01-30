@@ -30,7 +30,6 @@ class _RankedCaregiver {
 class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
   final _service = CaregiverMatchService(db: FirebaseFirestore.instance);
 
-  String _norm(String s) => s.trim();
   String _dateKey(DateTime d) => DateFormat('yyyy-MM-dd').format(d);
 
   Future<List<_RankedCaregiver>> _loadAllSorted({
@@ -40,88 +39,137 @@ class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
   }) async {
     final meeting = meetingP.data;
 
-    // แสดงทั้งหมดได้
-    final String province = meeting?.province.trim() ?? '';
-    final String districtName = meeting?.districtName.trim() ?? '';
-    final String subdistrictName = meeting?.subdistrictName.trim() ?? '';
+    final provinceNeed = meeting?.province.trim() ?? '';
+    final districtIdNeed = meeting?.districtId.trim() ?? '';
+    final subdistrictIdNeed = meeting?.subdistrictId.trim() ?? '';
 
-    final DateTime? date = bookingP.data.serviceDate;
-    final String? time = bookingP.data.serviceTime;
+    final date = bookingP.data.serviceDate;
+    final timeNeedRaw = bookingP.data.serviceTime
+        ?.trim(); // "06:00" หรือ "0600"
 
-    final String? caregiverType = adlP.result?.caregiverType;
+    // วันต้องมีเสมอ
+    if (date == null) return [];
 
-    // ถ้า service ไม่มี mapCaregiverTypeToRole ก็ไม่กรอง role (ให้ผ่าน)
-    String? roleNeed;
-    try {
-      roleNeed = (caregiverType == null || caregiverType.trim().isEmpty)
-          ? null
-          : _service.mapCaregiverTypeToRole(caregiverType);
-    } catch (_) {
-      roleNeed = null;
-    }
+    final dateKey = _dateKey(date);
+    final timeNeed = (timeNeedRaw == null)
+        ? ''
+        : timeNeedRaw.replaceAll(':', '');
 
-    // 1) ดึง roles ทั้งหมด
-    final rolesSnap = await FirebaseFirestore.instance
-        .collection('roles')
+    // type จากแบบประเมิน (เอาไว้ให้คะแนนเพิ่ม)
+    final caregiverTypeNeed = adlP.result?.caregiverType;
+    final roleNeed =
+        (caregiverTypeNeed == null || caregiverTypeNeed.trim().isEmpty)
+        ? null
+        : _service.mapCaregiverTypeToRole(caregiverTypeNeed);
+
+    //ดึงทุก slot ของ “วันนั้น”
+    final snap = await FirebaseFirestore.instance
+        .collection('caregiver_slots')
+        .where('dateKey', isEqualTo: dateKey)
+        .where('isAvailable', isEqualTo: true)
         .get();
-    final all = rolesSnap.docs
-        .map((d) => Caregiver.fromMap(d.id, d.data()))
+
+    if (snap.docs.isEmpty) return [];
+
+    final ranked = snap.docs
+        .map((d) {
+          final m = d.data();
+
+          final firstName = (m['firstName'] ?? '').toString();
+          final lastName = (m['lastName'] ?? '').toString();
+
+          final caregiverTypeFromDb = (m['caregiverType'] ?? '').toString();
+          final roleFromDb = caregiverTypeFromDb.isEmpty
+              ? ''
+              : (_service.mapCaregiverTypeToRole(caregiverTypeFromDb) ??
+                    caregiverTypeFromDb);
+
+          final province = (m['province'] ?? '').toString().trim();
+          final districtId = (m['districtId'] ?? '').toString().trim();
+          final subdistrictId = (m['subdistrictId'] ?? '').toString().trim();
+
+          final slotId = (m['slotId'] ?? '').toString(); // "2026-01-30_0600"
+          final slotTime = slotId.contains('_')
+              ? slotId.split('_').last
+              : ''; // "0600"
+
+          // --- พื้นที่เป็นชั้น ๆ ---
+          final okProvince = provinceNeed.isEmpty || province == provinceNeed;
+          final okDistrict =
+              districtIdNeed.isEmpty || districtId == districtIdNeed;
+          final okSubdistrict =
+              subdistrictIdNeed.isEmpty || subdistrictId == subdistrictIdNeed;
+
+          // --- เวลาไม่ต้องตรง แต่ให้คะแนนถ้าตรง ---
+          final okTime = timeNeed.isEmpty ? true : (slotTime == timeNeed);
+
+          // --- role ไม่ต้องตัดทิ้ง แต่ให้คะแนนถ้าตรง ---
+          final okRole = (roleNeed == null || roleNeed.trim().isEmpty)
+              ? true
+              : roleFromDb.trim() == roleNeed.trim();
+
+          // คิดคะแนนตาม priority ที่คุณต้องการ
+          int score = 0;
+
+          // (A) วันที่ตรงอยู่แล้ว เพราะ query ด้วย dateKey
+          score += 50;
+
+          // (B) พื้นที่: จังหวัด > เขต > แขวง
+          if (okProvince) score += 30;
+
+          // เขตตรงสำคัญมาก (เพราะถ้าแขวงไม่ตรงยังอยากได้ “เขตเดียวกัน”)
+          if (okDistrict) score += 15;
+
+          // แขวงตรงได้เพิ่ม แต่ไม่ตรงก็ยังแสดงได้ถ้าเขตตรง
+          if (okSubdistrict) score += 25;
+
+          // (C) เวลา: ตรงเวลาให้ขึ้นก่อน แต่ไม่ตรงยังได้
+          if (okTime) score += 20;
+
+          // (D) ประเภทผู้ดูแล: ตรงให้เพิ่ม
+          if (okRole) score += 10;
+
+          // isMatched: “ตรงครบตามชุดที่ดีที่สุด”
+          final isMatched =
+              okProvince && okDistrict && okSubdistrict && okTime && okRole;
+
+          final c = Caregiver(
+            id: d.id,
+            name: firstName,
+            lastName: lastName,
+            role: roleFromDb,
+            province: province,
+            district: (m['district'] ?? '').toString(),
+            subdistrict: (m['subdistrict'] ?? '').toString(),
+            rating: (m['rating'] is num)
+                ? (m['rating'] as num).toDouble()
+                : 5.0,
+            photoUrl: m['photoUrl']?.toString(),
+            isMatched: isMatched,
+            matchScore: score,
+            districtId: districtId,
+            subdistrictId: subdistrictId,
+          );
+
+          return _RankedCaregiver(
+            caregiver: c,
+            isMatched: isMatched,
+            matchScore: score,
+          );
+        })
+        // “ไม่อยากให้ต่างจังหวัดโผล่เลย”
+        .where(
+          (x) =>
+              provinceNeed.isEmpty ||
+              x.caregiver.province.trim() == provinceNeed,
+        )
         .toList();
 
-    // 2) หา caregiverIds ที่ "ว่าง" ตามวัน+เวลา (ถ้ามี)
-    final Set<String> availableIds = {};
-    if (date != null && time != null && time.trim().isNotEmpty) {
-      final tSnap = await FirebaseFirestore.instance
-          .collectionGroup('time')
-          .where('date', isEqualTo: _dateKey(date))
-          .where('time', isEqualTo: time.trim())
-          .get();
-
-      for (final doc in tSnap.docs) {
-        final parent = doc.reference.parent.parent; // roles/{id}
-        if (parent != null) availableIds.add(parent.id);
-      }
-    }
-
-    // 3) คำนวณคะแนน + matched
-    // คะแนน: ว่างเวลา(50) + จังหวัด(15) + เขต(15) + แขวง(10) + role(10)
-    final ranked = all.map((c) {
-      int score = 0;
-
-      final bool okTime = availableIds.contains(c.id);
-      if (okTime) score += 50;
-
-      final bool okProvince = province.isEmpty || _norm(c.province) == province;
-      final bool okDistrict =
-          districtName.isEmpty || _norm(c.district) == districtName;
-      final bool okSub =
-          subdistrictName.isEmpty || _norm(c.subdistrict) == subdistrictName;
-
-      if (province.isNotEmpty && okProvince) score += 15;
-      if (districtName.isNotEmpty && okDistrict) score += 15;
-      if (subdistrictName.isNotEmpty && okSub) score += 10;
-
-      final bool okRole = (roleNeed == null) ? true : (c.role == roleNeed);
-      if (roleNeed != null && okRole) score += 10;
-
-      final bool isMatched =
-          okTime && okProvince && okDistrict && okSub && okRole;
-
-      return _RankedCaregiver(
-        caregiver: c,
-        isMatched: isMatched,
-        matchScore: score,
-      );
-    }).toList();
-
-    // 4) sort: matched ก่อน -> score มากก่อน -> rating มากก่อน
+    // เรียง: ตรงครบก่อน > คะแนนมากก่อน
     ranked.sort((a, b) {
       if (a.isMatched != b.isMatched) return a.isMatched ? -1 : 1;
-
       final s = b.matchScore.compareTo(a.matchScore);
       if (s != 0) return s;
-
-      // rating ของ Caregiver ของคุณเป็น double อยู่แล้ว
       return b.caregiver.rating.compareTo(a.caregiver.rating);
     });
 
@@ -133,6 +181,13 @@ class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
     final bookingP = context.watch<BookingProvider>();
     final meetingP = context.watch<MeetingPointProvider>();
     final adlP = context.watch<ADLProvider>();
+
+    final date = bookingP.data.serviceDate;
+    final time = (bookingP.data.serviceTime ?? '').trim();
+
+    // key ผูกกับวันที่+เวลา เพื่อบังคับ FutureBuilder รีเฟรชเมื่อเปลี่ยน
+    final futureKey =
+        '${date != null ? _dateKey(date) : 'no-date'}_${time.replaceAll(':', '')}';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -168,13 +223,13 @@ class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
               onPressed: () => Navigator.pop(context),
               style: TextButton.styleFrom(
                 backgroundColor: const Color(0xFFFF0000),
-                minimumSize: const Size(0, 40), 
+                minimumSize: const Size(0, 44),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 18, 
-                  vertical: 6,
+                  horizontal: 22,
+                  vertical: 12,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(22), 
+                  borderRadius: BorderRadius.circular(999),
                 ),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
@@ -192,6 +247,7 @@ class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
       ),
       body: SafeArea(
         child: FutureBuilder<List<_RankedCaregiver>>(
+          key: ValueKey(futureKey), // ตรงนี้สำคัญ
           future: _loadAllSorted(
             bookingP: bookingP,
             meetingP: meetingP,
@@ -200,6 +256,15 @@ class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snap.hasError) {
+              return Center(
+                child: Text(
+                  'เกิดข้อผิดพลาด: ${snap.error}',
+                  textAlign: TextAlign.center,
+                ),
+              );
             }
 
             final items = snap.data ?? [];
@@ -216,7 +281,7 @@ class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
             return ListView.separated(
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
               itemCount: items.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 14),
+              separatorBuilder: (_, _) => const SizedBox(height: 14),
               itemBuilder: (context, i) => _CaregiverCard(
                 caregiver: items[i].caregiver,
                 isMatched: items[i].isMatched,

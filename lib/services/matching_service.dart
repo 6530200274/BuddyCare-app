@@ -13,6 +13,8 @@ class Caregiver {
   final String? photoUrl;
   final bool isMatched;
   final int matchScore;
+  final String districtId;
+  final String subdistrictId;
 
   Caregiver({
     required this.id,
@@ -26,14 +28,16 @@ class Caregiver {
     required this.photoUrl,
     required this.isMatched,
     required this.matchScore,
+    required this.districtId,
+    required this.subdistrictId,
   });
 
   factory Caregiver.fromMap(String id, Map<String, dynamic> m) {
     return Caregiver(
       id: id,
-      name: (m['name'] ?? '').toString(),
-      lastName: m['latName']?.toString(),
-      role: (m['role'] ?? '').toString(),
+      name: (m['firstName'] ?? m['name'] ?? '').toString(),
+      lastName: (m['lastName'] ?? '').toString(),
+      role: (m['caregiverType'] ?? m['role'] ?? '').toString(),
       province: (m['province'] ?? '').toString(),
       district: (m['district'] ?? '').toString(),
       subdistrict: (m['subdistrict'] ?? '').toString(),
@@ -41,6 +45,8 @@ class Caregiver {
       photoUrl: m['photoUrl']?.toString(),
       isMatched: m['isMatched'] ?? false,
       matchScore: m['matchScore'] ?? 0,
+      districtId: (m['districtId'] ?? '').toString(),
+      subdistrictId: (m['subdistrictId'] ?? '').toString(),
     );
   }
 
@@ -50,21 +56,22 @@ class Caregiver {
   }
 
   String get roleLabel {
-    switch (role) {
-      case 'พยาบาลวิชาชีพ':
-        return 'พยาบาลวิชาชีพ (Registered Nurse: RN)';
-      case 'ผู้ช่วยพยาบาล':
-        return 'ผู้ช่วยพยาบาล (Practical Nurse: PN)';
-      default:
-        return 'ผู้ดูแล (NA/Caregiver)';
+    final r = role.toLowerCase();
+
+    if (r.contains('พยาบาลวิชาชีพ') || r.contains('rn')) {
+      return 'พยาบาลวิชาชีพ (Registered Nurse: RN)';
     }
+    if (r.contains('ผู้ช่วยพยาบาล') || r.contains('pn')) {
+      return 'ผู้ช่วยพยาบาล (Practical Nurse: PN)';
+    }
+    return 'ผู้ดูแล (NA/Caregiver)';
   }
 }
 
 class CaregiverMatchService {
   final FirebaseFirestore _db;
   CaregiverMatchService({FirebaseFirestore? db})
-      : _db = db ?? FirebaseFirestore.instance;
+    : _db = db ?? FirebaseFirestore.instance;
 
   String _dateKey(DateTime d) => DateFormat('yyyy-MM-dd').format(d);
 
@@ -74,10 +81,14 @@ class CaregiverMatchService {
     final t = caregiverType.trim().toLowerCase();
 
     // ตัวอย่างรองรับหลายรูปแบบ
-    if (t.contains('rn') || t.contains('registered') || t.contains('พยาบาลวิชาชีพ')) {
+    if (t.contains('rn') ||
+        t.contains('registered') ||
+        t.contains('พยาบาลวิชาชีพ')) {
       return 'พยาบาลวิชาชีพ';
     }
-    if (t.contains('pn') || t.contains('practical') || t.contains('ผู้ช่วยพยาบาล')) {
+    if (t.contains('pn') ||
+        t.contains('practical') ||
+        t.contains('ผู้ช่วยพยาบาล')) {
       return 'ผู้ช่วยพยาบาล';
     }
     if (t.contains('na') || t.contains('caregiver') || t.contains('ผู้ดูแล')) {

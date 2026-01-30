@@ -10,10 +10,10 @@ class EmergencyContact {
   });
 
   Map<String, dynamic> toMap() => {
-        'firstName': firstName,
-        'lastName': lastName,
-        'phone': phone,
-      };
+    'firstName': firstName,
+    'lastName': lastName,
+    'phone': phone,
+  };
 
   factory EmergencyContact.fromMap(Map<String, dynamic>? map) {
     if (map == null) {
@@ -61,32 +61,32 @@ class RecipientProfile {
   });
 
   Map<String, dynamic> toMap() => {
-        'firstName': firstName,
-        'lastName': lastName,
-        'phone': phone,
-        'dob': dob, // Firestore รองรับ DateTime เป็น Timestamp อัตโนมัติ
-        'nationality': nationality,
-        'religion': religion,
-        'language': language,
-        'weightKg': weightKg,
-        'heightCm': heightCm,
-        'gender': gender,
-        'relationship': relationship,
-        'emergencyContact': emergencyContact.toMap(),
-      };
+    'firstName': firstName,
+    'lastName': lastName,
+    'phone': phone,
+    'dob': dob, // Firestore รองรับ DateTime เป็น Timestamp อัตโนมัติ
+    'nationality': nationality,
+    'religion': religion,
+    'language': language,
+    'weightKg': weightKg,
+    'heightCm': heightCm,
+    'gender': gender,
+    'relationship': relationship,
+    'emergencyContact': emergencyContact.toMap(),
+  };
 
   factory RecipientProfile.empty() => const RecipientProfile(
-        firstName: '',
-        lastName: '',
-        phone: '',
-        dob: null,
-        nationality: '',
-        religion: '',
-        language: '',
-        weightKg: null,
-        heightCm: null,
-        gender: '',
-        relationship: '',
-        emergencyContact: EmergencyContact(firstName: '', lastName: '', phone: ''),
-      );
+    firstName: '',
+    lastName: '',
+    phone: '',
+    dob: null,
+    nationality: '',
+    religion: '',
+    language: '',
+    weightKg: null,
+    heightCm: null,
+    gender: '',
+    relationship: '',
+    emergencyContact: EmergencyContact(firstName: '', lastName: '', phone: ''),
+  );
 }
