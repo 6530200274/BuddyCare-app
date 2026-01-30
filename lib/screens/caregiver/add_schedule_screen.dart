@@ -313,14 +313,71 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
     setState(() => _saving = true);
 
     try {
-      final docRef = FirebaseFirestore.instance
+      // 1) ดึงข้อมูล caregiver เพื่อเอา address + ids + caregiverType + name
+      final caregiverSnap = await FirebaseFirestore.instance
+          .collection('caregiver')
+          .doc(uid)
+          .get();
+
+      final caregiver = caregiverSnap.data() ?? {};
+
+      // (A) caregiverType
+      // รองรับทั้งรูปแบบ: caregiver['caregiverType'] หรือ caregiver['career']['caregiverType']
+      final career = (caregiver['career'] is Map)
+          ? (caregiver['career'] as Map).cast<String, dynamic>()
+          : <String, dynamic>{};
+      final caregiverType =
+          (caregiver['caregiverType'] ?? career['caregiverType'])?.toString();
+
+      // (B) address + ids
+      // รองรับ: caregiver['address'] หรือ field อยู่ root เช่น districtId/subdistrictId
+      final address = (caregiver['address'] is Map)
+          ? (caregiver['address'] as Map).cast<String, dynamic>()
+          : <String, dynamic>{};
+
+      final province = (address['province'] ?? caregiver['province'])
+          ?.toString();
+      final district = (address['district'] ?? caregiver['district'])
+          ?.toString();
+      // ระวังคีย์ subDistrict / subdistrict / subDistrictName ฯลฯ
+      final subdistrict =
+          (address['subdistrict'] ??
+                  address['subDistrict'] ??
+                  caregiver['subdistrict'] ??
+                  caregiver['subDistrict'])
+              ?.toString();
+
+      // ดึง districtId/subdistrictId
+      final districtId = (address['districtId'] ?? caregiver['districtId'])
+          ?.toString()
+          .trim();
+      final subdistrictId =
+          (address['subdistrictId'] ?? caregiver['subdistrictId'])
+              ?.toString()
+              .trim();
+
+      // (C) name
+      // รองรับ: caregiver['profile'] หรือ root
+      final profile = (caregiver['profile'] is Map)
+          ? (caregiver['profile'] as Map).cast<String, dynamic>()
+          : <String, dynamic>{};
+
+      final firstName = (profile['firstName'] ?? caregiver['firstName'])
+          ?.toString();
+      final lastName = (profile['lastName'] ?? caregiver['lastName'])
+          ?.toString();
+
+      // ---------------------------
+      // 2) เขียนตารางงานส่วนตัว caregiver/{uid}/schedule/{slotId}
+      // ---------------------------
+      final scheduleRef = FirebaseFirestore.instance
           .collection('caregiver')
           .doc(uid)
           .collection('schedule')
           .doc(slotId);
 
       await FirebaseFirestore.instance.runTransaction((tx) async {
-        final snap = await tx.get(docRef);
+        final snap = await tx.get(scheduleRef);
 
         final data = {
           'date': Timestamp.fromDate(serviceDateTime),
@@ -331,37 +388,28 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
           'isAvailable': selectedStatus == 'ว่างงาน',
           'uid': uid,
           'slotId': slotId,
+
+          // เพิ่ม id สำหรับ matching (เก็บใน schedule ด้วย)
+          'districtId': districtId,
+          'subdistrictId': subdistrictId,
+
           'updatedAt': FieldValue.serverTimestamp(),
         };
 
         if (!snap.exists) {
-          // สร้างครั้งแรก
-          tx.set(docRef, {...data, 'createdAt': FieldValue.serverTimestamp()});
+          tx.set(scheduleRef, {
+            ...data,
+            'createdAt': FieldValue.serverTimestamp(),
+          });
         } else {
-          // แก้ไขของเดิม
-          tx.set(docRef, data, SetOptions(merge: true));
+          tx.set(scheduleRef, data, SetOptions(merge: true));
         }
       });
-      // ดึงข้อมูล caregiver เพื่อเอา province/district/subDistrict + career.caregiverType
-      final caregiverSnap = await FirebaseFirestore.instance
-          .collection('caregiver')
-          .doc(uid)
-          .get();
-      final caregiver = caregiverSnap.data() ?? {};
-      final career = (caregiver['career'] ?? {}) as Map<String, dynamic>;
-      final caregiverType = career['caregiverType'];
 
-      final address = (caregiver['address'] ?? {}) as Map<String, dynamic>;
-      final province = address['province'];
-      final district = address['district'];
-      final subdistrict = address['subDistrict'];
-
-      final profile = (caregiver['profile'] ?? {}) as Map<String, dynamic>;
-      final firstName = profile['firstName'];
-      final lastName = profile['lastName'];
-      // เขียนตารางกลาง caregiver_slots
+      // ---------------------------
+      // 3) เขียนตารางกลาง caregiver_slots/{uid}_{slotId}
+      // ---------------------------
       final slotDocId = '${uid}_$slotId';
-
       await FirebaseFirestore.instance
           .collection('caregiver_slots')
           .doc(slotDocId)
@@ -383,6 +431,11 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
             'province': province,
             'district': district,
             'subdistrict': subdistrict,
+
+            // เพิ่ม id สำหรับ matching
+            'districtId': districtId,
+            'subdistrictId': subdistrictId,
+
             'caregiverType': caregiverType,
             'firstName': firstName,
             'lastName': lastName,
@@ -391,6 +444,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
             'updatedAt': FieldValue.serverTimestamp(),
             'createdAt': FieldValue.serverTimestamp(),
           }, SetOptions(merge: true));
+
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
