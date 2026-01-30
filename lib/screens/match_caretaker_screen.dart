@@ -42,12 +42,13 @@ class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
     final provinceNeed = meeting?.province.trim() ?? '';
     final districtIdNeed = meeting?.districtId.trim() ?? '';
     final subdistrictIdNeed = meeting?.subdistrictId.trim() ?? '';
+    final districtNeedName = meeting?.districtName.trim() ?? '';
+    final subdistrictNeedName = meeting?.subdistrictName.trim() ?? '';
 
     final date = bookingP.data.serviceDate;
     final timeNeedRaw = bookingP.data.serviceTime
         ?.trim(); // "06:00" หรือ "0600"
 
-    // วันต้องมีเสมอ
     if (date == null) return [];
 
     final dateKey = _dateKey(date);
@@ -55,14 +56,12 @@ class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
         ? ''
         : timeNeedRaw.replaceAll(':', '');
 
-    // type จากแบบประเมิน (เอาไว้ให้คะแนนเพิ่ม)
     final caregiverTypeNeed = adlP.result?.caregiverType;
     final roleNeed =
         (caregiverTypeNeed == null || caregiverTypeNeed.trim().isEmpty)
         ? null
         : _service.mapCaregiverTypeToRole(caregiverTypeNeed);
 
-    //ดึงทุก slot ของ “วันนั้น”
     final snap = await FirebaseFirestore.instance
         .collection('caregiver_slots')
         .where('dateKey', isEqualTo: dateKey)
@@ -85,53 +84,86 @@ class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
                     caregiverTypeFromDb);
 
           final province = (m['province'] ?? '').toString().trim();
+
+          // ใช้ id เป็นหลัก
           final districtId = (m['districtId'] ?? '').toString().trim();
           final subdistrictId = (m['subdistrictId'] ?? '').toString().trim();
 
-          final slotId = (m['slotId'] ?? '').toString(); // "2026-01-30_0600"
-          final slotTime = slotId.contains('_')
-              ? slotId.split('_').last
-              : ''; // "0600"
+          // ชื่อจาก slot (ใช้ตอน id ซ้ำ/ว่าง)
+          final districtName = (m['district'] ?? '').toString().trim();
+          final subdistrictName = (m['subdistrict'] ?? '').toString().trim();
 
-          // --- พื้นที่เป็นชั้น ๆ ---
+          final slotId = (m['slotId'] ?? '').toString(); // "2026-01-30_0600"
+          final slotTime = slotId.contains('_') ? slotId.split('_').last : '';
+
+          // ---------- matching ชั้น ๆ ----------
           final okProvince = provinceNeed.isEmpty || province == provinceNeed;
-          final okDistrict =
+
+          // districtId ตรงหรือไม่
+          final okDistrictId =
               districtIdNeed.isEmpty || districtId == districtIdNeed;
-          final okSubdistrict =
+
+          // subdistrictId ตรงหรือไม่
+          final okSubdistrictId =
               subdistrictIdNeed.isEmpty || subdistrictId == subdistrictIdNeed;
 
-          // --- เวลาไม่ต้องตรง แต่ให้คะแนนถ้าตรง ---
+          // fallback ชื่อ: ใช้ก็ต่อเมื่อ "id ว่าง" หรือ "dataset ซ้ำ id แล้วชื่อช่วยแยก"
+          final needNameFallbackDistrict =
+              districtIdNeed.isEmpty ||
+              districtId.isEmpty ||
+              (districtIdNeed.isNotEmpty && districtId == districtIdNeed);
+
+          final needNameFallbackSubdistrict =
+              subdistrictIdNeed.isEmpty ||
+              subdistrictId.isEmpty ||
+              (subdistrictIdNeed.isNotEmpty &&
+                  subdistrictId == subdistrictIdNeed);
+
+          final okDistrictName = !needNameFallbackDistrict
+              ? true
+              : (districtNeedName.isEmpty || districtName == districtNeedName);
+
+          final okSubdistrictName = !needNameFallbackSubdistrict
+              ? true
+              : (subdistrictNeedName.isEmpty ||
+                    subdistrictName == subdistrictNeedName);
+
+          // เวลา: ให้คะแนนถ้าตรง แต่ไม่ตัดทิ้ง
           final okTime = timeNeed.isEmpty ? true : (slotTime == timeNeed);
 
-          // --- role ไม่ต้องตัดทิ้ง แต่ให้คะแนนถ้าตรง ---
+          // role: ให้คะแนนถ้าตรง แต่ไม่ตัดทิ้ง
           final okRole = (roleNeed == null || roleNeed.trim().isEmpty)
               ? true
               : roleFromDb.trim() == roleNeed.trim();
 
-          // คิดคะแนนตาม priority ที่คุณต้องการ
+          // ---------- scoring ตาม priority ที่ต้องการ ----------
           int score = 0;
 
-          // (A) วันที่ตรงอยู่แล้ว เพราะ query ด้วย dateKey
+          // วันตรงอยู่แล้ว
           score += 50;
 
-          // (B) พื้นที่: จังหวัด > เขต > แขวง
+          // จังหวัด
           if (okProvince) score += 30;
 
-          // เขตตรงสำคัญมาก (เพราะถ้าแขวงไม่ตรงยังอยากได้ “เขตเดียวกัน”)
-          if (okDistrict) score += 15;
+          // เขต: id ตรงสำคัญสุด
+          if (okDistrictId) score += 40;
 
-          // แขวงตรงได้เพิ่ม แต่ไม่ตรงก็ยังแสดงได้ถ้าเขตตรง
-          if (okSubdistrict) score += 25;
+          // แขวง: ถ้าเขตตรง แล้วแขวง id ตรง -> ดันขึ้นอันดับแรก
+          if (okDistrictId && okSubdistrictId) score += 60;
 
-          // (C) เวลา: ตรงเวลาให้ขึ้นก่อน แต่ไม่ตรงยังได้
+          // ถ้า id ซ้ำ/ว่าง ให้ใช้ชื่อช่วยดัน (เพิ่มคะแนนเล็กน้อย)
+          if (okDistrictId && okDistrictName) score += 5;
+          if (okDistrictId && okSubdistrictId && okSubdistrictName) score += 10;
+
+          // เวลา
           if (okTime) score += 20;
 
-          // (D) ประเภทผู้ดูแล: ตรงให้เพิ่ม
+          // ประเภทผู้ดูแล
           if (okRole) score += 10;
 
-          // isMatched: “ตรงครบตามชุดที่ดีที่สุด”
+          // isMatched = ตรงครบชุดที่ดีที่สุด (เขต+แขวง+เวลา+role+จังหวัด)
           final isMatched =
-              okProvince && okDistrict && okSubdistrict && okTime && okRole;
+              okProvince && okDistrictId && okSubdistrictId && okTime && okRole;
 
           final c = Caregiver(
             id: d.id,
@@ -139,8 +171,8 @@ class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
             lastName: lastName,
             role: roleFromDb,
             province: province,
-            district: (m['district'] ?? '').toString(),
-            subdistrict: (m['subdistrict'] ?? '').toString(),
+            district: districtName,
+            subdistrict: subdistrictName,
             rating: (m['rating'] is num)
                 ? (m['rating'] as num).toDouble()
                 : 5.0,
@@ -165,11 +197,25 @@ class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
         )
         .toList();
 
-    // เรียง: ตรงครบก่อน > คะแนนมากก่อน
+    // เรียง: (1) เขต+แขวงตรง id ก่อน (2) เขตตรงก่อน (3) isMatched (4) score (5) rating
     ranked.sort((a, b) {
+      final aExactArea =
+          a.caregiver.districtId.trim() == districtIdNeed &&
+          a.caregiver.subdistrictId.trim() == subdistrictIdNeed;
+      final bExactArea =
+          b.caregiver.districtId.trim() == districtIdNeed &&
+          b.caregiver.subdistrictId.trim() == subdistrictIdNeed;
+      if (aExactArea != bExactArea) return aExactArea ? -1 : 1;
+
+      final aDistrictOnly = a.caregiver.districtId.trim() == districtIdNeed;
+      final bDistrictOnly = b.caregiver.districtId.trim() == districtIdNeed;
+      if (aDistrictOnly != bDistrictOnly) return aDistrictOnly ? -1 : 1;
+
       if (a.isMatched != b.isMatched) return a.isMatched ? -1 : 1;
+
       final s = b.matchScore.compareTo(a.matchScore);
       if (s != 0) return s;
+
       return b.caregiver.rating.compareTo(a.caregiver.rating);
     });
 
