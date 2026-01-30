@@ -198,6 +198,21 @@ class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
         .toList();
 
     // เรียง: (1) เขต+แขวงตรง id ก่อน (2) เขตตรงก่อน (3) isMatched (4) score (5) rating
+    //เช็คก่อนว่า มี "เขต+แขวงตรง + ประเภทตรง" จริงไหม
+    final needRole = (roleNeed ?? '').trim();
+
+    final hasExactAreaAndRole = ranked.any((x) {
+      final exactArea =
+          x.caregiver.districtId.trim() == districtIdNeed &&
+          x.caregiver.subdistrictId.trim() == subdistrictIdNeed;
+
+      final roleMatch = needRole.isEmpty
+          ? true
+          : x.caregiver.role.trim() == needRole;
+
+      return exactArea && roleMatch;
+    });
+
     ranked.sort((a, b) {
       final aExactArea =
           a.caregiver.districtId.trim() == districtIdNeed &&
@@ -205,12 +220,51 @@ class _MatchCaregiverScreenState extends State<MatchCaregiverScreen> {
       final bExactArea =
           b.caregiver.districtId.trim() == districtIdNeed &&
           b.caregiver.subdistrictId.trim() == subdistrictIdNeed;
-      if (aExactArea != bExactArea) return aExactArea ? -1 : 1;
 
-      final aDistrictOnly = a.caregiver.districtId.trim() == districtIdNeed;
-      final bDistrictOnly = b.caregiver.districtId.trim() == districtIdNeed;
-      if (aDistrictOnly != bDistrictOnly) return aDistrictOnly ? -1 : 1;
+      final aRoleMatch = needRole.isEmpty
+          ? true
+          : a.caregiver.role.trim() == needRole;
+      final bRoleMatch = needRole.isEmpty
+          ? true
+          : b.caregiver.role.trim() == needRole;
 
+      final aExactAreaAndRole = aExactArea && aRoleMatch;
+      final bExactAreaAndRole = bExactArea && bRoleMatch;
+
+      // CASE 1: มี "เขต+แขวงตรง + ประเภทตรง"
+      if (hasExactAreaAndRole) {
+        // 1) ดัน "เขต+แขวงตรง + ประเภทตรง" ขึ้นมาก่อนสุด
+        if (aExactAreaAndRole != bExactAreaAndRole) {
+          return aExactAreaAndRole ? -1 : 1;
+        }
+
+        // 2) หลังจากนั้น ให้ "ประเภทตรง" มาก่อน (แม้พื้นที่ไม่ตรง)
+        if (aRoleMatch != bRoleMatch) return aRoleMatch ? -1 : 1;
+
+        // 3) แล้วค่อย "เขต+แขวงตรง (แต่ประเภทไม่ตรง)" มาก่อนพื้นที่อื่น
+        if (aExactArea != bExactArea) return aExactArea ? -1 : 1;
+
+        // 4) ต่อด้วย isMatched / score / rating ตามเดิม
+        if (a.isMatched != b.isMatched) return a.isMatched ? -1 : 1;
+
+        final s = b.matchScore.compareTo(a.matchScore);
+        if (s != 0) return s;
+
+        return b.caregiver.rating.compareTo(a.caregiver.rating);
+      }
+
+      // CASE 2: ไม่มี "เขต+แขวงตรง + ประเภทตรง" เลย
+      // 1) เอา "ประเภทตรง" ขึ้นมาก่อนให้หมด
+      if (aRoleMatch != bRoleMatch) return aRoleMatch ? -1 : 1;
+
+      // 2) ถ้าอยู่ในกลุ่ม "ประเภทไม่ตรง" ทั้งคู่ -> ดัน "เขตตรง (districtId ตรง)" ก่อน
+      if (!aRoleMatch && !bRoleMatch) {
+        final aDistrictOnly = a.caregiver.districtId.trim() == districtIdNeed;
+        final bDistrictOnly = b.caregiver.districtId.trim() == districtIdNeed;
+        if (aDistrictOnly != bDistrictOnly) return aDistrictOnly ? -1 : 1;
+      }
+
+      // 3) ที่เหลือทั้งหมดค่อยว่ากัน (รวมถึง เขต+แขวงตรงแต่ประเภทไม่ตรง)
       if (a.isMatched != b.isMatched) return a.isMatched ? -1 : 1;
 
       final s = b.matchScore.compareTo(a.matchScore);
